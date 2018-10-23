@@ -1,14 +1,21 @@
-﻿生成启动时间为 2018/10/22 21:59:46。
+﻿生成启动时间为 2018/10/23 22:26:08。
      1>项目“E:\GIT\Encoder\H265_Encoder_Sim\H265_Encoder_Sim\H265_Encoder_Sim.vcxproj”在节点 2 上(Build 个目标)。
      1>ClCompile:
-         D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt main.cpp
-         main.cpp
-     1>e:\git\encoder\h265_encoder_sim\h265_encoder_sim\main.cpp(27): warning C4101: “param”: 未引用的局部变量
+         D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _CRT_SECURE_NO_WARNINGS /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt intrapred.cpp
+         intrapred.cpp
        Link:
-         D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"E:\GIT\Encoder\H265_Encoder_Sim\Debug\H265_Encoder_Sim.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"E:\GIT\Encoder\H265_Encoder_Sim\Debug\H265_Encoder_Sim.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"E:\GIT\Encoder\H265_Encoder_Sim\Debug\H265_Encoder_Sim.lib" /MACHINE:X86 Debug\main.obj
+         D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"E:\GIT\Encoder\H265_Encoder_Sim\Debug\H265_Encoder_Sim.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"E:\GIT\Encoder\H265_Encoder_Sim\Debug\H265_Encoder_Sim.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"E:\GIT\Encoder\H265_Encoder_Sim\Debug\H265_Encoder_Sim.lib" /MACHINE:X86 Debug\api.obj
+         Debug\common.obj
+         Debug\constants.obj
+         Debug\dct.obj
+         Debug\intrapred.obj
+         Debug\main.obj
+         Debug\param.obj
+         Debug\pixel.obj
+         Debug\primitives.obj
          H265_Encoder_Sim.vcxproj -> E:\GIT\Encoder\H265_Encoder_Sim\Debug\H265_Encoder_Sim.exe
      1>已完成生成项目“E:\GIT\Encoder\H265_Encoder_Sim\H265_Encoder_Sim\H265_Encoder_Sim.vcxproj”(Build 个目标)的操作。
 
 生成成功。
 
-已用时间 00:00:01.54
+已用时间 00:00:02.03

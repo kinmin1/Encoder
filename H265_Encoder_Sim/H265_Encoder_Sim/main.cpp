@@ -1,7 +1,9 @@
 #include<stdio.h>
+#include<string.h>
 #include"x265.h"
 #include"param.h"
 #include"api.h"
+#include"encoder.h"
 
 int ECS_encode(const char* infile, int width, int height, int type, const char* outfile);
 
@@ -25,9 +27,9 @@ int ECS_encode(const char* infile, int width, int height, int type, const char* 
 	int ret = 0;
 
 	x265_param param;//=param_1;//x265_param是x265.h中定义的结构体，定义了x265的输入参数
-	/*
+	
 	x265_param_default(&param);
-
+	
 	x265_picture *pic_in = NULL;
 
 	int csp = X265_CSP_I420;
@@ -45,9 +47,9 @@ int ECS_encode(const char* infile, int width, int height, int type, const char* 
 	param.sourceHeight = height;
 	param.fpsNum = 50000;//25; // 帧率
 	param.fpsDenom = 1000;//1; // 帧率
-
-	Encoder *encoder = x265_encoder_open(&param);
 	
+	Encoder *encoder = x265_encoder_open(&param);
+	/*
 	pic_in = x265_picture_alloc();
 	if (pic_in == NULL)
 	{

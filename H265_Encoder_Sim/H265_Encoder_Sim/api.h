@@ -8,7 +8,6 @@
 #ifndef API_H_
 #define API_H_
 #include "x265.h"
-/*
 #include "encoder.h"
 #include "entropy.h"
 
@@ -21,5 +20,5 @@ int x265_encoder_encode(Encoder *enc, x265_nal **pp_nal, uint32_t *pi_nal, x265_
 void x265_picture_free(x265_picture *p);
 void x265_encoder_close(Encoder *enc);
 x265_picture *x265_picture_alloc();
-*/
+
 #endif /* API_H_ */

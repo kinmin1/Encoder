@@ -18,6 +18,30 @@
     <ClCompile Include="main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="param.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="constants.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="api.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="primitives.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="dct.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="pixel.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="common.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="intrapred.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="x265.h">
@@ -30,6 +54,108 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="api.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="constants.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="encoder.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="frame.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="slice.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="nal.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Bitstream.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="reference.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="primitives.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="mv.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="picyuv.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="lowres.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="piclist.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="entropy.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="level.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="contexts.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="cudata.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="scalinglist.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="dpb.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="framedata.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="frameencoder.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="analysis.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="framefilter.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="predict.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="shortyuv.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="quant.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="yuv.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="deblock.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="search.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="bitcost.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="rdcost.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="motion.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="dct.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="pixel.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="intrapred.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

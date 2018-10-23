@@ -204,10 +204,10 @@ typedef int  ssum2_t;      //Signed sum
 
 #define X265_LOOKAHEAD_MAX 250
 
-inline int x265_min(int a, int b);
-inline int x265_max(int a, int b);
-inline int x265_clip3(int minVal, int maxVal, int a);
-inline pixel x265_clip(pixel x);
+int x265_min(int a, int b);
+int x265_max(int a, int b);
+int x265_clip3(int minVal, int maxVal, int a);
+pixel x265_clip(pixel x);
 
 /* Stores inter analysis data for a single frame */
 typedef struct analysis_inter_data

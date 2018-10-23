@@ -44,6 +44,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -64,13 +65,55 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="api.cpp" />
+    <ClCompile Include="common.cpp" />
+    <ClCompile Include="constants.cpp" />
+    <ClCompile Include="dct.cpp" />
+    <ClCompile Include="intrapred.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="param.cpp" />
+    <ClCompile Include="pixel.cpp" />
+    <ClCompile Include="primitives.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="analysis.h" />
     <ClInclude Include="api.h" />
+    <ClInclude Include="bitcost.h" />
+    <ClInclude Include="Bitstream.h" />
     <ClInclude Include="common.h" />
+    <ClInclude Include="constants.h" />
+    <ClInclude Include="contexts.h" />
+    <ClInclude Include="cudata.h" />
+    <ClInclude Include="dct.h" />
+    <ClInclude Include="deblock.h" />
+    <ClInclude Include="dpb.h" />
+    <ClInclude Include="encoder.h" />
+    <ClInclude Include="entropy.h" />
+    <ClInclude Include="frame.h" />
+    <ClInclude Include="framedata.h" />
+    <ClInclude Include="frameencoder.h" />
+    <ClInclude Include="framefilter.h" />
+    <ClInclude Include="intrapred.h" />
+    <ClInclude Include="level.h" />
+    <ClInclude Include="lowres.h" />
+    <ClInclude Include="motion.h" />
+    <ClInclude Include="mv.h" />
+    <ClInclude Include="nal.h" />
     <ClInclude Include="param.h" />
+    <ClInclude Include="piclist.h" />
+    <ClInclude Include="picyuv.h" />
+    <ClInclude Include="pixel.h" />
+    <ClInclude Include="predict.h" />
+    <ClInclude Include="primitives.h" />
+    <ClInclude Include="quant.h" />
+    <ClInclude Include="rdcost.h" />
+    <ClInclude Include="reference.h" />
+    <ClInclude Include="scalinglist.h" />
+    <ClInclude Include="search.h" />
+    <ClInclude Include="shortyuv.h" />
+    <ClInclude Include="slice.h" />
     <ClInclude Include="x265.h" />
+    <ClInclude Include="yuv.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
