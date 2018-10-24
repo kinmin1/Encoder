@@ -28,22 +28,22 @@ Encoder *x265_encoder_open(x265_param *p)
 		goto fail;
 	
 	x265_setup_primitives();
-	/*
-	encoder = (Encoder *)malloc(sizeof(Encoder));//完成所有帧编码后释放&Encoder_1;//
+	
+	encoder = (Encoder *)malloc(sizeof(Encoder));//完成所有帧编码后释放
 	//printf("sizeof(Encoder)=%d\n",sizeof(Encoder));
 	if (!encoder)
 		printf("malloc Encoder fail!\n");
-
+	
 	HRDInfo_Info(&encoder->m_vps.hrdParameters);
 	Window_dow(&encoder->m_sps.conformanceWindow);
 	HRDInfo_Info(&encoder->m_sps.vuiParameters.hrdParameters);
 	Window_dow(&encoder->m_sps.vuiParameters.defaultDisplayWindow);
 	NAL_nal(&encoder->m_nalList);
 	Window_dow(&encoder->m_conformanceWindow);
-
+	
 	Encoder_init(encoder);
 	Encoder_configure(encoder, p);
-
+	/*
 	// may change rate control and CPB params
 	if (!enforceLevel(p, &encoder->m_vps))
 		goto fail;

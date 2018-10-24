@@ -42,6 +42,39 @@
     <ClCompile Include="intrapred.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="slice.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="piclist.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="nal.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Bitstream.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="encoder.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="frame.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="framedata.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="cudata.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="frameencoder.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="entropy.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="analysis.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="x265.h">
@@ -156,6 +189,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="intrapred.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="slicetype.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="sao.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
