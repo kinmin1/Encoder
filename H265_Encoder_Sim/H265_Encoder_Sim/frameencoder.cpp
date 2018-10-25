@@ -19,7 +19,7 @@
 #include "encoder.h"
 
 void FrameEncoder_FrameEncoder(FrameEncoder *frencoder)
-{
+{/*
 	frencoder->m_prevOutputTime = x265_mdate();
 	frencoder->m_isFrameEncoder = TRUE;
 	frencoder->m_threadActive = TRUE;
@@ -37,11 +37,11 @@ void FrameEncoder_FrameEncoder(FrameEncoder *frencoder)
 	frencoder->m_frame = NULL;
 	frencoder->m_cuGeoms = NULL;
 	frencoder->m_ctuGeomMap = NULL;
-	frencoder->m_localTldIdx = 0;
+	frencoder->m_localTldIdx = 0;*/
 }
 
 bool FrameEncoder_init(FrameEncoder *frencoder, struct Encoder *top, int numRows, int numCols)
-{
+{/*
 	FrameEncoder_FrameEncoder(frencoder);
 	frencoder->m_top = top;
 	frencoder->m_param = top->m_param;
@@ -53,7 +53,7 @@ bool FrameEncoder_init(FrameEncoder *frencoder, struct Encoder *top, int numRows
 	if (!frencoder->m_rows)
 		printf("malloc m_rows fail !");
 
-	frencoder->m_frameFilter = /*&m_frameFilter;*/(FrameFilter *)malloc(sizeof(FrameFilter)); //获取当前row存放位置
+	frencoder->m_frameFilter = (FrameFilter *)malloc(sizeof(FrameFilter)); //获取当前row存放位置
 	if (!frencoder->m_frameFilter)
 		printf("malloc FrameFilter fail !");
 
@@ -66,24 +66,24 @@ bool FrameEncoder_init(FrameEncoder *frencoder, struct Encoder *top, int numRows
 		2 : (frencoder->m_param->bEnableSAO || frencoder->m_param->bEnableLoopFilter ? 1 : 0);
 	frencoder->m_filterRowDelayCus = frencoder->m_filterRowDelay * numCols;
 
-	FrameFilter_init(frencoder->m_frameFilter, top, frencoder, numRows);
+	FrameFilter_init(frencoder->m_frameFilter, top, frencoder, numRows);*/
 	return TRUE;
 }
 
 void CTURow_init(CTURow *cturow, Entropy *initContext)
-{
+{/*
 	(*cturow).active = FALSE;
 	(*cturow).busy = TRUE;
 	(*cturow).completed = 0;
-	load(&(*cturow).rowGoOnCoder, initContext);
+	load(&(*cturow).rowGoOnCoder, initContext);*/
 }
 
 /* Generate a complete list of unique geom sets for the current picture dimensions */
 //计算CU所有情况的几何信息
 bool FrameEncoder_initializeGeoms(FrameEncoder *frencoder)
 {
-
-	/* Geoms only vary between CTUs in the presence of picture edges */
+	/*
+	// Geoms only vary between CTUs in the presence of picture edges //
 	int maxCUSize = frencoder->m_param->maxCUSize;
 	int minCUSize = frencoder->m_param->minCUSize;
 	int heightRem = frencoder->m_param->sourceHeight & (maxCUSize - 1);//高度不够CTU的余数
@@ -144,12 +144,12 @@ bool FrameEncoder_initializeGeoms(FrameEncoder *frencoder)
 		}
 		X265_CHECK(countGeoms == allocGeoms, "geometry match check failure\n");
 	}
-
+	*/
 	return TRUE;
 }
 
 bool FrameEncoder_startCompressFrame(FrameEncoder *frencoder, Frame* curFrame)
-{
+{/*
 	frencoder->m_frame = curFrame;
 	frencoder->m_param = curFrame->m_param;
 	curFrame->m_encData->m_slice->m_mref = frencoder->m_mref;
@@ -174,7 +174,7 @@ bool FrameEncoder_startCompressFrame(FrameEncoder *frencoder, Frame* curFrame)
 	FrameEncoder_destroy(frencoder);
 	free(quant); quant = NULL;
 	free(curFrame->m_encData->m_slice); curFrame->m_encData->m_slice = NULL;//--------------free
-
+	*/
 	return TRUE;
 }
 
@@ -183,11 +183,11 @@ bool FrameEncoder_startCompressFrame(FrameEncoder *frencoder, Frame* curFrame)
 *   返回值         ： null
 **/
 void FrameEncoder_compressFrame(FrameEncoder *frencoder, Analysis *analysis)
-{
+{/*
 	Analysis *ana = analysis;
-	/* Emit access unit delimiter unless this is the first frame and the user is
-	* not repeating headers (since AUD is supposed to be the first NAL in the access
-	* unit) */
+	// Emit access unit delimiter unless this is the first frame and the user is
+	// not repeating headers (since AUD is supposed to be the first NAL in the access
+	// unit) 
 	Slice* slice = frencoder->m_frame->m_encData->m_slice; //获取当前slice
 
 	// Generate motion references//产生运动参考帧
@@ -202,20 +202,20 @@ void FrameEncoder_compressFrame(FrameEncoder *frencoder, Analysis *analysis)
 			//ECS_memcpy(slice->m_refPicList[l][ref]->m_reconPic->m_picOrg[0], reconFrameBuf_Y, sizeof(pixel) * 21376);
 			//ECS_memcpy(slice->m_refPicList[l][ref]->m_reconPic->m_picOrg[1], reconFrameBuf_U, sizeof(pixel) * 8320);
 			//ECS_memcpy(slice->m_refPicList[l][ref]->m_reconPic->m_picOrg[2], reconFrameBuf_V, sizeof(pixel) * 8320);
-			MotionReference_init(&frencoder->m_mref[l][ref], slice->m_refPicList[l][ref]->m_reconPic, /*w,*/ frencoder->m_param);
+			MotionReference_init(&frencoder->m_mref[l][ref], slice->m_refPicList[l][ref]->m_reconPic, frencoder->m_param);
 		}
 	}
 
-	/* Get the QP for this frame from rate control. This call may block until
-	* frames ahead of it in encode order have called rateControlEnd() */
+	// Get the QP for this frame from rate control. This call may block until
+	// frames ahead of it in encode order have called rateControlEnd() 
 	int qp = 26; //计算估计当前帧应用的量化参数
 
-	/* Clip slice QP to 0-51 spec range before encoding */
+	// Clip slice QP to 0-51 spec range before encoding //
 	slice->m_sliceQp = x265_clip3(-QP_BD_OFFSET, QP_MAX_SPEC, qp); //获取当前估计的量化参数
 
 	resetEntropy(&frencoder->m_initSliceContext, frencoder->m_frame->m_encData->m_slice);
 	FrameFilter_start(frencoder->m_frameFilter, frencoder->m_frame, &frencoder->m_initSliceContext, qp);
-	/* reset entropy coders */
+	// reset entropy coders //
 	load(&frencoder->m_entropyCoder, &frencoder->m_initSliceContext);
 	for (uint32_t i = 0; i < frencoder->m_numRows; i++)
 		CTURow_init(&frencoder->m_rows[i], &frencoder->m_initSliceContext);
@@ -252,7 +252,7 @@ void FrameEncoder_compressFrame(FrameEncoder *frencoder, Analysis *analysis)
 	resetBits(&frencoder->m_bs);
 	load(&frencoder->m_entropyCoder, &frencoder->m_initSliceContext);
 	setBitstream(&frencoder->m_entropyCoder, &frencoder->m_bs);
-	codeSliceHeader(&frencoder->m_entropyCoder, slice/*, frencoder->m_frame->m_encData*/);
+	codeSliceHeader(&frencoder->m_entropyCoder, slice);
 
 	// serialize each row, record final lengths in slice header
 	uint32_t maxStreamSize = serializeSubstreams(&frencoder->m_nalList, frencoder->m_substreamSizes, numSubstreams, frencoder->m_outStreams);
@@ -271,18 +271,18 @@ void FrameEncoder_compressFrame(FrameEncoder *frencoder, Analysis *analysis)
 	fclose(fp);
 	free(frencoder->m_nalList.m_extraBuffer); frencoder->m_nalList.m_extraBuffer = NULL;
 	free(frencoder->m_nalList.m_buffer); frencoder->m_nalList.m_buffer = NULL;
-	free(frencoder->m_outStreams); frencoder->m_outStreams = NULL;
+	free(frencoder->m_outStreams); frencoder->m_outStreams = NULL;*/
 }
 
 // Called by worker threads
 void FrameEncoder_processRowEncoder(FrameEncoder *frencoder, int intRow, Analysis *tld)
-{
+{/*
 	int count = 0;
 	uint32_t row = (uint32_t)intRow; //获取当前CTU行号
 	CTURow *curRow = &frencoder->m_rows[row];
 	tld->sear.m_param = frencoder->m_param; //获取配置参数
-	/* When WPP is enabled, every row has its own row coder instance. Otherwise
-	* they share row 0 */
+	// When WPP is enabled, every row has its own row coder instance. Otherwise
+	// they share row 0 
 	Entropy* rowCoder = &frencoder->m_rows[0].rowGoOnCoder;
 
 	if (!rowCoder)
@@ -316,7 +316,7 @@ void FrameEncoder_processRowEncoder(FrameEncoder *frencoder, int intRow, Analysi
 
 	}
 
-	/* flush row bitstream (if WPP and no SAO) or flush frame if no WPP and no SAO */
+	// flush row bitstream (if WPP and no SAO) or flush frame if no WPP and no SAO //
 	if (!frencoder->m_param->bEnableSAO && (row == frencoder->m_numRows - 1))
 		finishSlice(rowCoder);
 
@@ -329,11 +329,11 @@ void FrameEncoder_processRowEncoder(FrameEncoder *frencoder, int intRow, Analysi
 		tld->sear.m_quant.m_resiDctCoeff = NULL; tld->sear.m_quant.m_fencShortBuf = NULL;
 		//free(frencoder->m_frameFilter);frencoder->m_frameFilter=NULL;
 	}
-
+	*/
 }
 
 void FrameEncoder_destroy(FrameEncoder *frencoder)
-{
+{/*
 	if (frencoder->m_outStreams)
 	{
 		free(frencoder->m_outStreams);
@@ -356,20 +356,20 @@ void FrameEncoder_destroy(FrameEncoder *frencoder)
 	{
 		free(frencoder->m_substreamSizes);
 		frencoder->m_substreamSizes = NULL;
-	}
+	}*/
 }
 
 Frame *FrameEncoder_getEncodedPicture(FrameEncoder *frameE, NALList* output)
-{
+{/*
 	if (frameE->m_frame)
 	{
-		/* block here until worker thread completes */
+		// block here until worker thread completes //
 
 		Frame *ret = frameE->m_frame;
 		frameE->m_frame = NULL;
 		takeContents(output, &frameE->m_nalList);
 		return ret;
 	}
-
+	*/
 	return NULL;
 }

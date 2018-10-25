@@ -51,7 +51,7 @@ void Encoder_init(Encoder *encoder)
 
 void Encoder_create(Encoder *encoder)
 {
-
+	/*
 	if (!primitives.pu[0].sad)
 	{
 		// this should be an impossible condition when using our public API, and indicates a serious bug.
@@ -65,15 +65,9 @@ void Encoder_create(Encoder *encoder)
 	int cols = (p->sourceWidth + p->maxCUSize - 1) >> g_log2Size[p->maxCUSize];
 
 	encoder->m_aborted = FALSE;
-	encoder->m_frameEncoder = /*&FrameEncoder_1;*/(FrameEncoder*)malloc(sizeof(FrameEncoder));//完成所有帧编码后释放
-	//printf("sizeof(FrameEncoder)=%d\n",sizeof(FrameEncoder));//---==-=-=-=-=-=-
-	//if(!encoder->m_frameEncoder)
-	//  printf( "malloc FrameEncoder failed!");
+	encoder->m_frameEncoder = (FrameEncoder*)malloc(sizeof(FrameEncoder));//完成所有帧编码后释放
 
-	encoder->m_scalingList = /*&ScalingList_1;*/(ScalingList*)malloc(sizeof(ScalingList));//完成所有帧编码后释放
-	//printf("sizeof(ScalingList)=%d\n",sizeof(ScalingList));//--===-=-=-==-=-=
-	//if(!encoder->m_scalingList)
-	//printf("malloc ScalingList fail !\n");
+	encoder->m_scalingList = (ScalingList*)malloc(sizeof(ScalingList));//完成所有帧编码后释放
 
 	if (!(ScalingList_init(encoder->m_scalingList)))
 	{
@@ -82,9 +76,8 @@ void Encoder_create(Encoder *encoder)
 	}
 	ScalingList_setupQuantMatrices(encoder->m_scalingList);
 
-	encoder->m_dpb = /*&DPB_1;//*/(DPB *)malloc(sizeof(DPB));//完成所有帧编码后释放
-	//if(!encoder->m_dpb)
-	//	printf("Malloc DPB fail!");
+	encoder->m_dpb = (DPB *)malloc(sizeof(DPB));//完成所有帧编码后释放
+
 	DPB_init(encoder->m_dpb, encoder->m_param);
 
 	Encoder_initVPS(encoder, &encoder->m_vps);
@@ -100,19 +93,20 @@ void Encoder_create(Encoder *encoder)
 	}
 	//m_bZeroLatency = !m_param->bframes && !m_param->lookaheadDepth && m_param->frameNumThreads == 1;
 	encoder->m_bZeroLatency = 0;
+	*/
 }
 
 void Encoder_initVPS(Encoder *encoder, VPS *vps)
-{
-	/* Note that much of the VPS is initialized by determineLevel() */
+{/*
+	// Note that much of the VPS is initialized by determineLevel() //
 	vps->ptl.progressiveSourceFlag = !encoder->m_param->interlaceMode;
 	vps->ptl.interlacedSourceFlag = !!encoder->m_param->interlaceMode;
 	vps->ptl.nonPackedConstraintFlag = FALSE;
-	vps->ptl.frameOnlyConstraintFlag = !encoder->m_param->interlaceMode;
+	vps->ptl.frameOnlyConstraintFlag = !encoder->m_param->interlaceMode;*/
 }
 
 void Encoder_initSPS(Encoder *encoder, SPS *sps)
-{
+{/*
 	sps->conformanceWindow = encoder->m_conformanceWindow;
 	sps->chromaFormatIdc = encoder->m_param->internalCsp;
 	sps->picWidthInLumaSamples = encoder->m_param->sourceWidth;
@@ -178,11 +172,11 @@ void Encoder_initSPS(Encoder *encoder, SPS *sps)
 	vui->hrdParametersPresentFlag = encoder->m_param->bEmitHRDSEI;
 
 	vui->timingInfo.numUnitsInTick = encoder->m_param->fpsDenom;
-	vui->timingInfo.timeScale = encoder->m_param->fpsNum;
+	vui->timingInfo.timeScale = encoder->m_param->fpsNum;*/
 }
 
 void Encoder_initPPS(Encoder *encoder, PPS *pps)
-{
+{/*
 	//bool bIsVbv = this->m_param->rc.vbvBufferSize > 0 && this->m_param->rc.vbvMaxBitrate > 0;
 	//if (!this->m_param->bLossless && (this->m_param->rc.aqMode||bIsVbv))
 	if (!encoder->m_param->bLossless)
@@ -213,11 +207,11 @@ void Encoder_initPPS(Encoder *encoder, PPS *pps)
 	pps->deblockingFilterBetaOffsetDiv2 = encoder->m_param->deblockingFilterBetaOffset;
 	pps->deblockingFilterTcOffsetDiv2 = encoder->m_param->deblockingFilterTCOffset;
 
-	pps->bEntropyCodingSyncEnabled = 0;//encoder->m_param->bEnableWavefront;
+	pps->bEntropyCodingSyncEnabled = 0;//encoder->m_param->bEnableWavefront;*/
 }
 
 int encode(Encoder *enc, x265_picture* pic_in, x265_picture* pic_out)
-{
+{/*
 	if (enc->m_aborted)
 		return -1;
 	Frame *inFrame; //即将creat用于存储视频帧
@@ -238,9 +232,9 @@ int encode(Encoder *enc, x265_picture* pic_in, x265_picture* pic_out)
 
 			if (Frame_create(inFrame, enc->m_param))
 			{
-				/* the first PicYuv created is asked to generate the CU and block unit offset
-				* arrays which are then shared with all subsequent PicYuv (orig and recon)
-				* allocated by this top level encoder */
+				// the first PicYuv created is asked to generate the CU and block unit offset
+				// arrays which are then shared with all subsequent PicYuv (orig and recon)
+				// allocated by this top level encoder //
 				if (enc->m_cuOffsetY)//已经申请过空间，不用再进入else将 encoder offset指针赋值到对应m_fencPic
 				{
 					inFrame->m_fencPic->m_cuOffsetC = enc->m_cuOffsetC;//空间为一帧LCU个数，按照行列对应色度LCU的pixel地址
@@ -282,7 +276,7 @@ int encode(Encoder *enc, x265_picture* pic_in, x265_picture* pic_out)
 			inFrame = PicList_popBack(&enc->m_dpb->m_freeList);//从m_dpb->m_freeList开始取帧
 			inFrame->m_lowresInit = FALSE;
 		}
-		/* Copy input picture into a Frame and PicYuv, send to lookahead */
+		// Copy input picture into a Frame and PicYuv, send to lookahead //
 		PicYuv_copyFromPicture(inFrame->m_fencPic, pic_in, enc->m_sps.conformanceWindow.rightOffset, enc->m_sps.conformanceWindow.bottomOffset);
 
 		inFrame->m_poc = ++enc->m_pocLast; //累加读入帧数
@@ -305,16 +299,16 @@ int encode(Encoder *enc, x265_picture* pic_in, x265_picture* pic_out)
 
 	do
 	{
-		/* getEncodedPicture() should block until the FrameEncoder has completed
-		* encoding the frame.  This is how back-pressure through the API is
-		* accomplished when the encoder is full */
+		// getEncodedPicture() should block until the FrameEncoder has completed
+		// encoding the frame.  This is how back-pressure through the API is
+		// accomplished when the encoder is full //
 		if (!enc->m_bZeroLatency || pass)
 			outFrame = FrameEncoder_getEncodedPicture(curEncoder, &enc->m_nalList);
 		if (outFrame)
 		{
 			Slice *slice = outFrame->m_encData->m_slice;
 
-			/* Free up pic_in->analysisData since it has already been used */
+			// Free up pic_in->analysisData since it has already been used //
 			//if (enc->m_param->analysisMode == X265_ANALYSIS_LOAD)
 			//  freeAnalysis(&outFrame->m_analysisData);
 			if (pic_out)
@@ -357,14 +351,14 @@ int encode(Encoder *enc, x265_picture* pic_in, x265_picture* pic_out)
 			ret = 1;
 		}
 
-		/* pop a single frame from decided list, then provide to frame encoder
-		* curEncoder is guaranteed to be idle at this point */
+		// pop a single frame from decided list, then provide to frame encoder
+		// curEncoder is guaranteed to be idle at this point //
 		if (!pass)
 			//frameEnc = m_lookahead->getDecidedPicture();
 			frameEnc = inFrame;
 		if (frameEnc && !pass)
 		{
-			/* give this frame a FrameData instance before encoding */
+			// give this frame a FrameData instance before encoding //
 			if (enc->m_dpb->m_picSymFreeList)
 			{//暂时不执行
 				frameEnc->m_encData = enc->m_dpb->m_picSymFreeList;
@@ -397,7 +391,7 @@ int encode(Encoder *enc, x265_picture* pic_in, x265_picture* pic_out)
 			else
 				frameEnc->m_dts = frameEnc->m_reorderedPts;
 
-			/* Allocate analysis data before encode in save mode. This is allocated in frameEnc */
+			// Allocate analysis data before encode in save mode. This is allocated in frameEnc //
 			if (enc->m_param->analysisMode == X265_ANALYSIS_SAVE)
 			{//暂时不执行
 				x265_analysis_data* analysis = &frameEnc->m_analysisData;
@@ -411,44 +405,38 @@ int encode(Encoder *enc, x265_picture* pic_in, x265_picture* pic_out)
 				analysis->numPartitions = NUM_4x4_PARTITIONS;
 			}
 
-			/* determine references, setup RPS, etc */
+			// determine references, setup RPS, etc //
 			if ((frameEnc->m_poc<NUM_OF_I_FRAME) || ((frameEnc->m_poc + 1) % 10 == 0))
 			{
 				DPB_prepareEncode(enc->m_dpb, frameEnc);
 				curEncoder->m_sliceType = 1;
 			}
-			/*
-			else if(frameEnc->m_poc==20)
-			{
-			DPB_prepareEncode(enc->m_dpb,frameEnc);
-			curEncoder->m_sliceType = 1;
-			}*/
 			else
 			{
 				DPB_prepareEncode2(enc->m_dpb, frameEnc);
 				curEncoder->m_sliceType = 3;
 			}
 
-			/* Allow FrameEncoder::compressFrame() to start in the frame encoder thread */
+			// Allow FrameEncoder::compressFrame() to start in the frame encoder thread //
 			if (!FrameEncoder_startCompressFrame(curEncoder, frameEnc))
 				enc->m_aborted = TRUE;
 		}
 	} while (enc->m_bZeroLatency && ++pass < 2);
-	return ret;
+	return ret;*/return 0;
 }
 
 void Encoder_configure(Encoder * encoder, x265_param *p)
-{
+{/*
 	encoder->m_param = p;
 
-	/* initialize the conformance window */
+	// initialize the conformance window //
 	encoder->m_conformanceWindow.bEnabled = FALSE;
 	encoder->m_conformanceWindow.rightOffset = 0;
 	encoder->m_conformanceWindow.topOffset = 0;
 	encoder->m_conformanceWindow.bottomOffset = 0;
 	encoder->m_conformanceWindow.leftOffset = 0;
 
-	/* set pad size if width is not multiple of the minimum CU size*/
+	// set pad size if width is not multiple of the minimum CU size //
 	if (p->sourceWidth & (p->minCUSize - 1))
 	{
 		uint32_t rem = p->sourceWidth & (p->minCUSize - 1);
@@ -457,7 +445,7 @@ void Encoder_configure(Encoder * encoder, x265_param *p)
 		encoder->m_conformanceWindow.bEnabled = TRUE;
 		encoder->m_conformanceWindow.rightOffset = padsize;
 	}
-	/* set pad size if height is not multiple of the minimum CU size*/
+	// set pad size if height is not multiple of the minimum CU size //
 	if (p->sourceHeight & (p->minCUSize - 1))
 	{
 		uint32_t rem = p->sourceHeight & (p->minCUSize - 1);
@@ -466,11 +454,11 @@ void Encoder_configure(Encoder * encoder, x265_param *p)
 		encoder->m_conformanceWindow.bEnabled = TRUE;
 		encoder->m_conformanceWindow.bottomOffset = padsize;
 	}
-	encoder->m_param->rc.qgSize = p->maxCUSize;
+	encoder->m_param->rc.qgSize = p->maxCUSize;*/
 }
 
 void Encoder_destroy(Encoder *encoder)
-{
+{/*
 	//FrameEncoder_destroy(encoder->m_frameEncoder);
 	free(encoder->m_frameEncoder); encoder->m_frameEncoder = NULL;
 	free(encoder->m_dpb); encoder->m_dpb = NULL;
@@ -478,5 +466,5 @@ void Encoder_destroy(Encoder *encoder)
 	if (encoder->m_param)
 	{
 		free(encoder->m_param); encoder->m_param = NULL;
-	}
+	}*/
 }

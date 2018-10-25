@@ -45,6 +45,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -78,7 +79,9 @@
     <ClCompile Include="framedata.cpp" />
     <ClCompile Include="frameencoder.cpp" />
     <ClCompile Include="intrapred.cpp" />
+    <ClCompile Include="level.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="motion.cpp" />
     <ClCompile Include="nal.cpp" />
     <ClCompile Include="param.cpp" />
     <ClCompile Include="piclist.cpp" />

@@ -13,40 +13,40 @@
 #include "shortyuv.h"
 #include "search.h"
 
-enum {
-	PRED_MERGE,
-	PRED_SKIP,
-	PRED_INTRA,
-	PRED_2Nx2N,
-	PRED_BIDIR,
-	PRED_Nx2N,
-	PRED_2NxN,
-	PRED_SPLIT,
-	PRED_2NxnU,
-	PRED_2NxnD,
-	PRED_nLx2N,
-	PRED_nRx2N,
-	PRED_INTRA_NxN, /* 4x4 intra PU blocks for 8x8 CU */
-	PRED_LOSSLESS,  /* lossless encode of best mode */
-	MAX_PRED_TYPES
-}PREDTYPE;
-struct ModeDepth
-{
-	Mode           pred[MAX_PRED_TYPES];
-	Mode*          bestMode;
-	Yuv            fencYuv;
-	CUDataMemPool  cuMemPool;
-}ModeDepth;
+
 typedef struct Analysis
 {
 	Search sear;
+	enum {
+		PRED_MERGE,
+		PRED_SKIP,
+		PRED_INTRA,
+		PRED_2Nx2N,
+		PRED_BIDIR,
+		PRED_Nx2N,
+		PRED_2NxN,
+		PRED_SPLIT,
+		PRED_2NxnU,
+		PRED_2NxnD,
+		PRED_nLx2N,
+		PRED_nRx2N,
+		PRED_INTRA_NxN, /* 4x4 intra PU blocks for 8x8 CU */
+		PRED_LOSSLESS,  /* lossless encode of best mode */
+		MAX_PRED_TYPES
+	}PREDTYPE;
 
 	/* Analysis data for load/save modes, keeps getting incremented as CTU analysis proceeds and data is consumed or read */
 	analysis_intra_data* m_reuseIntraDataCTU;//保存模式，不断增加CTU分析过程中的数据消耗或读取
 	analysis_inter_data* m_reuseInterDataCTU;
 	int32_t*             m_reuseRef;
 	uint32_t*            m_reuseBestMergeCand;
-
+	struct ModeDepth
+	{
+		Mode           pred[MAX_PRED_TYPES];
+		Mode*          bestMode;
+		Yuv            fencYuv;
+		CUDataMemPool  cuMemPool;
+	}ModeDepth;
 	struct ModeDepth m_modeDepth[NUM_CU_DEPTH];
 	bool      m_bTryLossless;
 	bool      m_bChromaSa8d;

@@ -22,14 +22,15 @@
 
 uint32_t g_puOffset[8] = { 0, 8, 4, 4, 2, 10, 1, 5 };
 void Entropy_entropy(Entropy* entropy)
-{
+{/*
 	markValid(entropy);
 	entropy->m_fracBits = 0;
 	entropy->m_pad = 0;
 	X265_CHECK(sizeof(entropy->m_contextState) >= sizeof(entropy->m_contextState[0]) * MAX_OFF_CTX_MOD, "context state table is too small\n");
+*/
 }
 void codeProfileTier(Entropy* entropy, struct ProfileTierLevel* ptl, int maxTempSubLayers)
-{
+{/*
 	int j;
 	WRITE_CODE(entropy->syn.m_bitIf, 0, 2, "XXX_profile_space[]");
 	WRITE_FLAG(entropy->syn.m_bitIf, ptl->tierFlag, "XXX_tier_flag[]");
@@ -75,10 +76,10 @@ void codeProfileTier(Entropy* entropy, struct ProfileTierLevel* ptl, int maxTemp
 		WRITE_FLAG(entropy->syn.m_bitIf, 0, "sub_layer_level_present_flag[i]");
 		for (i = maxTempSubLayers - 1; i < 8; i++)
 			WRITE_CODE(entropy->syn.m_bitIf, 0, 2, "reserved_zero_2bits");
-	}
+	}*/
 }
 void codeVPS(Entropy* entropy, struct VPS* vps)
-{
+{/*
 	uint32_t i;
 	WRITE_CODE(entropy->syn.m_bitIf, 0, 4, "vps_video_parameter_set_id");
 	WRITE_CODE(entropy->syn.m_bitIf, 3, 2, "vps_reserved_three_2bits");
@@ -100,11 +101,11 @@ void codeVPS(Entropy* entropy, struct VPS* vps)
 
 	WRITE_CODE(entropy->syn.m_bitIf, 0, 6, "vps_max_nuh_reserved_zero_layer_id");
 	WRITE_UVLC(entropy->syn.m_bitIf, 0, "vps_max_op_sets_minus1");
-	WRITE_FLAG(entropy->syn.m_bitIf, 0, "vps_timing_info_present_flag"); /* we signal timing info in SPS-VUI */
-	WRITE_FLAG(entropy->syn.m_bitIf, 0, "vps_extension_flag");
+	WRITE_FLAG(entropy->syn.m_bitIf, 0, "vps_timing_info_present_flag"); // we signal timing info in SPS-VUI //
+	WRITE_FLAG(entropy->syn.m_bitIf, 0, "vps_extension_flag"); */
 }
 void codeScalingLists(Entropy* entropy, struct ScalingList* scalingList, uint32_t sizeId, uint32_t listId)
-{
+{/*
 	int i;
 	int coefNum = X265_MIN(MAX_MATRIX_COEF_NUM, (int)scalingList->s_numCoefPerSize[sizeId]);
 	const uint16_t* scan = (sizeId == 0 ? g_scan4x4[SCAN_DIAG] : g_scan8x8diag);
@@ -127,10 +128,10 @@ void codeScalingLists(Entropy* entropy, struct ScalingList* scalingList, uint32_
 			data = data + 256;
 
 		WRITE_SVLC(entropy->syn.m_bitIf, data, "scaling_list_delta_coef");
-	}
+	}*/
 }
 void codeScalingListss(Entropy* entropy, struct ScalingList* scalingList)
-{
+{/*
 	int sizeId, listId;
 	for (sizeId = 0; sizeId < NUM_SIZES1; sizeId++)
 	{
@@ -143,10 +144,10 @@ void codeScalingListss(Entropy* entropy, struct ScalingList* scalingList)
 			else // DPCM Mode
 				codeScalingLists(entropy, scalingList, sizeId, listId);
 		}
-	}
+	}*/
 }
 void codeHrdParameters(Entropy* entropy, struct HRDInfo* hrd, int maxSubTLayers)
-{
+{/*
 	int i;
 	WRITE_FLAG(entropy->syn.m_bitIf, 1, "nal_hrd_parameters_present_flag");
 	WRITE_FLAG(entropy->syn.m_bitIf, 0, "vcl_hrd_parameters_present_flag");
@@ -168,10 +169,10 @@ void codeHrdParameters(Entropy* entropy, struct HRDInfo* hrd, int maxSubTLayers)
 		WRITE_UVLC(entropy->syn.m_bitIf, hrd->bitRateValue - 1, "bit_rate_value_minus1");
 		WRITE_UVLC(entropy->syn.m_bitIf, hrd->cpbSizeValue - 1, "cpb_size_value_minus1");
 		WRITE_FLAG(entropy->syn.m_bitIf, hrd->cbrFlag, "cbr_flag");
-	}
+	}*/
 }
 void codeVUI(Entropy* entropy, struct VUI* vui, int maxSubTLayers)
-{
+{/*
 	WRITE_FLAG(entropy->syn.m_bitIf, vui->aspectRatioInfoPresentFlag, "aspect_ratio_info_present_flag");
 	if (vui->aspectRatioInfoPresentFlag)
 	{
@@ -230,10 +231,10 @@ void codeVUI(Entropy* entropy, struct VUI* vui, int maxSubTLayers)
 	if (vui->hrdParametersPresentFlag)
 		codeHrdParameters(entropy, &vui->hrdParameters, maxSubTLayers);
 
-	WRITE_FLAG(entropy->syn.m_bitIf, 0, "bitstream_restriction_flag");
+	WRITE_FLAG(entropy->syn.m_bitIf, 0, "bitstream_restriction_flag");*/
 }
 void codeSPS(Entropy* entropy, struct SPS* sps, struct ScalingList* scalingList, struct ProfileTierLevel* ptl)
-{
+{/*
 	uint32_t i;
 	WRITE_CODE(entropy->syn.m_bitIf, 0, 4, "sps_video_parameter_set_id");
 	WRITE_CODE(entropy->syn.m_bitIf, sps->maxTempSubLayers - 1, 3, "sps_max_sub_layers_minus1");
@@ -299,17 +300,17 @@ void codeSPS(Entropy* entropy, struct SPS* sps, struct ScalingList* scalingList,
 	WRITE_FLAG(entropy->syn.m_bitIf, 1, "vui_parameters_present_flag");
 	codeVUI(entropy, &sps->vuiParameters, sps->maxTempSubLayers);
 
-	WRITE_FLAG(entropy->syn.m_bitIf, 0, "sps_extension_flag");
+	WRITE_FLAG(entropy->syn.m_bitIf, 0, "sps_extension_flag");*/
 }
 
 uint32_t bitsCodeBin(const Entropy* entroy, uint32_t binValue, uint32_t ctxModel)
-{
+{/*
 	uint64_t fracBits = (entroy->m_fracBits & 32767) + sbacGetEntropyBits(ctxModel, binValue);
-	return (uint32_t)(fracBits >> 15);
+	return (uint32_t)(fracBits >> 15);*/return 0;
 }
 
 void codeShortTermRefPicSet(Entropy* entropy, const struct RPS* rps)
-{
+{/*
 	WRITE_UVLC(entropy->syn.m_bitIf, rps->numberOfNegativePictures, "num_negative_pics");
 	WRITE_UVLC(entropy->syn.m_bitIf, rps->numberOfPositivePictures, "num_positive_pics");
 	int prev = 0;
@@ -327,10 +328,10 @@ void codeShortTermRefPicSet(Entropy* entropy, const struct RPS* rps)
 		WRITE_UVLC(entropy->syn.m_bitIf, rps->deltaPOC[j] - prev - 1, "delta_poc_s1_minus1");
 		prev = rps->deltaPOC[j];
 		WRITE_FLAG(entropy->syn.m_bitIf, rps->bUsed[j], "used_by_curr_pic_s1_flag");
-	}
+	}*/
 }
 void codePredWeightTable(Entropy* entropy, struct Slice*slice)
-{
+{/*
 	int list, ref, plane;
 	struct  WeightParam *wp=NULL;
 	char           bChroma = 1; // 4:0:0 not yet supported
@@ -404,17 +405,17 @@ void codePredWeightTable(Entropy* entropy, struct Slice*slice)
 			printf("total weights must be <= 24\n");
 			return;
 		}
-	}
+	}*/
 }
 void codeSliceHeader(Entropy* entropy, Slice* slice /*struct FrameData* encData*/)
-{
+{/*
 	WRITE_FLAG(entropy->syn.m_bitIf, 1, "first_slice_segment_in_pic_flag");
 	if (getRapPicFlag(slice))
 		WRITE_FLAG(entropy->syn.m_bitIf, 0, "no_output_of_prior_pics_flag");
 
 	WRITE_UVLC(entropy->syn.m_bitIf, 0, "slice_pic_parameter_set_id");
 
-	/* x265 does not use dependent slices, so always write all this data */
+	// x265 does not use dependent slices, so always write all this data //
 	WRITE_UVLC(entropy->syn.m_bitIf, slice->m_sliceType, "slice_type");
 
 	if (!getIdrPicFlag(slice))
@@ -500,9 +501,10 @@ void codeSliceHeader(Entropy* entropy, Slice* slice /*struct FrameData* encData*
 
 	if (isSAOEnabled || isDBFEnabled)
 		WRITE_FLAG(entropy->syn.m_bitIf, slice->m_sLFaseFlag, "slice_loop_filter_across_slices_enabled_flag");
+*/
 }
 void  estCBFBit(const Entropy* entropy, struct EstBitsSbac* estBitsSbac)
-{
+{/*
 	uint32_t ctxInc;
 
 	const uint8_t *ctx = &(entropy->m_contextState[OFF_QT_CBF_CTX]);
@@ -516,19 +518,20 @@ void  estCBFBit(const Entropy* entropy, struct EstBitsSbac* estBitsSbac)
 	ctx = &entropy->m_contextState[OFF_QT_ROOT_CBF_CTX];
 
 	estBitsSbac->blockRootCbpBits[0] = sbacGetEntropyBits(ctx[0], 0);
-	estBitsSbac->blockRootCbpBits[1] = sbacGetEntropyBits(ctx[0], 1);
+	estBitsSbac->blockRootCbpBits[1] = sbacGetEntropyBits(ctx[0], 1);*/
 }
 void  estSignificantCoeffGroupMapBit(const Entropy* entroy, struct EstBitsSbac* estBitsSbac, char bIsLuma)
-{
+{/*
 	int firstCtx = 0, numCtx = NUM_SIG_CG_FLAG_CTX, ctxIdx;
 	uint32_t bin;
 	for (ctxIdx = firstCtx; ctxIdx < firstCtx + numCtx; ctxIdx++)
 		for (bin = 0; bin < 2; bin++)
 			estBitsSbac->significantCoeffGroupBits[ctxIdx][bin] = sbacGetEntropyBits(entroy->m_contextState[OFF_SIG_CG_FLAG_CTX + ((bIsLuma ? 0 : NUM_SIG_CG_FLAG_CTX) + ctxIdx)], bin);
+*/
 }
 
 void estSignificantMapBit(const Entropy* entroy, struct EstBitsSbac* estBitsSbac, uint32_t log2TrSize, char bIsLuma)
-{
+{/*
 	int firstCtx = 1, numCtx = 8, ctxIdx, i;
 	uint32_t bin;
 	if (log2TrSize >= 4)
@@ -579,11 +582,11 @@ void estSignificantMapBit(const Entropy* entroy, struct EstBitsSbac* estBitsSbac
 		}
 
 		estBitsSbac->lastBits[i][ctx] = bits;
-	}
+	}*/
 }
 
 void estSignificantCoefficientsBit(const Entropy* entroy, struct EstBitsSbac* estBitsSbac, char bIsLuma)
-{
+{/*
 	int ctxIdx;
 	if (bIsLuma)
 	{
@@ -618,11 +621,11 @@ void estSignificantCoefficientsBit(const Entropy* entroy, struct EstBitsSbac* es
 			estBitsSbac->levelAbsBits[ctxIdx][0] = sbacGetEntropyBits(ctxAbs[ctxIdx], 0);
 			estBitsSbac->levelAbsBits[ctxIdx][1] = sbacGetEntropyBits(ctxAbs[ctxIdx], 1);
 		}
-	}
+	}*/
 }
 
 void estBit(const Entropy* entroy, struct EstBitsSbac* estBitsSbac, uint32_t log2TrSize, char bIsLuma)
-{
+{/*
 	estCBFBit(entroy, estBitsSbac);
 
 	estSignificantCoeffGroupMapBit(entroy, estBitsSbac, bIsLuma);
@@ -631,62 +634,72 @@ void estBit(const Entropy* entroy, struct EstBitsSbac* estBitsSbac, uint32_t log
 	estSignificantMapBit(entroy, estBitsSbac, log2TrSize, bIsLuma);
 
 	// encode significant coefficients
-	estSignificantCoefficientsBit(entroy, estBitsSbac, bIsLuma);
+	estSignificantCoefficientsBit(entroy, estBitsSbac, bIsLuma);*/
 }
 
-uint32_t bitsIntraModeNonMPM(const Entropy* entroy)  { return bitsCodeBin(entroy, 0, entroy->m_contextState[OFF_ADI_CTX]) + 5; }
-uint32_t bitsIntraModeMPM(Entropy* entroy, const uint32_t preds[3], uint32_t dir)  { return bitsCodeBin(entroy, 1, entroy->m_contextState[OFF_ADI_CTX]) + (dir == preds[0] ? 1 : 2); }
-uint32_t estimateCbfBits(Entropy* entroy, uint32_t cbf, enum TextType ttype, uint32_t tuDepth)  { return bitsCodeBin(entroy, cbf, entroy->m_contextState[OFF_QT_CBF_CTX + ctxCbf[ttype][tuDepth]]); }
+uint32_t bitsIntraModeNonMPM(const Entropy* entroy)  
+{ /*
+  return bitsCodeBin(entroy, 0, entroy->m_contextState[OFF_ADI_CTX]) + 5; */return 0;
+}
+uint32_t bitsIntraModeMPM(Entropy* entroy, const uint32_t preds[3], uint32_t dir)  
+{ /*
+  return bitsCodeBin(entroy, 1, entroy->m_contextState[OFF_ADI_CTX]) + (dir == preds[0] ? 1 : 2);*/ return 0;
+}
+uint32_t estimateCbfBits(Entropy* entroy, uint32_t cbf, enum TextType ttype, uint32_t tuDepth)  
+{ /*
+  return bitsCodeBin(entroy, cbf, entroy->m_contextState[OFF_QT_CBF_CTX + ctxCbf[ttype][tuDepth]]); */return 0;
+}
 uint32_t bitsIntraMode(Entropy* entroy, CUData* cu, uint32_t absPartIdx)
-{
-	return bitsCodeBin(entroy, 0, entroy->m_contextState[OFF_SKIP_FLAG_CTX + CUData_getCtxSkipFlag(cu, absPartIdx)]) + /* not skip */bitsCodeBin(entroy, 1, entroy->m_contextState[OFF_PRED_MODE_CTX]); /* intra */
+{/*
+	return bitsCodeBin(entroy, 0, entroy->m_contextState[OFF_SKIP_FLAG_CTX + CUData_getCtxSkipFlag(cu, absPartIdx)]) + bitsCodeBin(entroy, 1, entroy->m_contextState[OFF_PRED_MODE_CTX]); // intra //
+	*/return 0;
 }
 
 uint32_t bitsInterMode(Entropy* entroy, CUData* cu, uint32_t absPartIdx, uint32_t depth)
-{
+{/*
 	uint32_t bits;
-	bits = bitsCodeBin(entroy, 0, entroy->m_contextState[OFF_SKIP_FLAG_CTX + CUData_getCtxSkipFlag(cu, absPartIdx)]); /* not skip */
-	bits += bitsCodeBin(entroy, 0, entroy->m_contextState[OFF_PRED_MODE_CTX]); /* inter */
+	bits = bitsCodeBin(entroy, 0, entroy->m_contextState[OFF_SKIP_FLAG_CTX + CUData_getCtxSkipFlag(cu, absPartIdx)]); // not skip //
+	bits += bitsCodeBin(entroy, 0, entroy->m_contextState[OFF_PRED_MODE_CTX]); // inter //
 	enum PartSize partSize = (PartSize)cu->m_partSize[absPartIdx];
 	switch (partSize)
 	{
 	case SIZE_2Nx2N:
-		bits += bitsCodeBin(entroy, 1, entroy->m_contextState[OFF_PART_SIZE_CTX]);
-		break;
+	bits += bitsCodeBin(entroy, 1, entroy->m_contextState[OFF_PART_SIZE_CTX]);
+	break;
 
 	case SIZE_2NxN:
 	case SIZE_2NxnU:
 	case SIZE_2NxnD:
-		bits += bitsCodeBin(entroy, 0, entroy->m_contextState[OFF_PART_SIZE_CTX + 0]);
-		bits += bitsCodeBin(entroy, 1, entroy->m_contextState[OFF_PART_SIZE_CTX + 1]);
-		if (cu->m_slice->m_sps->maxAMPDepth > depth)
-		{
-			bits += bitsCodeBin(entroy, (partSize == SIZE_2NxN) ? 1 : 0, entroy->m_contextState[OFF_PART_SIZE_CTX + 3]);
-			if (partSize != SIZE_2NxN)
-				bits++; // encodeBinEP((partSize == SIZE_2NxnU ? 0 : 1));
-		}
-		break;
+	bits += bitsCodeBin(entroy, 0, entroy->m_contextState[OFF_PART_SIZE_CTX + 0]);
+	bits += bitsCodeBin(entroy, 1, entroy->m_contextState[OFF_PART_SIZE_CTX + 1]);
+	if (cu->m_slice->m_sps->maxAMPDepth > depth)
+	{
+	bits += bitsCodeBin(entroy, (partSize == SIZE_2NxN) ? 1 : 0, entroy->m_contextState[OFF_PART_SIZE_CTX + 3]);
+	if (partSize != SIZE_2NxN)
+	bits++; // encodeBinEP((partSize == SIZE_2NxnU ? 0 : 1));
+	}
+	break;
 
 	case SIZE_Nx2N:
 	case SIZE_nLx2N:
 	case SIZE_nRx2N:
-		bits += bitsCodeBin(entroy, 0, entroy->m_contextState[OFF_PART_SIZE_CTX + 0]);
-		bits += bitsCodeBin(entroy, 0, entroy->m_contextState[OFF_PART_SIZE_CTX + 1]);
-		if (depth == g_maxCUDepth && !(cu->m_log2CUSize[absPartIdx] == 3))
-			bits += bitsCodeBin(entroy, 1, entroy->m_contextState[OFF_PART_SIZE_CTX + 2]);
-		if (cu->m_slice->m_sps->maxAMPDepth > depth)
-		{
-			bits += bitsCodeBin(entroy, (partSize == SIZE_Nx2N) ? 1 : 0, entroy->m_contextState[OFF_PART_SIZE_CTX + 3]);
-			if (partSize != SIZE_Nx2N)
-				bits++; // encodeBinEP((partSize == SIZE_nLx2N ? 0 : 1));
-		}
-		break;
-	default:
-		if (0)
-			printf("invalid CU partition\n");
-		break;
+	bits += bitsCodeBin(entroy, 0, entroy->m_contextState[OFF_PART_SIZE_CTX + 0]);
+	bits += bitsCodeBin(entroy, 0, entroy->m_contextState[OFF_PART_SIZE_CTX + 1]);
+	if (depth == g_maxCUDepth && !(cu->m_log2CUSize[absPartIdx] == 3))
+	bits += bitsCodeBin(entroy, 1, entroy->m_contextState[OFF_PART_SIZE_CTX + 2]);
+	if (cu->m_slice->m_sps->maxAMPDepth > depth)
+	{
+	bits += bitsCodeBin(entroy, (partSize == SIZE_Nx2N) ? 1 : 0, entroy->m_contextState[OFF_PART_SIZE_CTX + 3]);
+	if (partSize != SIZE_Nx2N)
+	bits++; // encodeBinEP((partSize == SIZE_nLx2N ? 0 : 1));
 	}
-	return bits;
+	break;
+	default:
+	if (0)
+	printf("invalid CU partition\n");
+	break;
+	}
+	return bits; */return 0;
 }
 
 void start(Entropy* entropy)
@@ -699,45 +712,60 @@ void start(Entropy* entropy)
 }
 
 void copyState(Entropy* dst, const Entropy* other)
-{
+{/*
 	dst->m_low = other->m_low;
 	dst->m_range = other->m_range;
 	dst->m_bitsLeft = other->m_bitsLeft;
 	dst->m_bufferedByte = other->m_bufferedByte;
 	dst->m_numBufferedBytes = other->m_numBufferedBytes;
-	dst->m_fracBits = other->m_fracBits;
+	dst->m_fracBits = other->m_fracBits;*/
 }
 
-void markInvalid(Entropy* entropy)                 { entropy->m_valid = FALSE; }
-void markValid(Entropy* entropy)                   { entropy->m_valid = TRUE; }
-void zeroFract(Entropy* entropy)                   { entropy->m_fracBits = 0; }
+void markInvalid(Entropy* entropy)                 
+{ /*
+	entropy->m_valid = FALSE; */
+}
+void markValid(Entropy* entropy)                   
+{/*
+	entropy->m_valid = TRUE; */
+}
+void zeroFract(Entropy* entropy)                   
+{/*
+	entropy->m_fracBits = 0; */
+}
 void copyFrom(Entropy* dst, const Entropy* src)
-{
+{/*
 	X265_CHECK(src->m_valid, "invalid copy source context\n");
 	copyState(dst, src);
 	memcpy(dst->m_contextState, src->m_contextState, MAX_OFF_CTX_MOD * sizeof(uint8_t));
-	markValid(dst);
+	markValid(dst);*/
 }
 
 /* Initialize our context information from the nominated source */
 void copyContextsFrom(Entropy* dst, const Entropy* src)
-{
+{/*
 	X265_CHECK(src->m_valid, "invalid copy source context\n");
 
 	memcpy(dst->m_contextState, src->m_contextState, MAX_OFF_CTX_MOD * sizeof(dst->m_contextState[0]));
-	markValid(dst);
+	markValid(dst);*/
 }
 // SBAC RD
 void loadIntraDirModeLuma(Entropy* dst, const Entropy* src)
-{
+{/*
 	dst->m_fracBits = src->m_fracBits;
-	dst->m_contextState[OFF_ADI_CTX] = src->m_contextState[OFF_ADI_CTX];
+	dst->m_contextState[OFF_ADI_CTX] = src->m_contextState[OFF_ADI_CTX];*/
 }
-void load(Entropy* dst, const Entropy* src)            { copyFrom(dst, src); }
-void store(const Entropy* src, Entropy* dst)          { copyFrom(dst, src); }
+void load(Entropy* dst, const Entropy* src)            
+{/*
+	copyFrom(dst, src);*/ 
+}
+void store(const Entropy* src, Entropy* dst)          
+{/*
+	copyFrom(dst, src); */
+}
 
 uint8_t sbacInit(int qp, int initValue)
-{
+{/*
 	qp = x265_clip3_int(QP_MIN, QP_MAX_SPEC, qp);
 
 	int  slope = (initValue >> 4) * 5 - 45;
@@ -746,17 +774,17 @@ uint8_t sbacInit(int qp, int initValue)
 	uint32_t mpState = (initState >= 64);
 	uint32_t state = ((mpState ? (initState - 64) : (63 - initState)) << 1) + mpState;
 
-	return (state & 0xff);
+	return (state & 0xff);*/return 0;
 }
 void initBuffer(uint8_t* contextModel, enum SliceType sliceType, int qp, uint8_t* ctxModel, int size)
-{
+{/*
 	int n;
 	ctxModel += sliceType * size;
 	for (n = 0; n < size; n++)
-		contextModel[n] = sbacInit(qp, ctxModel[n]);
+		contextModel[n] = sbacInit(qp, ctxModel[n]);*/
 }
 void resetEntropy(Entropy* entropy, Slice *slice)
-{
+{/*
 	int  qp = slice->m_sliceQp;
 	SliceType sliceType = slice->m_sliceType;
 
@@ -787,11 +815,11 @@ void resetEntropy(Entropy* entropy, Slice *slice)
 	initBuffer(&entropy->m_contextState[OFF_TRANSFORMSKIP_FLAG_CTX], sliceType, qp, (uint8_t*)INIT_TRANSFORMSKIP_FLAG, 2 * NUM_TRANSFORMSKIP_FLAG_CTX);
 	initBuffer(&entropy->m_contextState[OFF_TQUANT_BYPASS_FLAG_CTX], sliceType, qp, (uint8_t*)INIT_CU_TRANSQUANT_BYPASS_FLAG, NUM_TQUANT_BYPASS_FLAG_CTX);
 	// new structure
-	start(entropy);
+	start(entropy);*/
 }
 /** Move bits from register into bitstream */
 void writeOut(Entropy* entropy)
-{
+{/*
 	uint32_t leadByte = entropy->m_low >> (13 + entropy->m_bitsLeft);
 	uint32_t low_mask = (uint32_t)(~0) >> (11 + 8 - entropy->m_bitsLeft);
 
@@ -817,10 +845,10 @@ void writeOut(Entropy* entropy)
 		}
 		entropy->m_numBufferedBytes = 1;
 		entropy->m_bufferedByte = leadByte & 0xff;
-	}
+	}*/
 }
 void finish(Entropy* entropy)
-{
+{/*
 	if (entropy->m_low >> (21 + entropy->m_bitsLeft))
 	{
 		writeByte(entropy->syn.m_bitIf, entropy->m_bufferedByte + 1);
@@ -841,11 +869,11 @@ void finish(Entropy* entropy)
 			entropy->m_numBufferedBytes--;
 		}
 	}
-	enc_write(entropy->syn.m_bitIf, entropy->m_low >> 8, 13 + entropy->m_bitsLeft);
+	enc_write(entropy->syn.m_bitIf, entropy->m_low >> 8, 13 + entropy->m_bitsLeft);*/
 }
 /** Encode bin */
 void encodeBin(Entropy* entropy, uint32_t binValue, uint8_t *ctxModel)
-{
+{/*
 	uint32_t mstate = *ctxModel;
 
 	*ctxModel = sbacNext(mstate, binValue);
@@ -907,10 +935,10 @@ void encodeBin(Entropy* entropy, uint32_t binValue, uint8_t *ctxModel)
 	entropy->m_bitsLeft += numBits;
 
 	if (entropy->m_bitsLeft >= 0)
-		writeOut(entropy);
+		writeOut(entropy);*/
 }
 int clz(unsigned int a)
-{
+{/*
 	int i, count = 0;
 	for (i = 0; i<32; i++)
 	{
@@ -918,10 +946,10 @@ int clz(unsigned int a)
 			break;
 		count++;
 	}
-	return count ^ 31;
+	return count ^ 31;*/return 0;
 }
 int ctz(unsigned int a)
-{
+{/*
 	int i, count = 0;
 	for (i = 0; i<32; i++)
 	{
@@ -929,11 +957,11 @@ int ctz(unsigned int a)
 			break;
 		count++;
 	}
-	return count;
+	return count;*/return 0;
 }
 
 void codePPS(Entropy *entropy, PPS *pps)
-{
+{/*
 	WRITE_UVLC(entropy->syn.m_bitIf, 0, "pps_pic_parameter_set_id");
 	WRITE_UVLC(entropy->syn.m_bitIf, 0, "pps_seq_parameter_set_id");
 	WRITE_FLAG(entropy->syn.m_bitIf, 0, "dependent_slice_segments_enabled_flag");
@@ -979,12 +1007,12 @@ void codePPS(Entropy *entropy, PPS *pps)
 	WRITE_FLAG(entropy->syn.m_bitIf, 0, "lists_modification_present_flag");
 	WRITE_UVLC(entropy->syn.m_bitIf, 0, "log2_parallel_merge_level_minus2");
 	WRITE_FLAG(entropy->syn.m_bitIf, 0, "slice_segment_header_extension_present_flag");
-	WRITE_FLAG(entropy->syn.m_bitIf, 0, "pps_extension_flag");
+	WRITE_FLAG(entropy->syn.m_bitIf, 0, "pps_extension_flag");*/
 }
 
 /** Encode equiprobable bin */
 void encodeBinEP(Entropy* entropy, uint32_t binValue)
-{
+{/*
 	if (!entropy->syn.m_bitIf)
 	{
 		entropy->m_fracBits += 32768;
@@ -996,11 +1024,11 @@ void encodeBinEP(Entropy* entropy, uint32_t binValue)
 	entropy->m_bitsLeft++;
 
 	if (entropy->m_bitsLeft >= 0)
-		writeOut(entropy);
+		writeOut(entropy);*/
 }
 /** Encode equiprobable bins */
 void encodeBinsEP(Entropy* entropy, uint32_t binValues, int numBins)
-{
+{/*
 	if (!entropy->syn.m_bitIf)
 	{
 		entropy->m_fracBits += 32768 * numBins;
@@ -1025,11 +1053,11 @@ void encodeBinsEP(Entropy* entropy, uint32_t binValues, int numBins)
 	entropy->m_bitsLeft += numBins;
 
 	if (entropy->m_bitsLeft >= 0)
-		writeOut(entropy);
+		writeOut(entropy);*/
 }
 /** Encode terminating bin */
 void encodeBinTrm(Entropy* entropy, uint32_t binValue)
-{
+{/*
 	if (!entropy->syn.m_bitIf)
 	{
 		entropy->m_fracBits += sbacGetEntropyBitsTrm(binValue);
@@ -1054,31 +1082,55 @@ void encodeBinTrm(Entropy* entropy, uint32_t binValue)
 	}
 
 	if (entropy->m_bitsLeft >= 0)
-		writeOut(entropy);
+		writeOut(entropy);*/
 }
-void codeTransformSubdivFlag(Entropy* entropy, uint32_t symbol, uint32_t ctx)    { encodeBin(entropy, symbol, &entropy->m_contextState[OFF_TRANS_SUBDIV_FLAG_CTX + ctx]); }
-void codeCUTransquantBypassFlag(Entropy* entropy, uint32_t symbol)               { encodeBin(entropy, symbol, &entropy->m_contextState[OFF_TQUANT_BYPASS_FLAG_CTX]); }
-void codeQtCbfLuma(Entropy* entropy, uint32_t cbf, uint32_t tuDepth)             { encodeBin(entropy, cbf, &entropy->m_contextState[OFF_QT_CBF_CTX + !tuDepth]); }
-void codeQtCbfChroma(Entropy* entropy, uint32_t cbf, uint32_t tuDepth)           { encodeBin(entropy, cbf, &entropy->m_contextState[OFF_QT_CBF_CTX + 2 + tuDepth]); }
-void codeQtRootCbf(Entropy* entropy, uint32_t cbf)                               { encodeBin(entropy, cbf, &entropy->m_contextState[OFF_QT_ROOT_CBF_CTX]); }
+void codeTransformSubdivFlag(Entropy* entropy, uint32_t symbol, uint32_t ctx)    
+{/*
+	encodeBin(entropy, symbol, &entropy->m_contextState[OFF_TRANS_SUBDIV_FLAG_CTX + ctx]); */
+}
+void codeCUTransquantBypassFlag(Entropy* entropy, uint32_t symbol)               
+{/*
+	encodeBin(entropy, symbol, &entropy->m_contextState[OFF_TQUANT_BYPASS_FLAG_CTX]); */
+}
+void codeQtCbfLuma(Entropy* entropy, uint32_t cbf, uint32_t tuDepth)             
+{/*
+	encodeBin(entropy, cbf, &entropy->m_contextState[OFF_QT_CBF_CTX + !tuDepth]); */
+}
+void codeQtCbfChroma(Entropy* entropy, uint32_t cbf, uint32_t tuDepth)           
+{/*
+	encodeBin(entropy, cbf, &entropy->m_contextState[OFF_QT_CBF_CTX + 2 + tuDepth]); */
+}
+void codeQtRootCbf(Entropy* entropy, uint32_t cbf)                               
+{/*
+	encodeBin(entropy, cbf, &entropy->m_contextState[OFF_QT_ROOT_CBF_CTX]); */
+}
 void codeSplitFlag(Entropy* entropy, CUData *cu, uint32_t absPartIdx, uint32_t depth)
-{
+{/*
 	printf("isSpilit");
 	encodeBin(entropy, cu->m_cuDepth[absPartIdx] > depth, &entropy->m_contextState[OFF_SPLIT_FLAG_CTX + CUData_getCtxSplitFlag(cu, absPartIdx, depth)]);
+	*/
 }
 void codeSkipFlag(Entropy* entropy, CUData* cu, uint32_t absPartIdx)
-{
+{/*
 	encodeBin(entropy, isSkipped(cu, absPartIdx), &entropy->m_contextState[OFF_SKIP_FLAG_CTX + CUData_getCtxSkipFlag(cu, absPartIdx)]);
+	*/
 }
 void codePredMode(Entropy* entropy, int predMode)
-{
-	encodeBin(entropy, predMode == MODE_INTRA ? 1 : 0, &entropy->m_contextState[OFF_PRED_MODE_CTX]);
+{/*
+	encodeBin(entropy, predMode == MODE_INTRA ? 1 : 0, &entropy->m_contextState[OFF_PRED_MODE_CTX]);*/
 }
-void codeTransformSkipFlags(Entropy* entropy, uint32_t transformSkip, enum TextType ttype) { encodeBin(entropy, transformSkip, &entropy->m_contextState[OFF_TRANSFORMSKIP_FLAG_CTX + (ttype ? NUM_TRANSFORMSKIP_FLAG_CTX : 0)]); }
+void codeTransformSkipFlags(Entropy* entropy, uint32_t transformSkip, enum TextType ttype) 
+{/*
+	encodeBin(entropy, transformSkip, &entropy->m_contextState[OFF_TRANSFORMSKIP_FLAG_CTX + (ttype ? NUM_TRANSFORMSKIP_FLAG_CTX : 0)]); 
+	*/
+}
 /* these functions are only used to estimate the bits when cbf is 0 and will never be called when writing the bistream. */
-void codeQtRootCbfZero(Entropy* entropy) { encodeBin(entropy, 0, &entropy->m_contextState[OFF_QT_ROOT_CBF_CTX]); }
+void codeQtRootCbfZero(Entropy* entropy) 
+{/*
+	encodeBin(entropy, 0, &entropy->m_contextState[OFF_QT_ROOT_CBF_CTX]); */
+}
 void  writeUnaryMaxSymbol(Entropy* entropy, uint32_t symbol, uint8_t* scmModel, int offset, uint32_t maxSymbol)//使用截断一元码（TU）二元化方法将前缀转换为二元码，在对每一位比特进行常规编码。
-{
+{/*
 	if (maxSymbol <= 0)
 	{
 		printf("maxSymbol too small\n");
@@ -1096,10 +1148,10 @@ void  writeUnaryMaxSymbol(Entropy* entropy, uint32_t symbol, uint8_t* scmModel, 
 		encodeBin(entropy, 1, &scmModel[offset]);
 
 	if (bCodeLast)
-		encodeBin(entropy, 0, &scmModel[offset]);
+		encodeBin(entropy, 0, &scmModel[offset]);*/
 }
 void writeEpExGolomb(Entropy* entropy, uint32_t symbol, uint32_t count)//使用EGK二元化方法将后缀转换为二元码，在对每一位比特进行旁路编码。
-{
+{/*
 	uint32_t bins = 0;
 	int numBins = 0;
 
@@ -1122,10 +1174,10 @@ void writeEpExGolomb(Entropy* entropy, uint32_t symbol, uint32_t count)//使用EGK
 		printf("numBins too large\n");
 		return;
 	}
-	encodeBinsEP(entropy, bins, numBins);
+	encodeBinsEP(entropy, bins, numBins);*/
 }
 void codeDeltaQP(Entropy* entropy, CUData* cu, uint32_t absPartIdx)//对语法元素cu_qp_delta_abs进行编码。
-{
+{/*
 	int dqp = 0;//cu->m_qp[absPartIdx] - getRefQP(cu,absPartIdx);
 
 	int qpBdOffsetY = QP_BD_OFFSET;
@@ -1142,11 +1194,11 @@ void codeDeltaQP(Entropy* entropy, CUData* cu, uint32_t absPartIdx)//对语法元素c
 	{
 		uint32_t sign = (dqp > 0 ? 0 : 1);
 		encodeBinEP(entropy, sign);//对符号进行旁路编码。
-	}
+	}*/
 }
 /** Coding of coeff_abs_level_minus3 */
 void writeCoefRemainExGolomb(Entropy* entropy, uint32_t codeNumber, uint32_t absGoRice)
-{
+{/*
 	uint32_t length;
 	const uint32_t codeRemain = codeNumber & ((1 << absGoRice) - 1);
 
@@ -1186,10 +1238,10 @@ void writeCoefRemainExGolomb(Entropy* entropy, uint32_t codeNumber, uint32_t abs
 
 		encodeBinsEP(entropy, (1 << (COEF_REMAIN_BIN_REDUCTION + length + 1)) - 2, COEF_REMAIN_BIN_REDUCTION + length + 1);
 		encodeBinsEP(entropy, codeNumber, length + absGoRice);
-	}
+	}*/
 }
 void codeMergeIndex(Entropy* entropy, CUData* cu, uint32_t absPartIdx)
-{
+{/*
 	uint32_t numCand = cu->m_slice->m_maxNumMergeCand;
 
 	if (numCand > 1)
@@ -1208,28 +1260,28 @@ void codeMergeIndex(Entropy* entropy, CUData* cu, uint32_t absPartIdx)
 			mask >>= (unaryIdx == numCand - 1) ? 1 : 0;
 			encodeBinsEP(entropy, mask, unaryIdx - (unaryIdx == numCand - 1));
 		}
-	}
+	}*/
 }
 
 void entropy_resetBits(Entropy* entropy)
-{
+{/*
 	entropy->m_low = 0;
 	entropy->m_bitsLeft = -12;
 	entropy->m_numBufferedBytes = 0;
 	entropy->m_bufferedByte = 0xff;
 	entropy->m_fracBits &= 32767;
 	if (entropy->syn.m_bitIf)
-		resetBits(entropy->syn.m_bitIf);
+		resetBits(entropy->syn.m_bitIf);*/
 }
 
 void setBitstream(Entropy* entropy, Bitstream* pbit)
-{
-	entropy->syn.m_bitIf = pbit;
+{/*
+	entropy->syn.m_bitIf = pbit;*/
 }
 
 /* finish encoding a cu and handle end-of-slice conditions */
 void finishCU(Entropy* entropy, const CUData* cu, uint32_t absPartIdx, uint32_t depth, bool bCodeDQP)
-{
+{/*
 	const Slice* slice = cu->m_slice;
 	uint32_t realEndAddress = slice->m_endCUAddr;//真正的结束地址
 	uint32_t cuAddr = getSCUAddr(cu) + absPartIdx;//CU的地址
@@ -1261,11 +1313,11 @@ void finishCU(Entropy* entropy, const CUData* cu, uint32_t absPartIdx, uint32_t 
 
 		if (!entropy->syn.m_bitIf)
 			entropy_resetBits(entropy); // TODO: most likely unnecessary
-	}
+	}*/
 }
 
 void codePartSize(Entropy* entropy, CUData* cu, uint32_t absPartIdx, uint32_t depth)
-{
+{/*
 	enum PartSize partSize = (enum PartSize)(cu->m_partSize[absPartIdx]);
 
 	if (isIntra_cudata(cu, absPartIdx))
@@ -1315,19 +1367,19 @@ void codePartSize(Entropy* entropy, CUData* cu, uint32_t absPartIdx, uint32_t de
 			return;
 		}
 		break;
-	}
+	}*/
 }
 
 void swap(unsigned int *x,unsigned int *y)//使用指针传递地址
-{
+{/*
 	int temp;
 	temp = *x;
 	*x = *y;
-	*y = temp;
+	*y = temp;*/
 }
 
 unsigned int rightshift(unsigned int x[2], unsigned int shift)
-{
+{/*
 	unsigned int b[2] = { 0 };
 	unsigned int temp;
 	b[1] = x[1] >> shift;
@@ -1343,45 +1395,43 @@ unsigned int rightshift(unsigned int x[2], unsigned int shift)
 		temp = temp << (32 - shift);
 		b[1] = temp + b[1];
 		return b[1];
-	}
+	}*/return 0;
 }
 /* Pattern decision for context derivation process of significant_coeff_flag */
-uint32_t calc_sigPattern(/*uint64_t sigCoeffGroupFlag64*/uint32_t x[2], uint32_t cgPosX, uint32_t cgPosY, uint32_t cgBlkPos, uint32_t trSizeCG);
-/*
-{
-uint32_t p[2]={x[1],x[0]};
-if (trSizeCG == 1)
-return 0;
+uint32_t calc_sigPattern(/*uint64_t sigCoeffGroupFlag64*/uint32_t x[2], uint32_t cgPosX, uint32_t cgPosY, uint32_t cgBlkPos, uint32_t trSizeCG)
+{/*
+	uint32_t p[2]={x[1],x[0]};
+	if (trSizeCG == 1)
+	return 0;
 
-X265_CHECK(trSizeCG <= 8, "transform CG is too large\n");
-X265_CHECK(cgBlkPos < 64, "cgBlkPos is too large\n");
-// NOTE: cgBlkPos+1 may more than 63, it is invalid for shift,
-//       but in this case, both cgPosX and cgPosY equal to (trSizeCG - 1),
-//       the sigRight and sigLower will clear value to zero, the final result will be correct
+	X265_CHECK(trSizeCG <= 8, "transform CG is too large\n");
+	X265_CHECK(cgBlkPos < 64, "cgBlkPos is too large\n");
+	// NOTE: cgBlkPos+1 may more than 63, it is invalid for shift,
+	//       but in this case, both cgPosX and cgPosY equal to (trSizeCG - 1),
+	//       the sigRight and sigLower will clear value to zero, the final result will be correct
 
-const uint32_t sigPos = rightshift(p,cgBlkPos + 1);
-// TODO: instruction BT is faster, but _bittest64 still generate instruction 'BT m, r' in VS2012
-const uint32_t sigRight = ((int32_t)(cgPosX - (trSizeCG - 1)) >> 31) & (sigPos & 1);
-const uint32_t sigLower = ((int32_t)(cgPosY - (trSizeCG - 1)) >> 31) & (sigPos >> (trSizeCG - 2)) & 2;
-return sigRight + sigLower;
+	const uint32_t sigPos = rightshift(p,cgBlkPos + 1);
+	// TODO: instruction BT is faster, but _bittest64 still generate instruction 'BT m, r' in VS2012
+	const uint32_t sigRight = ((int32_t)(cgPosX - (trSizeCG - 1)) >> 31) & (sigPos & 1);
+	const uint32_t sigLower = ((int32_t)(cgPosY - (trSizeCG - 1)) >> 31) & (sigPos >> (trSizeCG - 2)) & 2;
+	return sigRight + sigLower;*/return 0;
 }
-*/
+
 /* Context derivation process of coeff_abs_significant_flag */
-uint32_t get_Sigctx(/*uint64_t cgGroupMask*/uint32_t x[2], uint32_t cgPosX, uint32_t cgPosY, uint32_t cgBlkPos, uint32_t trSizeCG);
-/*
-{
-uint32_t p[2]={x[1],x[0]};
-X265_CHECK(cgBlkPos < 64, "cgBlkPos is too large\n");
-// NOTE: unsafe shift operator, see NOTE in calcPatternSigCtx
-const uint32_t sigPos = rightshift(p,cgBlkPos + 1);
-const uint32_t sigRight = ((int32_t)(cgPosX - (trSizeCG - 1)) >> 31) & sigPos;
-const uint32_t sigLower = ((int32_t)(cgPosY - (trSizeCG - 1)) >> 31) & (sigPos >> (trSizeCG - 1));
+uint32_t get_Sigctx(/*uint64_t cgGroupMask*/uint32_t x[2], uint32_t cgPosX, uint32_t cgPosY, uint32_t cgBlkPos, uint32_t trSizeCG)
+{/*
+	uint32_t p[2]={x[1],x[0]};
+	X265_CHECK(cgBlkPos < 64, "cgBlkPos is too large\n");
+	// NOTE: unsafe shift operator, see NOTE in calcPatternSigCtx
+	const uint32_t sigPos = rightshift(p,cgBlkPos + 1);
+	const uint32_t sigRight = ((int32_t)(cgPosX - (trSizeCG - 1)) >> 31) & sigPos;
+	const uint32_t sigLower = ((int32_t)(cgPosY - (trSizeCG - 1)) >> 31) & (sigPos >> (trSizeCG - 1));
 
-return (sigRight | sigLower) & 1;
+	return (sigRight | sigLower) & 1;*/return 0;
 }
-*/
+
 void codeCoeffNxN(Entropy* entropy, CUData* cu, coeff_t* coeff, uint32_t absPartIdx, uint32_t log2TrSize, enum TextType ttype)
-{
+{/*
 	uint32_t blkPos, sig, ctxSig;
 	uint32_t trSize = 1 << log2TrSize;
 	uint32_t tqBypass = cu->m_tqBypass[absPartIdx];
@@ -1420,7 +1470,7 @@ void codeCoeffNxN(Entropy* entropy, CUData* cu, coeff_t* coeff, uint32_t absPart
 		return;
 	}
 
-	scanPosLast = scanPosLast_c(codingParameters.scan, coeff, coeffSign, coeffFlag, coeffNum, numSig/*, g_scan4x4[codingParameters.scanType], trSize*/);
+	scanPosLast = scanPosLast_c(codingParameters.scan, coeff, coeffSign, coeffFlag, coeffNum, numSig);//, g_scan4x4[codingParameters.scanType], trSize//
 	posLast = codingParameters.scan[scanPosLast];//扫描后第一个非零系数的位置，即TB中最后一个非零系数的位置。
 
 	const int lastScanSet = scanPosLast >> MLS_CG_SIZE;//确定扫描后第一个非零系数的位置落在第几个CG
@@ -1528,7 +1578,7 @@ void codeCoeffNxN(Entropy* entropy, CUData* cu, coeff_t* coeff, uint32_t absPart
 		{
 			uint32_t sigCoeffGroup = (((ch1[0] & ch2[0]) || (ch1[1] & ch2[1])) != 0);//当前CG的CSBF的值（0/1）
 			//当前CG的CSBF的上下文模型选取与其下、右相邻CG的CSBF的取值有关，公式：ctx=min(1,Sr+Sl)。
-			uint32_t ctxSig = get_Sigctx(/*sigCoeffGroupFlag64*/ch1, cgPosX, cgPosY, cgBlkPos, (trSize >> MLS_CG_LOG2_SIZE));//当前CG的CSBF的ctxIdx（0/1）
+			uint32_t ctxSig = get_Sigctx(ch1, cgPosX, cgPosY, cgBlkPos, (trSize >> MLS_CG_LOG2_SIZE));//当前CG的CSBF的ctxIdx（0/1）
 			encodeBin(entropy, sigCoeffGroup, &baseCoeffGroupCtx[ctxSig]);//当前CG的CSBF的算术编码
 		}
 
@@ -1542,7 +1592,7 @@ void codeCoeffNxN(Entropy* entropy, CUData* cu, coeff_t* coeff, uint32_t absPart
 			}
 			//对于8×8、16×16和32×32的TBs，sig_flag的上下文模型索引的选择不仅跟当前CG的下，右相邻CG的CSBF取值有关，还与当前CG的系数的位置有关，根据当前CG的下，右相邻CG的
 			//CSBF的取值分成4种模式，在当前CG中，每一种模式对于不同的位置对应着不同的上下文索引。
-			const int patternSigCtx = calc_sigPattern(/*sigCoeffGroupFlag64*/ch1, cgPosX, cgPosY, cgBlkPos, (trSize >> MLS_CG_LOG2_SIZE));//确定模式号（0,1,2,3）
+			const int patternSigCtx = calc_sigPattern(ch1, cgPosX, cgPosY, cgBlkPos, (trSize >> MLS_CG_LOG2_SIZE));//确定模式号（0,1,2,3）
 			const uint32_t posOffset = (bIsLuma && subSet) ? 3 : 0;
 			//对于4×4的TBs，sig_flag的上下文索引只与该TB的位置有关。
 			uint8_t ctxIndMap4x4[16] =
@@ -1932,10 +1982,10 @@ void codeCoeffNxN(Entropy* entropy, CUData* cu, coeff_t* coeff, uint32_t absPart
 		numNonZero = 0;
 		scanPosSigOff = (1 << MLS_CG_SIZE) - 1;//15
 	}//其余系数的位置信息以及非零系数的幅值信息编码结束。
-	//printf("finish codeCoeffNxN!\n");
+	//printf("finish codeCoeffNxN!\n");*/
 }
 void codeSaoMaxUvlc(Entropy* entropy, uint32_t code, uint32_t maxSymbol)
-{
+{/*
 	X265_CHECK(maxSymbol > 0, "maxSymbol too small\n");
 
 	uint32_t isCodeNonZero = !!code;
@@ -1949,10 +1999,10 @@ void codeSaoMaxUvlc(Entropy* entropy, uint32_t code, uint32_t maxSymbol)
 		mask <<= isCodeLast;
 
 		encodeBinsEP(entropy, mask, len);
-	}
+	}*/
 }
 void codeSaoOffset(Entropy* entropy, const SaoCtuParam* ctuParam, int plane)
-{
+{/*
 	int typeIdx = ctuParam->typeIdx;
 
 	if (plane != 2)
@@ -1985,10 +2035,10 @@ void codeSaoOffset(Entropy* entropy, const SaoCtuParam* ctuParam, int plane)
 			if (plane != 2)
 				encodeBinsEP(entropy, (uint32_t)(typeIdx), 2);
 		}
-	}
+	}*/
 }
 void Entropy_codeQtCbfChroma(Entropy* entropy, CUData* cu, uint32_t absPartIdx, enum TextType ttype, uint32_t tuDepth, bool lowestLevel)
-{
+{/*
 	uint32_t ctx = tuDepth + 2;
 
 	uint32_t log2TrSize = cu->m_log2CUSize[absPartIdx] - tuDepth;
@@ -2005,47 +2055,47 @@ void Entropy_codeQtCbfChroma(Entropy* entropy, CUData* cu, uint32_t absPartIdx, 
 		encodeBin(entropy, getCbf(cu, absPartIdx + tuNumParts, ttype, subTUDepth), &entropy->m_contextState[OFF_QT_CBF_CTX + ctx]);
 	}
 	else
-		encodeBin(entropy, getCbf(cu, absPartIdx, ttype, lowestTUDepth), &entropy->m_contextState[OFF_QT_CBF_CTX + ctx]);
+		encodeBin(entropy, getCbf(cu, absPartIdx, ttype, lowestTUDepth), &entropy->m_contextState[OFF_QT_CBF_CTX + ctx]);*/
 }
 
 void Entropy_codeQtCbfLuma(Entropy* entropy, CUData* cu, uint32_t absPartIdx, uint32_t tuDepth)
-{
-	codeQtCbfLuma(entropy, getCbf(cu, absPartIdx, TEXT_LUMA, tuDepth), tuDepth);
+{/*
+	codeQtCbfLuma(entropy, getCbf(cu, absPartIdx, TEXT_LUMA, tuDepth), tuDepth*/
 }
 
 void TURecurse_init(TURecurse *tURecurse, enum SplitType splitType, uint32_t _absPartIdxStep, uint32_t _absPartIdxTU)
-{
+{/*
 	uint32_t partIdxStepShift[NUMBER_OF_SPLIT_MODES] = { 0, 1, 2 };
 	tURecurse->section = 0;
 	tURecurse->absPartIdxTURelCU = _absPartIdxTU;
 	tURecurse->splitMode = (uint32_t)splitType;
-	tURecurse->absPartIdxStep = _absPartIdxStep >> partIdxStepShift[tURecurse->splitMode];
+	tURecurse->absPartIdxStep = _absPartIdxStep >> partIdxStepShift[tURecurse->splitMode];*/
 }
 
 char isNextSection(TURecurse *tURecurse)
-{
+{/*
 	if (tURecurse->splitMode == DONT_SPLIT)
 	{
-		tURecurse->section++;
-		return 0;
+	tURecurse->section++;
+	return 0;
 	}
 	else
 	{
-		tURecurse->absPartIdxTURelCU += tURecurse->absPartIdxStep;
+	tURecurse->absPartIdxTURelCU += tURecurse->absPartIdxStep;
 
-		tURecurse->section++;
-		return tURecurse->section < (uint32_t)(1 << tURecurse->splitMode);
-	}
+	tURecurse->section++;
+	return tURecurse->section < (uint32_t)(1 << tURecurse->splitMode);
+	}*/return 0;
 }
 char isLastSection(TURecurse *tURecurse)
-{
-	return (tURecurse->section + 1) >= (uint32_t)(1 << tURecurse->splitMode);
+{/*
+	return (tURecurse->section + 1) >= (uint32_t)(1 << tURecurse->splitMode);*/return 0;
 }
 void encodeTransform(Entropy* entropy, CUData* cu, uint32_t absPartIdx, uint32_t curDepth, uint32_t log2CurSize, bool bCodeDQP, uint32_t depthRange[2])
-{
+{/*
 	bool subdiv = cu->m_tuDepth[absPartIdx] > curDepth;
-	/* in each of these conditions, the subdiv flag is implied and not signaled,
-	* so we have checks to make sure the implied value matches our intentions */
+	// in each of these conditions, the subdiv flag is implied and not signaled,
+	// so we have checks to make sure the implied value matches our intentions //
 	if (isIntra_cudata(cu, absPartIdx) && cu->m_partSize[absPartIdx] != SIZE_2Nx2N && log2CurSize == MIN_LOG2_CU_SIZE)
 	{
 		if (!subdiv)
@@ -2212,10 +2262,10 @@ void encodeTransform(Entropy* entropy, CUData* cu, uint32_t absPartIdx, uint32_t
 						}
 					} while (isNextSection(&tURecurse));
 				}
-			}
+			}*/
 }
 void codeCoeff(Entropy* entropy, CUData* cu, uint32_t absPartIdx, bool bCodeDQP, uint32_t depthRange[2])
-{
+{/*
 	if (!isIntra_cudata(cu, absPartIdx))
 	{
 		if (!(cu->m_mergeFlag[absPartIdx] && cu->m_partSize[absPartIdx] == SIZE_2Nx2N))
@@ -2225,10 +2275,10 @@ void codeCoeff(Entropy* entropy, CUData* cu, uint32_t absPartIdx, bool bCodeDQP,
 	}
 
 	uint32_t log2CUSize = cu->m_log2CUSize[absPartIdx];
-	encodeTransform(entropy, cu, absPartIdx, 0, log2CUSize, bCodeDQP, depthRange);
+	encodeTransform(entropy, cu, absPartIdx, 0, log2CUSize, bCodeDQP, depthRange);*/
 }
 void codeIntraDirLumaAng(Entropy *entropy, CUData *cu, uint32_t absPartIdx, bool isMultiple)//编码帧内亮度
-{
+{/*
 	uint32_t dir[4], j, i;
 	uint32_t preds[4][3];
 	int predIdx[4];
@@ -2278,12 +2328,12 @@ void codeIntraDirLumaAng(Entropy *entropy, CUData *cu, uint32_t absPartIdx, bool
 			dir[j] += (dir[j] > preds[j][0]) ? -1 : 0;
 			encodeBinsEP(entropy, dir[j], 5);
 		}
-	}
+	}*/
 }
 
 
 void codeIntraDirChroma(Entropy *entropy, const CUData* cu, uint32_t absPartIdx, uint32_t *chromaDirMode)
-{
+{/*
 	int i;
 	uint32_t intraDirChroma = cu->m_chromaIntraDir[absPartIdx];
 
@@ -2302,20 +2352,20 @@ void codeIntraDirChroma(Entropy *entropy, const CUData* cu, uint32_t absPartIdx,
 
 		encodeBin(entropy, 1, &entropy->m_contextState[OFF_CHROMA_PRED_CTX]);
 		encodeBinsEP(entropy, intraDirChroma, 2);
-	}
+	}*/
 }
 void codeInterDir(Entropy *entropy, const CUData* cu, uint32_t absPartIdx)//帧间
-{
+{/*
 	const uint32_t interDir = cu->m_interDir[absPartIdx] - 1;
 	const uint32_t ctx = cu->m_cuDepth[absPartIdx]; // the context of the inter dir is the depth of the CU
 
 	if (cu->m_partSize[absPartIdx] == SIZE_2Nx2N || cu->m_log2CUSize[absPartIdx] != 3)
 		encodeBin(entropy, interDir == 2 ? 1 : 0, &entropy->m_contextState[OFF_INTER_DIR_CTX + ctx]);
 	if (interDir < 2)
-		encodeBin(entropy, interDir, &entropy->m_contextState[OFF_INTER_DIR_CTX + 4]);
+		encodeBin(entropy, interDir, &entropy->m_contextState[OFF_INTER_DIR_CTX + 4]);*/
 }
 void codeRefFrmIdx(Entropy *entropy, CUData* cu, uint32_t absPartIdx, int list)
-{
+{/*
 	uint32_t refFrame = cu->m_refIdx[list][absPartIdx];
 
 	encodeBin(entropy, refFrame > 0, &entropy->m_contextState[OFF_REF_NO_CTX]);
@@ -2334,18 +2384,18 @@ void codeRefFrmIdx(Entropy *entropy, CUData* cu, uint32_t absPartIdx, int list)
 			mask >>= (refFrame == refNum) ? 1 : 0;
 			encodeBinsEP(entropy, mask, refFrame - (refFrame == refNum));
 		}
-	}
+	}*/
 }
 /** encode reference frame index for a PU block */
 void codeRefFrmIdxPU(Entropy *entropy, CUData* cu, uint32_t absPartIdx, int list)
-{
+{/*
 	X265_CHECK(!isIntra_cudata(cu, absPartIdx), "intra block not expected\n");
 
 	if (cu->m_slice->m_numRefIdx[list] > 1)
-		codeRefFrmIdx(entropy, cu, absPartIdx, list);
+		codeRefFrmIdx(entropy, cu, absPartIdx, list);*/
 }
 void codeMvd(Entropy *entropy, const CUData* cu, uint32_t absPartIdx, int list)//帧间
-{
+{/*
 	const MV* mvd = &cu->m_mvd[list][absPartIdx];
 	const int hor = mvd->x;
 	const int ver = mvd->y;
@@ -2378,20 +2428,20 @@ void codeMvd(Entropy *entropy, const CUData* cu, uint32_t absPartIdx, int list)/
 			writeEpExGolomb(entropy, verAbs - 2, 1);
 
 		encodeBinEP(entropy, 0 > ver ? 1 : 0);
-	}
+	}*/
 }
 void codeMVPIdx(Entropy *entropy, uint32_t symbol)
-{
-	encodeBin(entropy, symbol, &entropy->m_contextState[OFF_MVP_IDX_CTX]);
+{/*
+	encodeBin(entropy, symbol, &entropy->m_contextState[OFF_MVP_IDX_CTX]);*/
 }
 void codeMergeFlag(Entropy *entropy, const CUData* cu, uint32_t absPartIdx)
-{
+{/*
 	//cu->m_mergeFlag[absPartIdx]
-	encodeBin(entropy, 0, &entropy->m_contextState[OFF_MERGE_FLAG_EXT_CTX]);
+	encodeBin(entropy, 0, &entropy->m_contextState[OFF_MERGE_FLAG_EXT_CTX]);*/
 }
 /** encode motion information for every PU block */
 void codePUWise(Entropy *entropy, CUData* cu, uint32_t absPartIdx)
-{
+{/*
 	X265_CHECK(!isIntra_cudata(cu, absPartIdx), "intra block not expected\n");
 	PartSize partSize = (PartSize)cu->m_partSize[absPartIdx];
 	uint32_t numPU = (partSize == SIZE_2Nx2N ? 1 : (partSize == SIZE_NxN ? 4 : 2));
@@ -2421,11 +2471,11 @@ void codePUWise(Entropy *entropy, CUData* cu, uint32_t absPartIdx)
 				}
 			}
 		}
-	}
+	}*/
 }
 
 void codePredInfo(Entropy *entropy, CUData *cu, uint32_t absPartIdx)
-{
+{/*
 	if (isIntra_cudata(cu, absPartIdx)) // If it is intra mode, encode intra prediction mode.
 	{
 		codeIntraDirLumaAng(entropy, cu, absPartIdx, TRUE);
@@ -2451,20 +2501,21 @@ void codePredInfo(Entropy *entropy, CUData *cu, uint32_t absPartIdx)
 	}
 	else // if it is inter mode, encode motion vector and reference index
 		codePUWise(entropy, cu, absPartIdx);//帧间部分先不用考虑
+	*/
 }
 void finishSlice(Entropy* entropy)
-{
+{/*
 	encodeBinTrm(entropy, 1);
 	finish(entropy);
-	writeByteAlignment(entropy->syn.m_bitIf);
+	writeByteAlignment(entropy->syn.m_bitIf);*/
 }
 /* encode a CU block recursively */
 void encodeCU(Entropy* entropy, CUData* cu, CUGeom* cuGeom, uint32_t absPartIdx, uint32_t depth, bool bEncodeDQP)
-{
+{/*
 	const Slice* slice = cu->m_slice;
 
-	int cuSplitFlag = /*!(cuGeom->flags & LEAF)*/0;//分割标志
-	int cuUnsplitFlag = /*!(cuGeom->flags & SPLIT_MANDATORY)*/1;//不分割标志
+	int cuSplitFlag = 0;//!(cuGeom->flags & LEAF);//分割标志
+	int cuUnsplitFlag =1; //!(cuGeom->flags & SPLIT_MANDATORY)//不分割标志
 
 	//CU不继续分割时
 	if (!cuUnsplitFlag)
@@ -2533,17 +2584,17 @@ void encodeCU(Entropy* entropy, CUData* cu, CUGeom* cuGeom, uint32_t absPartIdx,
 
 	// --- write terminating bit ---
 	finishCU(entropy, cu, absPartIdx, depth, bEncodeDQP);//===============================调用finishCU()，完成Bit的最终写入
-}
+*/}
 
 void encodeCTU(Entropy* entropy, CUData* cu, CUGeom* cuGeom)
-{
+{/*
 	bool bEncodeDQP = cu->m_slice->m_pps->bUseDQP;
-	encodeCU(entropy, cu, cuGeom, 0, 0, bEncodeDQP);
+	encodeCU(entropy, cu, cuGeom, 0, 0, bEncodeDQP);*/
 }
 
 uint32_t entropy_getNumberOfWrittenBits(Entropy* entropy)
-{
-	return (uint32_t)(entropy->m_fracBits >> 15);
+{/*
+	return (uint32_t)(entropy->m_fracBits >> 15);*/return 0;
 }
 
 const uint32_t g_entropyBits[128] =

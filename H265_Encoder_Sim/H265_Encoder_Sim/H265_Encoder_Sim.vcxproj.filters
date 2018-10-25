@@ -75,6 +75,12 @@
     <ClCompile Include="analysis.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="motion.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="level.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="x265.h">

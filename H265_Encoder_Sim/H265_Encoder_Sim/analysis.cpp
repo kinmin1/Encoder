@@ -20,18 +20,18 @@
 
 extern EncoderPrimitives primitives;
 bool Analysis_create(Analysis *analysis)
-{
+{/*
 	analysis->m_bChromaSa8d = analysis->sear.m_param->rdLevel >= 3;
 
 	int csp = 1;//m_param->internalCsp;
 	uint32_t cuSize = g_maxCUSize;
 
 	bool ok = TRUE;
-	for (uint32_t depth = 0; depth <= 0/*g_maxCUDepth*/; depth++, cuSize >>= 1)
+	for (uint32_t depth = 0; depth <= 0; depth++, cuSize >>= 1)//depth <= g_maxCUDepth;
 	{
-		struct ModeDepth *md = (analysis->m_modeDepth[depth]);
+		struct ModeDepth *md = &(analysis->m_modeDepth[depth]);
 
-		CUDataMemPool_create_analysis(&md->cuMemPool, depth, 2/*MAX_PRED_TYPES*/);
+		CUDataMemPool_create_analysis(&md->cuMemPool, depth, 2);//MAX_PRED_TYPES
 		ok &= Yuv_create_md(&md->fencYuv, cuSize, csp);
 
 		CUData_initialize(&md->pred[PRED_INTRA].cu, &md->cuMemPool, depth, 0);
@@ -44,8 +44,8 @@ bool Analysis_create(Analysis *analysis)
 		ok &= Yuv_create_md_pred_pred2Nx2N_1(&md->pred[PRED_2Nx2N].reconYuv, cuSize, csp);
 		md->pred[PRED_2Nx2N].fencYuv = &md->fencYuv;
 	}
-
-	return ok;
+	
+	return ok;*/return 0;
 }
 
 
@@ -53,7 +53,7 @@ bool Analysis_create(Analysis *analysis)
 void checkBestMode(Analysis* analysis, Mode* mode, uint32_t depth)
 {
 	//X265_CHECK(ok(mode), "mode costs are uninitialized\n");
-
+	/*
 	struct ModeDepth* md = &(analysis->m_modeDepth[depth]);
 	if (md->bestMode)
 	{
@@ -61,20 +61,13 @@ void checkBestMode(Analysis* analysis, Mode* mode, uint32_t depth)
 			md->bestMode = mode;
 	}
 	else
-		md->bestMode = mode;
+		md->bestMode = mode;*/
 }
 
 Mode* compressCTU(Analysis* analysis, CUData* ctu, Frame* frame, CUGeom* cuGeom, Entropy* initialContext)
-{
+{/*
 	analysis->sear.m_slice = ctu->m_slice;
 	analysis->sear.m_frame = frame;
-
-#if _DEBUG || CHECKED_BUILD
-	for (uint32_t i = 0; i <= g_maxCUDepth; i++)
-		for (uint32_t j = 0; j < MAX_PRED_TYPES; j++)
-			invalidate(&(m_modeDepth[i].pred[j]));
-	invalidateContexts(0);
-#endif
 
 	int qp = setLambdaFromQP(&analysis->sear, ctu, 26);
 
@@ -86,43 +79,43 @@ Mode* compressCTU(Analysis* analysis, CUData* ctu, Frame* frame, CUGeom* cuGeom,
 	uint32_t numPartition = ctu->m_numPartitions;
 	if (analysis->sear.m_param->analysisMode)
 	{
-		if (analysis->sear.m_slice->m_sliceType == I_SLICE)
-			analysis->m_reuseIntraDataCTU = (analysis_intra_data*)analysis->sear.m_frame->m_analysisData.intraData;
-		else
-		{
-			int numPredDir = isInterP(analysis->sear.m_slice) ? 1 : 2;
-			analysis->m_reuseInterDataCTU = (analysis_inter_data*)analysis->sear.m_frame->m_analysisData.interData;
-			analysis->m_reuseRef = &(analysis->m_reuseInterDataCTU->ref[ctu->m_cuAddr * X265_MAX_PRED_MODE_PER_CTU * numPredDir]);
-			analysis->m_reuseBestMergeCand = &(analysis->m_reuseInterDataCTU->bestMergeCand[ctu->m_cuAddr * MAX_GEOMS]);
-		}
+	if (analysis->sear.m_slice->m_sliceType == I_SLICE)
+	analysis->m_reuseIntraDataCTU = (analysis_intra_data*)analysis->sear.m_frame->m_analysisData.intraData;
+	else
+	{
+	int numPredDir = isInterP(analysis->sear.m_slice) ? 1 : 2;
+	analysis->m_reuseInterDataCTU = (analysis_inter_data*)analysis->sear.m_frame->m_analysisData.interData;
+	analysis->m_reuseRef = &(analysis->m_reuseInterDataCTU->ref[ctu->m_cuAddr * X265_MAX_PRED_MODE_PER_CTU * numPredDir]);
+	analysis->m_reuseBestMergeCand = &(analysis->m_reuseInterDataCTU->bestMergeCand[ctu->m_cuAddr * MAX_GEOMS]);
+	}
 	}
 
 	uint32_t zOrder = 0;
 	if (analysis->sear.m_slice->m_sliceType == I_SLICE)
 	{
-		compressIntraCU(analysis, ctu, cuGeom, zOrder, qp);
+	compressIntraCU(analysis, ctu, cuGeom, zOrder, qp);
 
-		if (analysis->sear.m_param->analysisMode == X265_ANALYSIS_SAVE && analysis->sear.m_frame->m_analysisData.intraData)
-		{
-			CUData* bestCU = &(analysis->m_modeDepth[0].bestMode->cu);
-			memcpy(&(analysis->m_reuseIntraDataCTU->depth[ctu->m_cuAddr * numPartition]), bestCU->m_cuDepth, sizeof(uint8_t) * numPartition);
-			memcpy(&(analysis->m_reuseIntraDataCTU->modes[ctu->m_cuAddr * numPartition]), bestCU->m_lumaIntraDir, sizeof(uint8_t) * numPartition);
-			memcpy(&(analysis->m_reuseIntraDataCTU->partSizes[ctu->m_cuAddr * numPartition]), bestCU->m_partSize, sizeof(uint8_t) * numPartition);
-			memcpy(&(analysis->m_reuseIntraDataCTU->chromaModes[ctu->m_cuAddr * numPartition]), bestCU->m_chromaIntraDir, sizeof(uint8_t) * numPartition);
-		}
+	if (analysis->sear.m_param->analysisMode == X265_ANALYSIS_SAVE && analysis->sear.m_frame->m_analysisData.intraData)
+	{
+	CUData* bestCU = &(analysis->m_modeDepth[0].bestMode->cu);
+	memcpy(&(analysis->m_reuseIntraDataCTU->depth[ctu->m_cuAddr * numPartition]), bestCU->m_cuDepth, sizeof(uint8_t) * numPartition);
+	memcpy(&(analysis->m_reuseIntraDataCTU->modes[ctu->m_cuAddr * numPartition]), bestCU->m_lumaIntraDir, sizeof(uint8_t) * numPartition);
+	memcpy(&(analysis->m_reuseIntraDataCTU->partSizes[ctu->m_cuAddr * numPartition]), bestCU->m_partSize, sizeof(uint8_t) * numPartition);
+	memcpy(&(analysis->m_reuseIntraDataCTU->chromaModes[ctu->m_cuAddr * numPartition]), bestCU->m_chromaIntraDir, sizeof(uint8_t) * numPartition);
+	}
 	}
 	else
 	{
-		compressInterCU_rd0_4(&analysis->sear.predict, &analysis->sear, analysis, ctu, cuGeom, qp, frame);
+	compressInterCU_rd0_4(&analysis->sear.predict, &analysis->sear, analysis, ctu, cuGeom, qp, frame);
 	}
 
-	return analysis->m_modeDepth[0].bestMode;
+	return analysis->m_modeDepth[0].bestMode;*/return 0;
 }
 
 
 
 void compressIntraCU(Analysis* analysis, CUData* parentCTU, CUGeom* cuGeom, uint32_t zOrder, int32_t qp)
-{
+{/*
 	uint32_t depth = cuGeom->depth;//当前CU深度
 	struct ModeDepth* md = &(analysis->m_modeDepth[depth]);
 	md->bestMode = NULL;
@@ -221,11 +214,12 @@ void compressIntraCU(Analysis* analysis, CUData* parentCTU, CUGeom* cuGeom, uint
 	CUData_copyToPic(&(md->bestMode->cu), depth);
 	if (md->bestMode != &(md->pred[PRED_SPLIT]))
 		Yuv_copyToPicYuv(&(md->bestMode->reconYuv), analysis->sear.m_frame->m_reconPic, parentCTU->m_cuAddr, cuGeom->absPartIdx);
+*/
 }
 
 //帧间预测
 void compressInterCU_rd0_4(struct Predict *predict, struct Search* search, struct Analysis* analysis, struct CUData* parentCTU, CUGeom* cuGeom, int32_t qp, struct Frame *frame)
-{
+{/*
 	uint32_t depth = cuGeom->depth;
 	uint32_t cuAddr = parentCTU->m_cuAddr;
 	struct ModeDepth *md = &(analysis->m_modeDepth[depth]);
@@ -359,13 +353,14 @@ void compressInterCU_rd0_4(struct Predict *predict, struct Search* search, struc
 	CUData_copyToPic(&md->bestMode->cu, depth);
 	if (md->bestMode != &md->pred[PRED_SPLIT] && search->m_param->rdLevel)
 		Yuv_copyToPicYuv(&md->bestMode->reconYuv, search->m_frame->m_reconPic, cuAddr, cuGeom->absPartIdx);
+*/
 }
 
 void addSplitFlagCost(Analysis* aly, Mode* mode, uint32_t depth)
-{
+{/*
 	if (aly->sear.m_param->rdLevel >= 3)
 	{
-		/* code the split flag (0 or 1) and update bit costs */
+		// code the split flag (0 or 1) and update bit costs //
 		entropy_resetBits(&(mode->contexts));
 		codeSplitFlag(&(mode->contexts), &(mode->cu), 0, depth);
 		uint32_t bits = entropy_getNumberOfWrittenBits(&(mode->contexts));
@@ -383,13 +378,13 @@ void addSplitFlagCost(Analysis* aly, Mode* mode, uint32_t depth)
 		mode->mvBits++;
 		mode->totalBits++;
 		updateModeCost(&(aly->sear), mode);
-	}
+	}*/
 }
 
 uint32_t Analysis_topSkipMinDepth(Search *search, struct CUData *parentCTU, struct CUGeom* cuGeom)
-{
-	/* Do not attempt to code a block larger than the largest block in the
-	* co-located CTUs in L0 and L1 */
+{/*
+	// Do not attempt to code a block larger than the largest block in the
+	// co-located CTUs in L0 and L1 //
 	int currentQP = parentCTU->m_qp[0];
 	int previousQP = currentQP;
 	uint32_t minDepth0 = 4, minDepth1 = 4;
@@ -397,33 +392,33 @@ uint32_t Analysis_topSkipMinDepth(Search *search, struct CUData *parentCTU, stru
 	int numRefs = 0;
 	if (parentCTU->m_slice->m_numRefIdx[0])
 	{
-		numRefs++;
-		struct CUData* cu = framedata_getPicCTU(search->m_slice->m_refPicList[0][0]->m_encData, parentCTU->m_cuAddr);
-		previousQP = cu->m_qp[0];
-		if (!cu->m_cuDepth[cuGeom->absPartIdx])
-			return 0;
-		for (uint32_t i = 0; i < cuGeom->numPartitions; i += 4)
-		{
-			uint32_t d = cu->m_cuDepth[cuGeom->absPartIdx + i];
-			minDepth0 = X265_MIN(d, minDepth0);
-			sum += d;
-		}
+	numRefs++;
+	struct CUData* cu = framedata_getPicCTU(search->m_slice->m_refPicList[0][0]->m_encData, parentCTU->m_cuAddr);
+	previousQP = cu->m_qp[0];
+	if (!cu->m_cuDepth[cuGeom->absPartIdx])
+	return 0;
+	for (uint32_t i = 0; i < cuGeom->numPartitions; i += 4)
+	{
+	uint32_t d = cu->m_cuDepth[cuGeom->absPartIdx + i];
+	minDepth0 = X265_MIN(d, minDepth0);
+	sum += d;
+	}
 	}
 	if (parentCTU->m_slice->m_numRefIdx[1])
 	{
-		numRefs++;
-		struct CUData* cu = framedata_getPicCTU(search->m_slice->m_refPicList[1][0]->m_encData, parentCTU->m_cuAddr);
-		if (!cu->m_cuDepth[cuGeom->absPartIdx])
-			return 0;
-		for (uint32_t i = 0; i < cuGeom->numPartitions; i += 4)
-		{
-			uint32_t d = cu->m_cuDepth[cuGeom->absPartIdx + i];
-			minDepth1 = X265_MIN(d, minDepth1);
-			sum += d;
-		}
+	numRefs++;
+	struct CUData* cu = framedata_getPicCTU(search->m_slice->m_refPicList[1][0]->m_encData, parentCTU->m_cuAddr);
+	if (!cu->m_cuDepth[cuGeom->absPartIdx])
+	return 0;
+	for (uint32_t i = 0; i < cuGeom->numPartitions; i += 4)
+	{
+	uint32_t d = cu->m_cuDepth[cuGeom->absPartIdx + i];
+	minDepth1 = X265_MIN(d, minDepth1);
+	sum += d;
+	}
 	}
 	if (!numRefs)
-		return 0;
+	return 0;
 
 	uint32_t minDepth = X265_MIN(minDepth0, minDepth1);
 	uint32_t thresh = minDepth * numRefs * (cuGeom->numPartitions >> 2);
@@ -431,13 +426,13 @@ uint32_t Analysis_topSkipMinDepth(Search *search, struct CUData *parentCTU, stru
 	// allow block size growth if QP is raising or avg depth is
 	// less than 1.5 of min depth //
 	if (minDepth && currentQP >= previousQP && (sum <= thresh + (thresh >> 1)))
-		minDepth -= 1;
+	minDepth -= 1;
 
-	return minDepth;
+	return minDepth;*/return 0;
 }
 /* sets md.bestMode if a valid merge candidate is found, else leaves it NULL */
 void Analysis_checkMerge2Nx2N_rd0_4(struct Search *search, struct CUData *cu, struct Mode* skip, struct Mode* merge, struct CUGeom* cuGeom, struct Analysis *analysis)
-{
+{/*
 	uint32_t depth = cuGeom->depth;
 	struct ModeDepth* md = &analysis->m_modeDepth[depth];
 	Yuv *fencYuv = &md->fencYuv;
@@ -540,17 +535,19 @@ void Analysis_checkMerge2Nx2N_rd0_4(struct Search *search, struct CUData *cu, st
 	CUData_setPURefIdx(&md->bestMode->cu, 0, (int8_t)candMvField[bestSadCand][0].refIdx, 0, 0);
 	CUData_setPURefIdx(&md->bestMode->cu, 1, (int8_t)candMvField[bestSadCand][1].refIdx, 0, 0);
 	checkDQP(search, md->bestMode, cuGeom);
+	*/
 }
 void std_swap(Mode *a, Mode*b)
-{
+{/*
 	Mode temp;
 	temp = *a;
 	*a = *b;
 	*b = temp;
+	*/
 }
 
 void Analysis_checkInter_rd0_4(struct Analysis* analysis, Search *search, Mode* interMode, CUGeom* cuGeom, PartSize partSize)
-{
+{/*
 	initCosts(interMode);
 	setPartSizeSubParts(&interMode->cu, partSize);
 	setPredModeSubParts(&interMode->cu, MODE_INTER);
@@ -593,7 +590,7 @@ void Analysis_checkInter_rd0_4(struct Analysis* analysis, Search *search, Mode* 
 				analysis->m_reuseRef++;
 			}
 		}
-	}
+	}*/
 }
 /* returns true if recursion should be stopped */
 bool Analysis_recursionDepthCheck(Search *search, const CUData* parentCTU, const CUGeom* cuGeom, Mode* bestMode)
@@ -602,7 +599,7 @@ bool Analysis_recursionDepthCheck(Search *search, const CUData* parentCTU, const
 	* of average of RD cost of the neighbor CU's(above, aboveleft, aboveright,
 	* left, colocated) and avg cost of that CU at depth "n" with weightage for
 	* each quantity */
-
+	/*
 	uint32_t depth = cuGeom->depth;
 	FrameData* curEncData = search->m_frame->m_encData;
 	RCStatCU* cuStat = &curEncData->m_cuStat[parentCTU->m_cuAddr];
@@ -649,6 +646,6 @@ bool Analysis_recursionDepthCheck(Search *search, const CUData* parentCTU, const
 		if (curCost < avgCost && avgCost)
 			return TRUE;
 	}
-
+	*/
 	return FALSE;
 }

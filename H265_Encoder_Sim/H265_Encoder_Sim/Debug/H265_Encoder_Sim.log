@@ -1,10 +1,11 @@
-﻿生成启动时间为 2018/10/24 22:06:40。
+﻿生成启动时间为 2018/10/25 22:51:34。
      1>项目“E:\GIT\Encoder\H265_Encoder_Sim\H265_Encoder_Sim\H265_Encoder_Sim.vcxproj”在节点 2 上(Build 个目标)。
      1>ClCompile:
-         D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _CRT_SECURE_NO_WARNINGS /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt entropy.cpp
-         entropy.cpp
+         D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _CRT_SECURE_NO_WARNINGS /D _MBCS /Gm /EHsc /RTC1 /MT /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt main.cpp
+         main.cpp
        Link:
-         D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"E:\GIT\Encoder\H265_Encoder_Sim\Debug\H265_Encoder_Sim.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"E:\GIT\Encoder\H265_Encoder_Sim\Debug\H265_Encoder_Sim.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"E:\GIT\Encoder\H265_Encoder_Sim\Debug\H265_Encoder_Sim.lib" /MACHINE:X86 Debug\api.obj
+         D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"E:\GIT\Encoder\H265_Encoder_Sim\Debug\H265_Encoder_Sim.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"E:\GIT\Encoder\H265_Encoder_Sim\Debug\H265_Encoder_Sim.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"E:\GIT\Encoder\H265_Encoder_Sim\Debug\H265_Encoder_Sim.lib" /MACHINE:X86 Debug\analysis.obj
+         Debug\api.obj
          Debug\Bitstream.obj
          Debug\common.obj
          Debug\constants.obj
@@ -16,46 +17,18 @@
          Debug\framedata.obj
          Debug\frameencoder.obj
          Debug\intrapred.obj
+         Debug\level.obj
          Debug\main.obj
+         Debug\motion.obj
          Debug\nal.obj
          Debug\param.obj
          Debug\piclist.obj
          Debug\pixel.obj
          Debug\primitives.obj
          Debug\slice.obj
-     1>cudata.obj : error LNK2019: 无法解析的外部符号 "void __cdecl ECS_memcpy(void *,void *,int)" (?ECS_memcpy@@YAXPAX0H@Z)，该符号在函数 "void __cdecl CUData_copyFromPic(struct CUData *,struct CUData const *,struct CUGeom const *)" (?CUData_copyFromPic@@YAXPAUCUData@@PBU1@PBUCUGeom@@@Z) 中被引用
-     1>cudata.obj : error LNK2019: 无法解析的外部符号 "void __cdecl copy64(unsigned char *,unsigned char *)" (?copy64@@YAXPAE0@Z)，该符号在函数 "void __cdecl CUData_initialize(struct CUData *,struct CUDataMemPool *,unsigned int,int)" (?CUData_initialize@@YAXPAUCUData@@PAUCUDataMemPool@@IH@Z) 中被引用
-     1>cudata.obj : error LNK2019: 无法解析的外部符号 "void __cdecl bcast64(unsigned char *,unsigned char)" (?bcast64@@YAXPAEE@Z)，该符号在函数 "void __cdecl CUData_initialize(struct CUData *,struct CUDataMemPool *,unsigned int,int)" (?CUData_initialize@@YAXPAUCUData@@PAUCUDataMemPool@@IH@Z) 中被引用
-     1>encoder.obj : error LNK2019: 无法解析的外部符号 "int __cdecl PicYuv_createOffsets(struct PicYuv *,struct SPS *)" (?PicYuv_createOffsets@@YAHPAUPicYuv@@PAUSPS@@@Z)，该符号在函数 "int __cdecl encode(struct Encoder *,struct x265_picture *,struct x265_picture *)" (?encode@@YAHPAUEncoder@@PAUx265_picture@@1@Z) 中被引用
-     1>encoder.obj : error LNK2019: 无法解析的外部符号 "void __cdecl PicYuv_copyFromPicture(struct PicYuv *,struct x265_picture *,int,int)" (?PicYuv_copyFromPicture@@YAXPAUPicYuv@@PAUx265_picture@@HH@Z)，该符号在函数 "int __cdecl encode(struct Encoder *,struct x265_picture *,struct x265_picture *)" (?encode@@YAHPAUEncoder@@PAUx265_picture@@1@Z) 中被引用
-     1>encoder.obj : error LNK2019: 无法解析的外部符号 "int __cdecl ScalingList_init(struct ScalingList *)" (?ScalingList_init@@YAHPAUScalingList@@@Z)，该符号在函数 "void __cdecl Encoder_create(struct Encoder *)" (?Encoder_create@@YAXPAUEncoder@@@Z) 中被引用
-     1>encoder.obj : error LNK2019: 无法解析的外部符号 "void __cdecl ScalingList_setupQuantMatrices(struct ScalingList *)" (?ScalingList_setupQuantMatrices@@YAXPAUScalingList@@@Z)，该符号在函数 "void __cdecl Encoder_create(struct Encoder *)" (?Encoder_create@@YAXPAUEncoder@@@Z) 中被引用
-     1>encoder.obj : error LNK2019: 无法解析的外部符号 "void __cdecl push_1(struct Bitstream *)" (?push_1@@YAXPAUBitstream@@@Z)，该符号在函数 "int __cdecl encode(struct Encoder *,struct x265_picture *,struct x265_picture *)" (?encode@@YAHPAUEncoder@@PAUx265_picture@@1@Z) 中被引用
-     1>encoder.obj : error LNK2019: 无法解析的外部符号 "void __cdecl MotionEstimate_initScales(void)" (?MotionEstimate_initScales@@YAXXZ)，该符号在函数 "void __cdecl Encoder_init(struct Encoder *)" (?Encoder_init@@YAXPAUEncoder@@@Z) 中被引用
-     1>encoder.obj : error LNK2019: 无法解析的外部符号 "void __cdecl DPB_init(struct DPB *,struct x265_param *)" (?DPB_init@@YAXPAUDPB@@PAUx265_param@@@Z)，该符号在函数 "void __cdecl Encoder_create(struct Encoder *)" (?Encoder_create@@YAXPAUEncoder@@@Z) 中被引用
-     1>encoder.obj : error LNK2019: 无法解析的外部符号 "void __cdecl DPB_prepareEncode(struct DPB *,struct Frame *)" (?DPB_prepareEncode@@YAXPAUDPB@@PAUFrame@@@Z)，该符号在函数 "int __cdecl encode(struct Encoder *,struct x265_picture *,struct x265_picture *)" (?encode@@YAHPAUEncoder@@PAUx265_picture@@1@Z) 中被引用
-     1>encoder.obj : error LNK2019: 无法解析的外部符号 "void __cdecl DPB_prepareEncode2(struct DPB *,struct Frame *)" (?DPB_prepareEncode2@@YAXPAUDPB@@PAUFrame@@@Z)，该符号在函数 "int __cdecl encode(struct Encoder *,struct x265_picture *,struct x265_picture *)" (?encode@@YAHPAUEncoder@@PAUx265_picture@@1@Z) 中被引用
-     1>encoder.obj : error LNK2019: 无法解析的外部符号 "void __cdecl DPB_recycleUnreferenced(struct DPB *)" (?DPB_recycleUnreferenced@@YAXPAUDPB@@@Z)，该符号在函数 "int __cdecl encode(struct Encoder *,struct x265_picture *,struct x265_picture *)" (?encode@@YAHPAUEncoder@@PAUx265_picture@@1@Z) 中被引用
-     1>entropy.obj : error LNK2019: 无法解析的外部符号 "unsigned int __cdecl calc_sigPattern(unsigned int *,unsigned int,unsigned int,unsigned int,unsigned int)" (?calc_sigPattern@@YAIPAIIIII@Z)，该符号在函数 "void __cdecl codeCoeffNxN(struct Entropy *,struct CUData *,short *,unsigned int,unsigned int,enum TextType)" (?codeCoeffNxN@@YAXPAUEntropy@@PAUCUData@@PAFIIW4TextType@@@Z) 中被引用
-     1>entropy.obj : error LNK2019: 无法解析的外部符号 "unsigned int __cdecl get_Sigctx(unsigned int *,unsigned int,unsigned int,unsigned int,unsigned int)" (?get_Sigctx@@YAIPAIIIII@Z)，该符号在函数 "void __cdecl codeCoeffNxN(struct Entropy *,struct CUData *,short *,unsigned int,unsigned int,enum TextType)" (?codeCoeffNxN@@YAXPAUEntropy@@PAUCUData@@PAFIIW4TextType@@@Z) 中被引用
-     1>entropy.obj : error LNK2019: 无法解析的外部符号 "int const __cdecl checkPredMode(struct ScalingList *,int,int)" (?checkPredMode@@YA?BHPAUScalingList@@HH@Z)，该符号在函数 "void __cdecl codeScalingListss(struct Entropy *,struct ScalingList *)" (?codeScalingListss@@YAXPAUEntropy@@PAUScalingList@@@Z) 中被引用
-     1>entropy.obj : error LNK2019: 无法解析的外部符号 "unsigned int __cdecl getSigCtxInc(unsigned int,unsigned int,unsigned int,unsigned int,char,unsigned int)" (?getSigCtxInc@@YAIIIIIDI@Z)，该符号在函数 "void __cdecl codeCoeffNxN(struct Entropy *,struct CUData *,short *,unsigned int,unsigned int,enum TextType)" (?codeCoeffNxN@@YAXPAUEntropy@@PAUCUData@@PAFIIW4TextType@@@Z) 中被引用
-     1>frame.obj : error LNK2019: 无法解析的外部符号 "int __cdecl PicYuv_create(struct PicYuv *,unsigned int,unsigned int)" (?PicYuv_create@@YAHPAUPicYuv@@II@Z)，该符号在函数 "int __cdecl Frame_create(struct Frame *,struct x265_param *)" (?Frame_create@@YAHPAUFrame@@PAUx265_param@@@Z) 中被引用
-     1>frame.obj : error LNK2019: 无法解析的外部符号 "int __cdecl PicYuv_create_reconPic(struct PicYuv *,unsigned int,unsigned int)" (?PicYuv_create_reconPic@@YAHPAUPicYuv@@II@Z)，该符号在函数 "int __cdecl Frame_allocEncodeData(struct Frame *,struct x265_param *,struct SPS *)" (?Frame_allocEncodeData@@YAHPAUFrame@@PAUx265_param@@PAUSPS@@@Z) 中被引用
-     1>frame.obj : error LNK2019: 无法解析的外部符号 "int __cdecl PicYuv_createOffsets_recon(struct PicYuv *,struct SPS *)" (?PicYuv_createOffsets_recon@@YAHPAUPicYuv@@PAUSPS@@@Z)，该符号在函数 "int __cdecl Frame_allocEncodeData(struct Frame *,struct x265_param *,struct SPS *)" (?Frame_allocEncodeData@@YAHPAUFrame@@PAUx265_param@@PAUSPS@@@Z) 中被引用
-     1>frame.obj : error LNK2019: 无法解析的外部符号 "void __cdecl PicYuv_destroy(struct PicYuv *)" (?PicYuv_destroy@@YAXPAUPicYuv@@@Z)，该符号在函数 "void __cdecl Frame_destroy(struct Frame *)" (?Frame_destroy@@YAXPAUFrame@@@Z) 中被引用
-     1>frameencoder.obj : error LNK2019: 无法解析的外部符号 "int __cdecl MotionReference_init(struct MotionReference *,struct PicYuv *,struct x265_param *)" (?MotionReference_init@@YAHPAUMotionReference@@PAUPicYuv@@PAUx265_param@@@Z)，该符号在函数 "void __cdecl FrameEncoder_compressFrame(struct FrameEncoder *,struct Analysis *)" (?FrameEncoder_compressFrame@@YAXPAUFrameEncoder@@PAUAnalysis@@@Z) 中被引用
-     1>frameencoder.obj : error LNK2019: 无法解析的外部符号 "void __cdecl push(struct Bitstream *)" (?push@@YAXPAUBitstream@@@Z)，该符号在函数 "void __cdecl FrameEncoder_compressFrame(struct FrameEncoder *,struct Analysis *)" (?FrameEncoder_compressFrame@@YAXPAUFrameEncoder@@PAUAnalysis@@@Z) 中被引用
-     1>frameencoder.obj : error LNK2019: 无法解析的外部符号 "int __cdecl initSearch(struct Search *,struct x265_param *,struct ScalingList *)" (?initSearch@@YAHPAUSearch@@PAUx265_param@@PAUScalingList@@@Z)，该符号在函数 "int __cdecl FrameEncoder_startCompressFrame(struct FrameEncoder *,struct Frame *)" (?FrameEncoder_startCompressFrame@@YAHPAUFrameEncoder@@PAUFrame@@@Z) 中被引用
-     1>frameencoder.obj : error LNK2019: 无法解析的外部符号 "struct Mode * __cdecl compressCTU(struct Analysis *,struct CUData *,struct Frame *,struct CUGeom *,struct Entropy *)" (?compressCTU@@YAPAUMode@@PAUAnalysis@@PAUCUData@@PAUFrame@@PAUCUGeom@@PAUEntropy@@@Z)，该符号在函数 "void __cdecl FrameEncoder_processRowEncoder(struct FrameEncoder *,int,struct Analysis *)" (?FrameEncoder_processRowEncoder@@YAXPAUFrameEncoder@@HPAUAnalysis@@@Z) 中被引用
-     1>frameencoder.obj : error LNK2019: 无法解析的外部符号 "int __cdecl Analysis_create(struct Analysis *)" (?Analysis_create@@YAHPAUAnalysis@@@Z)，该符号在函数 "int __cdecl FrameEncoder_startCompressFrame(struct FrameEncoder *,struct Frame *)" (?FrameEncoder_startCompressFrame@@YAHPAUFrameEncoder@@PAUFrame@@@Z) 中被引用
-     1>frameencoder.obj : error LNK2019: 无法解析的外部符号 "void __cdecl FrameFilter_init(struct FrameFilter *,struct Encoder *,struct FrameEncoder *,int)" (?FrameFilter_init@@YAXPAUFrameFilter@@PAUEncoder@@PAUFrameEncoder@@H@Z)，该符号在函数 "int __cdecl FrameEncoder_init(struct FrameEncoder *,struct Encoder *,int,int)" (?FrameEncoder_init@@YAHPAUFrameEncoder@@PAUEncoder@@HH@Z) 中被引用
-     1>frameencoder.obj : error LNK2019: 无法解析的外部符号 "void __cdecl FrameFilter_FrameFilter(struct FrameFilter *)" (?FrameFilter_FrameFilter@@YAXPAUFrameFilter@@@Z)，该符号在函数 "int __cdecl FrameEncoder_init(struct FrameEncoder *,struct Encoder *,int,int)" (?FrameEncoder_init@@YAHPAUFrameEncoder@@PAUEncoder@@HH@Z) 中被引用
-     1>frameencoder.obj : error LNK2019: 无法解析的外部符号 "void __cdecl FrameFilter_start(struct FrameFilter *,struct Frame *,struct Entropy *,int)" (?FrameFilter_start@@YAXPAUFrameFilter@@PAUFrame@@PAUEntropy@@H@Z)，该符号在函数 "void __cdecl FrameEncoder_compressFrame(struct FrameEncoder *,struct Analysis *)" (?FrameEncoder_compressFrame@@YAXPAUFrameEncoder@@PAUAnalysis@@@Z) 中被引用
-     1>frameencoder.obj : error LNK2019: 无法解析的外部符号 "void __cdecl FrameFilter_processRow(struct FrameFilter *,int)" (?FrameFilter_processRow@@YAXPAUFrameFilter@@H@Z)，该符号在函数 "void __cdecl FrameEncoder_compressFrame(struct FrameEncoder *,struct Analysis *)" (?FrameEncoder_compressFrame@@YAXPAUFrameEncoder@@PAUAnalysis@@@Z) 中被引用
-     1>E:\GIT\Encoder\H265_Encoder_Sim\Debug\H265_Encoder_Sim.exe : fatal error LNK1120: 30 个无法解析的外部命令
-     1>已完成生成项目“E:\GIT\Encoder\H265_Encoder_Sim\H265_Encoder_Sim\H265_Encoder_Sim.vcxproj”(Build 个目标)的操作 - 失败。
+         H265_Encoder_Sim.vcxproj -> E:\GIT\Encoder\H265_Encoder_Sim\Debug\H265_Encoder_Sim.exe
+     1>已完成生成项目“E:\GIT\Encoder\H265_Encoder_Sim\H265_Encoder_Sim\H265_Encoder_Sim.vcxproj”(Build 个目标)的操作。
 
-生成失败。
+生成成功。
 
 已用时间 00:00:01.88

@@ -49,42 +49,42 @@ int ECS_encode(const char* infile, int width, int height, int type, const char* 
 	param.fpsDenom = 1000;//1; // 帧率
 	
 	Encoder *encoder = x265_encoder_open(&param);
-	/*
+	
 	pic_in = x265_picture_alloc();
 	if (pic_in == NULL)
 	{
-	goto out;
+		goto out;
 	}
-
+	
 	x265_picture_init(&param, pic_in);
-
+	
 	// Y分量大小
 	luma_size = width * height;
 
 	pic_in->stride[0] = width;
 	pic_in->stride[1] = width / 2;
 	pic_in->stride[2] = width / 2;
-	*/
-	/*
+	
+	
 	// 计算总帧数
 	fseek(fp_src, 0, SEEK_END);
 	switch(csp)
 	{
-	case X265_CSP_I444:
-	i_frame = ftell(fp_src) / (luma_size*3);
-	chroma_size = luma_size;
-	break;
-	case X265_CSP_I420:
-	i_frame = ftell(fp_src) / (luma_size*3/2*10);
-	chroma_size = luma_size / 4;
-	break;
-	default:
-	printf("Colorspace Not Support.\n");
-	return -1;
+		case X265_CSP_I444:
+			i_frame = ftell(fp_src) / (luma_size*3);
+			chroma_size = luma_size;
+			break;
+		case X265_CSP_I420:
+			i_frame = ftell(fp_src) / (luma_size*3/2*10);
+			chroma_size = luma_size / 4;
+			break;
+		default:
+			printf("Colorspace Not Support.\n");
+		return -1;
 	}
 	fseek(fp_src,0,SEEK_SET);
 	printf("framecnt: %d, y: %d u: %d\n", i_frame, luma_size, chroma_size);
-	*/
+	
 
 	/*	x265_encoder_parameters(encoder, &param);
 
@@ -130,5 +130,6 @@ int ECS_encode(const char* infile, int width, int height, int type, const char* 
 	x265_picture_free(pic_in);
 	fclose(fp_src);
 	fclose(fp_dst);*/
+	out: 
 	return 0;
 }

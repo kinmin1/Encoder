@@ -8,14 +8,12 @@
 #include "common.h"
 #include "param.h"
 #include "api.h"
-#include "entropy.h"
 #include "level.h"
 #include "nal.h"
 #include "constants.h"
 #include "nal.h"
-#include "encoder.h"
-#include<string.h>
-#include<stdlib.h>
+#include <string.h>
+#include <stdlib.h>
 
 Encoder *x265_encoder_open(x265_param *p)
 {
@@ -43,7 +41,7 @@ Encoder *x265_encoder_open(x265_param *p)
 	
 	Encoder_init(encoder);
 	Encoder_configure(encoder, p);
-	/*
+	
 	// may change rate control and CPB params
 	if (!enforceLevel(p, &encoder->m_vps))
 		goto fail;
@@ -57,24 +55,24 @@ Encoder *x265_encoder_open(x265_param *p)
 		goto fail;
 
 	return (Encoder *)encoder;
-	*/
+	
 fail:
 	free(encoder);
 	encoder = NULL;
 	return NULL;
 }
-/*
+
 void x265_encoder_parameters(Encoder *enc, x265_param *out)
-{
+{/*
 	if (enc && out)
 	{
 		struct Encoder *encoder = (struct Encoder*)(enc);
 		memcpy(out, encoder->m_param, sizeof(x265_param));
-	}
+	}*/
 }
 
 void x265_picture_init(x265_param *param, x265_picture *pic)
-{
+{/*
 	memset(pic, 0, sizeof(x265_picture));
 	pic->bitDepth = param->internalBitDepth;
 	pic->forceqp = X265_QP_AUTO;
@@ -85,12 +83,12 @@ void x265_picture_init(x265_param *param, x265_picture *pic)
 		uint32_t numCUsInFrame = widthInCU*heightInCU;
 		pic->analysisData.numCUsInFrame = numCUsInFrame;
 		pic->analysisData.numPartitions = NUM_4x4_PARTITIONS;
-	}
+	}*/
 }
 
 void  getStreamHeaders(Encoder *encoder, NALList *list, Entropy* sbacCoder, Bitstream* bs)
 {
-
+	/*
 	setBitstream(sbacCoder, bs);
 
 	// headers for start of bitstream //
@@ -108,10 +106,10 @@ void  getStreamHeaders(Encoder *encoder, NALList *list, Entropy* sbacCoder, Bits
 	codePPS(sbacCoder, &encoder->m_pps);
 	writeByteAlignment(bs);
 	serialize(list, NAL_UNIT_PPS, bs);
-
+	*/
 }
 int x265_encoder_headers(Encoder *enc, x265_nal **pp_nal, uint32_t *pi_nal)
-{
+{/*
 	if (pp_nal && enc)
 	{
 		//Encoder *encoder = static_cast<Encoder*>(enc);
@@ -124,12 +122,12 @@ int x265_encoder_headers(Encoder *enc, x265_nal **pp_nal, uint32_t *pi_nal)
 		if (pi_nal) *pi_nal = enc->m_nalList.m_numNal;
 		return enc->m_nalList.m_occupancy;
 	}
-
+	*/
 	return -1;
 }
 
 int x265_encoder_encode(Encoder *enc, x265_nal **pp_nal, uint32_t *pi_nal, x265_picture *pic_in, x265_picture *pic_out)
-{
+{/*
 	if (!enc)
 		return -1;
 
@@ -149,7 +147,7 @@ int x265_encoder_encode(Encoder *enc, x265_nal **pp_nal, uint32_t *pi_nal, x265_
 	}
 	else if (pi_nal)
 		*pi_nal = 0;
-	return numEncoded;
+	return numEncoded;*/return 0;
 }
 
 x265_picture *x265_picture_alloc()
@@ -172,4 +170,3 @@ void x265_encoder_close(Encoder *enc)
 		enc = NULL;
 	}
 }
-*/
