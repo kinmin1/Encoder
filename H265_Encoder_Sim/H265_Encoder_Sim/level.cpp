@@ -42,7 +42,7 @@ LevelSpec levels[] =
 
 /* determine minimum decoder level required to decode the described video */
 void determineLevel(x265_param *param, VPS*vps)
-{/*
+{
 	vps->maxTempSubLayers = param->bEnableTemporalSubLayers ? 2 : 1;
 	if (param->internalCsp == X265_CSP_I420)
 	{
@@ -168,15 +168,15 @@ void determineLevel(x265_param *param, VPS*vps)
 			else if (vps->ptl.bitDepthConstraint <= 10)
 				profile = "Main 4:4:4 10";
 		}
-	}*/
+	}
 }
 
 bool enforceLevel(x265_param* param, VPS* vps)
-{/*
+{
 	vps->numReorderPics = (param->bBPyramid && param->bframes > 1) ? 2 : !!param->bframes;
 	vps->maxDecPicBuffering = X265_MIN(MAX_NUM_REF, X265_MAX(vps->numReorderPics + 2, (uint32_t)param->maxNumReferences) + vps->numReorderPics);
 
 	// no level specified by user, just auto-detect from the configuration //
-	if (param->levelIdc <= 0)*/
+	if (param->levelIdc <= 0)
 		return TRUE;
 }

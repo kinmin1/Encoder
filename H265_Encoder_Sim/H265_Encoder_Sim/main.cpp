@@ -4,18 +4,19 @@
 #include"param.h"
 #include"api.h"
 #include"encoder.h"
+#include <sys/types.h>  
 
-int ECS_encode(const char* infile, int width, int height, int type, const char* outfile);
+int MY_Encoder(const char* infile, int width, int height, int type, const char* outfile);
 
 int main()
 {
 	//printf("HELLO WORLD!\n");
-	ECS_encode("akiyo_cif_352_288.yuv", 352, 288, 1, "str.bin");
+	MY_Encoder("BUS_352x288_30_orig_150f.yuv", 352, 288, 1, "str.bin");
 	while (1);
 	return 0;
 }
 
-int ECS_encode(const char* infile, int width, int height, int type, const char* outfile)
+int MY_Encoder(const char* infile, int width, int height, int type, const char* outfile)
 {
 	int frame_cnt = 0;
 	FILE *fp_src = NULL;
@@ -108,10 +109,12 @@ int ECS_encode(const char* infile, int width, int height, int type, const char* 
 	}
 	fclose(fp_dst);
 	
-	unsigned char *buffer = (unsigned char *)malloc(luma_size * 3 / 2);//=(unsigned char *)0x58000000;
-	fread(buffer, sizeof(unsigned char), luma_size * 3 / 2, fp_src);
+	unsigned char *buffer = (unsigned char *)malloc(luma_size * 3 / 2);
+	
 	for (int i = 0; i < 10/* frame_cnt*/; i++)
 	{
+		fseek(fp_src, i * 352 * 288 * 3 / 2, SEEK_SET);
+		fread(buffer, sizeof(unsigned char), 352 * 288 * 3 / 2, fp_src);
 		pic_in->planes[0] = buffer;
 		pic_in->planes[1] = buffer + luma_size;
 		pic_in->planes[2] = buffer + luma_size * 5 / 4;
@@ -124,9 +127,6 @@ int ECS_encode(const char* infile, int width, int height, int type, const char* 
 			printf("Error encode frame: %d.\n", i + 1);
 			goto out;
 		}
-		//fseek(fp_src, luma_size * 3 / 2, SEEK_CUR);
-		//fp_src = fp_src + luma_size * 3 / 2;
-		//printf("%d\n", fp_src);
 	}
 	free(buffer);
 	buffer = NULL;

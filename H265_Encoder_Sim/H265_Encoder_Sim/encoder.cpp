@@ -426,7 +426,7 @@ int encode(Encoder *enc, x265_picture* pic_in, x265_picture* pic_out)
 }
 
 void Encoder_configure(Encoder * encoder, x265_param *p)
-{/*
+{
 	encoder->m_param = p;
 
 	// initialize the conformance window //
@@ -454,7 +454,7 @@ void Encoder_configure(Encoder * encoder, x265_param *p)
 		encoder->m_conformanceWindow.bEnabled = TRUE;
 		encoder->m_conformanceWindow.bottomOffset = padsize;
 	}
-	encoder->m_param->rc.qgSize = p->maxCUSize;*/
+	encoder->m_param->rc.qgSize = p->maxCUSize;
 }
 
 void Encoder_destroy(Encoder *encoder)
