@@ -22,8 +22,8 @@ void x265_param_default(x265_param *param)
 	param->internalBitDepth = x265_max_bit_depth;
 	param->internalCsp = X265_CSP_I420;
 
-	param->sourceWidth = 88;
-	param->sourceHeight = 72;
+	param->sourceWidth = 352;
+	param->sourceHeight = 288;
 	param->levelIdc = 0;
 	param->bHighTier = 0;
 	param->interlaceMode = 0;

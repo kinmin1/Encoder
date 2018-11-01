@@ -87,6 +87,7 @@
     <ClCompile Include="piclist.cpp" />
     <ClCompile Include="pixel.cpp" />
     <ClCompile Include="primitives.cpp" />
+    <ClCompile Include="scalinglist.cpp" />
     <ClCompile Include="slice.cpp" />
   </ItemGroup>
   <ItemGroup>

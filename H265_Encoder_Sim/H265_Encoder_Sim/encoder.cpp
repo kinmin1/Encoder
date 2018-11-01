@@ -51,7 +51,7 @@ void Encoder_init(Encoder *encoder)
 
 void Encoder_create(Encoder *encoder)
 {
-	/*
+	
 	if (!primitives.pu[0].sad)
 	{
 		// this should be an impossible condition when using our public API, and indicates a serious bug.
@@ -59,7 +59,7 @@ void Encoder_create(Encoder *encoder)
 			printf("Primitives must be initialized before encoder is created\n");
 		exit(0);
 	}
-
+	
 	x265_param* p = encoder->m_param;
 	int rows = (p->sourceHeight + p->maxCUSize - 1) >> g_log2Size[p->maxCUSize];
 	int cols = (p->sourceWidth + p->maxCUSize - 1) >> g_log2Size[p->maxCUSize];
@@ -68,12 +68,12 @@ void Encoder_create(Encoder *encoder)
 	encoder->m_frameEncoder = (FrameEncoder*)malloc(sizeof(FrameEncoder));//完成所有帧编码后释放
 
 	encoder->m_scalingList = (ScalingList*)malloc(sizeof(ScalingList));//完成所有帧编码后释放
-
+	
 	if (!(ScalingList_init(encoder->m_scalingList)))
 	{
 		printf("Unable to allocate scaling list arrays!\n");
 		encoder->m_aborted = TRUE;
-	}
+	}/*
 	ScalingList_setupQuantMatrices(encoder->m_scalingList);
 
 	encoder->m_dpb = (DPB *)malloc(sizeof(DPB));//完成所有帧编码后释放
