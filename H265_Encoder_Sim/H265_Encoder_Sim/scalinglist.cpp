@@ -41,9 +41,9 @@ int32_t quantInterDefault8x8[64] =
 	20, 24, 25, 28, 33, 41, 54, 71,
 	24, 25, 28, 33, 41, 54, 71, 91
 };
-//const int     s_numCoefPerSize[NUM_SIZES1] = { 16, 64, 256, 1024 };
-//const int32_t s_quantScales[NUM_REM] = { 26214, 23302, 20560, 18396, 16384, 14564 };
-//const int32_t s_invQuantScales[NUM_REM] = { 40, 45, 51, 57, 64, 72 };
+const int     const_s_numCoefPerSize[NUM_SIZES1] = { 16, 64, 256, 1024 };
+const int32_t const_s_quantScales[NUM_REM] = { 26214, 23302, 20560, 18396, 16384, 14564 };
+const int32_t const_s_invQuantScales[NUM_REM] = { 40, 45, 51, 57, 64, 72 };
 
 void ScalingList_ScalingList(ScalingList* list)
 {
@@ -53,17 +53,19 @@ void ScalingList_ScalingList(ScalingList* list)
 }
 bool ScalingList_init(ScalingList* scalingList)
 {
+	ScalingList_ScalingList(scalingList);
+
 	bool ok = TRUE;
 	for (int sizeId = 0; sizeId < NUM_SIZES1; sizeId++)
 	{
 		for (int listId = 0; listId < NUM_LISTS; listId++)
 		{
-			scalingList->m_scalingListCoef[sizeId][listId] = X265_MALLOC(int32_t, X265_MIN(MAX_MATRIX_COEF_NUM, scalingList->s_numCoefPerSize[sizeId]));
+			scalingList->m_scalingListCoef[sizeId][listId] = X265_MALLOC(int32_t, X265_MIN(MAX_MATRIX_COEF_NUM, const_s_numCoefPerSize[sizeId]));
 			ok &= !!scalingList->m_scalingListCoef[sizeId][listId];
 			for (int rem = 0; rem < NUM_REM; rem++)
 			{
-				scalingList->m_quantCoef[sizeId][listId][rem] = X265_MALLOC(int32_t, scalingList->s_numCoefPerSize[sizeId]);
-				scalingList->m_dequantCoef[sizeId][listId][rem] = X265_MALLOC(int32_t, scalingList->s_numCoefPerSize[sizeId]);
+				scalingList->m_quantCoef[sizeId][listId][rem] = X265_MALLOC(int32_t, const_s_numCoefPerSize[sizeId]);
+				scalingList->m_dequantCoef[sizeId][listId][rem] = X265_MALLOC(int32_t, const_s_numCoefPerSize[sizeId]);
 				ok &= scalingList->m_quantCoef[sizeId][listId][rem] && scalingList->m_dequantCoef[sizeId][listId][rem];
 			}
 		}
@@ -141,16 +143,16 @@ void ScalingList_setupQuantMatrices(ScalingList *scal)
 
 				if (scal->m_bEnabled)
 				{
-					processScalingListEnc(coeff, quantCoeff, scal->s_quantScales[rem] << 4, width, width, ratio, stride, dc);
-					processScalingListDec(coeff, dequantCoeff, scal->s_invQuantScales[rem], width, width, ratio, stride, dc);
+					processScalingListEnc(coeff, quantCoeff, const_s_quantScales[rem] << 4, width, width, ratio, stride, dc);
+					processScalingListDec(coeff, dequantCoeff, const_s_invQuantScales[rem], width, width, ratio, stride, dc);
 				}
 				else
 				{
 					/* flat quant and dequant coefficients */
 					for (int i = 0; i < count; i++)
 					{
-						quantCoeff[i] = scal->s_quantScales[rem];
-						dequantCoeff[i] = scal->s_invQuantScales[rem];
+						quantCoeff[i] = const_s_quantScales[rem];
+						dequantCoeff[i] = const_s_invQuantScales[rem];
 					}
 				}
 			}

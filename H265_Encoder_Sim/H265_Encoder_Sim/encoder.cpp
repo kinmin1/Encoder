@@ -73,11 +73,11 @@ void Encoder_create(Encoder *encoder)
 	{
 		printf("Unable to allocate scaling list arrays!\n");
 		encoder->m_aborted = TRUE;
-	}/*
+	}
 	ScalingList_setupQuantMatrices(encoder->m_scalingList);
-
+	
 	encoder->m_dpb = (DPB *)malloc(sizeof(DPB));//完成所有帧编码后释放
-
+	/*
 	DPB_init(encoder->m_dpb, encoder->m_param);
 
 	Encoder_initVPS(encoder, &encoder->m_vps);

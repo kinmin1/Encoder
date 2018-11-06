@@ -1010,7 +1010,7 @@ void setupPixelPrimitives_c(EncoderPrimitives* p)
     p->cu[BLOCK_ ## W ## x ## H].calcresidual  = getResidual; \
     p->cu[BLOCK_ ## W ## x ## H].sse_pp        = sse_pixel;\
     p->cu[BLOCK_ ## W ## x ## H].sse_ss        = sse_int16_t;
-	//p->cu[BLOCK_ ## W ## x ## H].var           = pixel_var; \
+//	p->cu[BLOCK_ ## W ## x ## H].var           = pixel_var; \
 
 
 	LUMA_PU(4, 4);

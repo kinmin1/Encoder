@@ -19,9 +19,7 @@ Encoder *x265_encoder_open(x265_param *p)
 {
 	if (!p)
 		return NULL;
-
 	Encoder *encoder = NULL;
-
 	if (x265_set_globals(p))
 		goto fail;
 	
