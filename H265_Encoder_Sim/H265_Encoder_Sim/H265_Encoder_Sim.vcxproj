@@ -73,11 +73,13 @@
     <ClCompile Include="constants.cpp" />
     <ClCompile Include="cudata.cpp" />
     <ClCompile Include="dct.cpp" />
+    <ClCompile Include="dpb.cpp" />
     <ClCompile Include="encoder.cpp" />
     <ClCompile Include="entropy.cpp" />
     <ClCompile Include="frame.cpp" />
     <ClCompile Include="framedata.cpp" />
     <ClCompile Include="frameencoder.cpp" />
+    <ClCompile Include="framefilter.cpp" />
     <ClCompile Include="intrapred.cpp" />
     <ClCompile Include="level.cpp" />
     <ClCompile Include="main.cpp" />

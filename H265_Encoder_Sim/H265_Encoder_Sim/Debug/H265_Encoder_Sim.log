@@ -1,17 +1,8 @@
-﻿生成启动时间为 2018/11/6 22:31:57。
+﻿生成启动时间为 2018/11/15 21:34:30。
      1>项目“E:\GIT\Encoder\H265_Encoder_Sim\H265_Encoder_Sim\H265_Encoder_Sim.vcxproj”在节点 2 上(Build 个目标)。
      1>ClCompile:
-         D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _CRT_SECURE_NO_WARNINGS /D _MBCS /Gm /EHsc /RTC1 /MT /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt analysis.cpp api.cpp encoder.cpp entropy.cpp frame.cpp frameencoder.cpp main.cpp scalinglist.cpp
-         scalinglist.cpp
-         encoder.cpp
-         正在生成代码...
-         正在跳过...(未检测到相关更改)
-         main.cpp
-         frameencoder.cpp
-         frame.cpp
-         entropy.cpp
+         D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _CRT_SECURE_NO_WARNINGS /D _MBCS /Gm /EHsc /RTC1 /MT /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt api.cpp
          api.cpp
-         analysis.cpp
        Link:
          D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"E:\GIT\Encoder\H265_Encoder_Sim\Debug\H265_Encoder_Sim.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"E:\GIT\Encoder\H265_Encoder_Sim\Debug\H265_Encoder_Sim.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"E:\GIT\Encoder\H265_Encoder_Sim\Debug\H265_Encoder_Sim.lib" /MACHINE:X86 Debug\analysis.obj
          Debug\api.obj
@@ -20,11 +11,13 @@
          Debug\constants.obj
          Debug\cudata.obj
          Debug\dct.obj
+         Debug\dpb.obj
          Debug\encoder.obj
          Debug\entropy.obj
          Debug\frame.obj
          Debug\framedata.obj
          Debug\frameencoder.obj
+         Debug\framefilter.obj
          Debug\intrapred.obj
          Debug\level.obj
          Debug\main.obj
@@ -41,4 +34,4 @@
 
 生成成功。
 
-已用时间 00:00:02.76
+已用时间 00:00:01.32

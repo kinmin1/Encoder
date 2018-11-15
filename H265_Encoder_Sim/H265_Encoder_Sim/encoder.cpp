@@ -77,13 +77,13 @@ void Encoder_create(Encoder *encoder)
 	ScalingList_setupQuantMatrices(encoder->m_scalingList);
 	
 	encoder->m_dpb = (DPB *)malloc(sizeof(DPB));//完成所有帧编码后释放
-	/*
+	
 	DPB_init(encoder->m_dpb, encoder->m_param);
-
+	
 	Encoder_initVPS(encoder, &encoder->m_vps);
 	Encoder_initSPS(encoder, &encoder->m_sps);
 	Encoder_initPPS(encoder, &encoder->m_pps);
-
+	
 	int numRows = (encoder->m_param->sourceHeight + g_maxCUSize - 1) / g_maxCUSize;
 	int numCols = (encoder->m_param->sourceWidth + g_maxCUSize - 1) / g_maxCUSize;
 	if (!FrameEncoder_init(encoder->m_frameEncoder, encoder, numRows, numCols))
@@ -93,20 +93,19 @@ void Encoder_create(Encoder *encoder)
 	}
 	//m_bZeroLatency = !m_param->bframes && !m_param->lookaheadDepth && m_param->frameNumThreads == 1;
 	encoder->m_bZeroLatency = 0;
-	*/
 }
 
 void Encoder_initVPS(Encoder *encoder, VPS *vps)
-{/*
+{
 	// Note that much of the VPS is initialized by determineLevel() //
 	vps->ptl.progressiveSourceFlag = !encoder->m_param->interlaceMode;
 	vps->ptl.interlacedSourceFlag = !!encoder->m_param->interlaceMode;
 	vps->ptl.nonPackedConstraintFlag = FALSE;
-	vps->ptl.frameOnlyConstraintFlag = !encoder->m_param->interlaceMode;*/
+	vps->ptl.frameOnlyConstraintFlag = !encoder->m_param->interlaceMode;
 }
 
 void Encoder_initSPS(Encoder *encoder, SPS *sps)
-{/*
+{
 	sps->conformanceWindow = encoder->m_conformanceWindow;
 	sps->chromaFormatIdc = encoder->m_param->internalCsp;
 	sps->picWidthInLumaSamples = encoder->m_param->sourceWidth;
@@ -172,11 +171,11 @@ void Encoder_initSPS(Encoder *encoder, SPS *sps)
 	vui->hrdParametersPresentFlag = encoder->m_param->bEmitHRDSEI;
 
 	vui->timingInfo.numUnitsInTick = encoder->m_param->fpsDenom;
-	vui->timingInfo.timeScale = encoder->m_param->fpsNum;*/
+	vui->timingInfo.timeScale = encoder->m_param->fpsNum;
 }
 
 void Encoder_initPPS(Encoder *encoder, PPS *pps)
-{/*
+{
 	//bool bIsVbv = this->m_param->rc.vbvBufferSize > 0 && this->m_param->rc.vbvMaxBitrate > 0;
 	//if (!this->m_param->bLossless && (this->m_param->rc.aqMode||bIsVbv))
 	if (!encoder->m_param->bLossless)
@@ -207,7 +206,7 @@ void Encoder_initPPS(Encoder *encoder, PPS *pps)
 	pps->deblockingFilterBetaOffsetDiv2 = encoder->m_param->deblockingFilterBetaOffset;
 	pps->deblockingFilterTcOffsetDiv2 = encoder->m_param->deblockingFilterTCOffset;
 
-	pps->bEntropyCodingSyncEnabled = 0;//encoder->m_param->bEnableWavefront;*/
+	pps->bEntropyCodingSyncEnabled = 0;//encoder->m_param->bEnableWavefront;
 }
 
 int encode(Encoder *enc, x265_picture* pic_in, x265_picture* pic_out)

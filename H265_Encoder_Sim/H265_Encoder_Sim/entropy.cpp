@@ -22,12 +22,12 @@
 
 uint32_t g_puOffset[8] = { 0, 8, 4, 4, 2, 10, 1, 5 };
 void Entropy_entropy(Entropy* entropy)
-{/*
+{
 	markValid(entropy);
 	entropy->m_fracBits = 0;
 	entropy->m_pad = 0;
 	X265_CHECK(sizeof(entropy->m_contextState) >= sizeof(entropy->m_contextState[0]) * MAX_OFF_CTX_MOD, "context state table is too small\n");
-*/
+
 }
 void codeProfileTier(Entropy* entropy, struct ProfileTierLevel* ptl, int maxTempSubLayers)
 {/*
@@ -726,8 +726,8 @@ void markInvalid(Entropy* entropy)
 	entropy->m_valid = FALSE; */
 }
 void markValid(Entropy* entropy)                   
-{/*
-	entropy->m_valid = TRUE; */
+{
+	entropy->m_valid = TRUE; 
 }
 void zeroFract(Entropy* entropy)                   
 {/*

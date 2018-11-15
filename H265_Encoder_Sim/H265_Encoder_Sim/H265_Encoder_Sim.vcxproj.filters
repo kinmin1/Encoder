@@ -84,6 +84,12 @@
     <ClCompile Include="scalinglist.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="dpb.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="framefilter.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="x265.h">

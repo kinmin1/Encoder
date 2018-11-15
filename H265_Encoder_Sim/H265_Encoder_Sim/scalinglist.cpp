@@ -129,7 +129,7 @@ void ScalingList_setupQuantMatrices(ScalingList *scal)
 		int width = 1 << (size + 2);
 		int ratio = width / X265_MIN(MAX_MATRIX_SIZE_NUM, width);
 		int stride = X265_MIN(MAX_MATRIX_SIZE_NUM, width);
-		int count = scal->s_numCoefPerSize[size];
+		int count = const_s_numCoefPerSize[size];
 
 		for (int list = 0; list < NUM_LISTS; list++)
 		{

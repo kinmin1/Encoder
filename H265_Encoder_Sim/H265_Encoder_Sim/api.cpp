@@ -70,7 +70,7 @@ void x265_encoder_parameters(Encoder *enc, x265_param *out)
 }
 
 void x265_picture_init(x265_param *param, x265_picture *pic)
-{/*
+{
 	memset(pic, 0, sizeof(x265_picture));
 	pic->bitDepth = param->internalBitDepth;
 	pic->forceqp = X265_QP_AUTO;
@@ -81,7 +81,7 @@ void x265_picture_init(x265_param *param, x265_picture *pic)
 		uint32_t numCUsInFrame = widthInCU*heightInCU;
 		pic->analysisData.numCUsInFrame = numCUsInFrame;
 		pic->analysisData.numPartitions = NUM_4x4_PARTITIONS;
-	}*/
+	}
 }
 
 void  getStreamHeaders(Encoder *encoder, NALList *list, Entropy* sbacCoder, Bitstream* bs)

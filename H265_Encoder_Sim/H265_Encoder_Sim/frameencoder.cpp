@@ -19,7 +19,7 @@
 #include "encoder.h"
 
 void FrameEncoder_FrameEncoder(FrameEncoder *frencoder)
-{/*
+{
 	frencoder->m_prevOutputTime = x265_mdate();
 	frencoder->m_isFrameEncoder = TRUE;
 	frencoder->m_threadActive = TRUE;
@@ -37,17 +37,17 @@ void FrameEncoder_FrameEncoder(FrameEncoder *frencoder)
 	frencoder->m_frame = NULL;
 	frencoder->m_cuGeoms = NULL;
 	frencoder->m_ctuGeomMap = NULL;
-	frencoder->m_localTldIdx = 0;*/
+	frencoder->m_localTldIdx = 0;
 }
 
 bool FrameEncoder_init(FrameEncoder *frencoder, struct Encoder *top, int numRows, int numCols)
-{/*
+{
 	FrameEncoder_FrameEncoder(frencoder);
 	frencoder->m_top = top;
 	frencoder->m_param = top->m_param;
 	frencoder->m_numRows = numRows;
 	frencoder->m_numCols = numCols;
-
+	
 	frencoder->m_rows = (CTURow *)malloc(sizeof(CTURow)*frencoder->m_numRows); //获取当前row存放位置
 
 	if (!frencoder->m_rows)
@@ -56,17 +56,17 @@ bool FrameEncoder_init(FrameEncoder *frencoder, struct Encoder *top, int numRows
 	frencoder->m_frameFilter = (FrameFilter *)malloc(sizeof(FrameFilter)); //获取当前row存放位置
 	if (!frencoder->m_frameFilter)
 		printf("malloc FrameFilter fail !");
-
+	
 	FrameFilter_FrameFilter(frencoder->m_frameFilter);
-
+	
 	Entropy_entropy(&frencoder->m_rows->bufferedEntropy);
 	Entropy_entropy(&frencoder->m_rows->rowGoOnCoder);
-
+	
 	frencoder->m_filterRowDelay = (frencoder->m_param->bEnableSAO && frencoder->m_param->bSaoNonDeblocked) ?
 		2 : (frencoder->m_param->bEnableSAO || frencoder->m_param->bEnableLoopFilter ? 1 : 0);
 	frencoder->m_filterRowDelayCus = frencoder->m_filterRowDelay * numCols;
 
-	FrameFilter_init(frencoder->m_frameFilter, top, frencoder, numRows);*/
+	FrameFilter_init(frencoder->m_frameFilter, top, frencoder, numRows);
 	return TRUE;
 }
 
