@@ -96,8 +96,7 @@ int MY_Encoder(const char* infile, int width, int height, int type, const char* 
 	
 	x265_nal *p_nal;
 	uint32_t nal;
-	//if (!param.bRepeatHeaders)
-	if (param.bRepeatHeaders)
+	if (!param.bRepeatHeaders)
 	{
 		if (x265_encoder_headers(encoder, &p_nal, &nal) < 0)
 		{
@@ -105,7 +104,8 @@ int MY_Encoder(const char* infile, int width, int height, int type, const char* 
 		}
 	
 		fwrite(p_nal->payload, sizeof(uint8_t), encoder->m_nalList.m_occupancy, fp_dst);
-		free(encoder->m_nalList.m_buffer); encoder->m_nalList.m_buffer = NULL;
+		free(encoder->m_nalList.m_buffer); 
+		encoder->m_nalList.m_buffer = NULL;
 	}
 	fclose(fp_dst);
 	

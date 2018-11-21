@@ -61,12 +61,12 @@ fail:
 }
 
 void x265_encoder_parameters(Encoder *enc, x265_param *out)
-{/*
+{
 	if (enc && out)
 	{
 		struct Encoder *encoder = (struct Encoder*)(enc);
 		memcpy(out, encoder->m_param, sizeof(x265_param));
-	}*/
+	}
 }
 
 void x265_picture_init(x265_param *param, x265_picture *pic)
@@ -86,7 +86,7 @@ void x265_picture_init(x265_param *param, x265_picture *pic)
 
 void  getStreamHeaders(Encoder *encoder, NALList *list, Entropy* sbacCoder, Bitstream* bs)
 {
-	/*
+	
 	setBitstream(sbacCoder, bs);
 
 	// headers for start of bitstream //
@@ -104,10 +104,10 @@ void  getStreamHeaders(Encoder *encoder, NALList *list, Entropy* sbacCoder, Bits
 	codePPS(sbacCoder, &encoder->m_pps);
 	writeByteAlignment(bs);
 	serialize(list, NAL_UNIT_PPS, bs);
-	*/
+	
 }
 int x265_encoder_headers(Encoder *enc, x265_nal **pp_nal, uint32_t *pi_nal)
-{/*
+{
 	if (pp_nal && enc)
 	{
 		//Encoder *encoder = static_cast<Encoder*>(enc);
@@ -120,7 +120,7 @@ int x265_encoder_headers(Encoder *enc, x265_nal **pp_nal, uint32_t *pi_nal)
 		if (pi_nal) *pi_nal = enc->m_nalList.m_numNal;
 		return enc->m_nalList.m_occupancy;
 	}
-	*/
+	
 	return -1;
 }
 

@@ -14,7 +14,11 @@ void resetBits(struct Bitstream *pbit)
 	pbit->m_byteOccupancy = 0;
 	pbit->m_partialByte = 0;
 }
-
+void push(struct Bitstream *pbit)
+{
+	pbit->m_fifo = (uint8_t  *)malloc(sizeof(uint8_t) * 5000);
+	resetBits(pbit);
+}
 void push_back(struct Bitstream *pbit, uint8_t val)
 {
 	if (!pbit->m_fifo)

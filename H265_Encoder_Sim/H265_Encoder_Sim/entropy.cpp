@@ -79,7 +79,7 @@ void codeProfileTier(Entropy* entropy, struct ProfileTierLevel* ptl, int maxTemp
 	}*/
 }
 void codeVPS(Entropy* entropy, struct VPS* vps)
-{/*
+{
 	uint32_t i;
 	WRITE_CODE(entropy->syn.m_bitIf, 0, 4, "vps_video_parameter_set_id");
 	WRITE_CODE(entropy->syn.m_bitIf, 3, 2, "vps_reserved_three_2bits");
@@ -102,7 +102,7 @@ void codeVPS(Entropy* entropy, struct VPS* vps)
 	WRITE_CODE(entropy->syn.m_bitIf, 0, 6, "vps_max_nuh_reserved_zero_layer_id");
 	WRITE_UVLC(entropy->syn.m_bitIf, 0, "vps_max_op_sets_minus1");
 	WRITE_FLAG(entropy->syn.m_bitIf, 0, "vps_timing_info_present_flag"); // we signal timing info in SPS-VUI //
-	WRITE_FLAG(entropy->syn.m_bitIf, 0, "vps_extension_flag"); */
+	WRITE_FLAG(entropy->syn.m_bitIf, 0, "vps_extension_flag"); 
 }
 void codeScalingLists(Entropy* entropy, struct ScalingList* scalingList, uint32_t sizeId, uint32_t listId)
 {/*
@@ -234,7 +234,7 @@ void codeVUI(Entropy* entropy, struct VUI* vui, int maxSubTLayers)
 	WRITE_FLAG(entropy->syn.m_bitIf, 0, "bitstream_restriction_flag");*/
 }
 void codeSPS(Entropy* entropy, struct SPS* sps, struct ScalingList* scalingList, struct ProfileTierLevel* ptl)
-{/*
+{
 	uint32_t i;
 	WRITE_CODE(entropy->syn.m_bitIf, 0, 4, "sps_video_parameter_set_id");
 	WRITE_CODE(entropy->syn.m_bitIf, sps->maxTempSubLayers - 1, 3, "sps_max_sub_layers_minus1");
@@ -300,7 +300,7 @@ void codeSPS(Entropy* entropy, struct SPS* sps, struct ScalingList* scalingList,
 	WRITE_FLAG(entropy->syn.m_bitIf, 1, "vui_parameters_present_flag");
 	codeVUI(entropy, &sps->vuiParameters, sps->maxTempSubLayers);
 
-	WRITE_FLAG(entropy->syn.m_bitIf, 0, "sps_extension_flag");*/
+	WRITE_FLAG(entropy->syn.m_bitIf, 0, "sps_extension_flag");
 }
 
 uint32_t bitsCodeBin(const Entropy* entroy, uint32_t binValue, uint32_t ctxModel)
@@ -961,7 +961,7 @@ int ctz(unsigned int a)
 }
 
 void codePPS(Entropy *entropy, PPS *pps)
-{/*
+{
 	WRITE_UVLC(entropy->syn.m_bitIf, 0, "pps_pic_parameter_set_id");
 	WRITE_UVLC(entropy->syn.m_bitIf, 0, "pps_seq_parameter_set_id");
 	WRITE_FLAG(entropy->syn.m_bitIf, 0, "dependent_slice_segments_enabled_flag");
@@ -1007,7 +1007,7 @@ void codePPS(Entropy *entropy, PPS *pps)
 	WRITE_FLAG(entropy->syn.m_bitIf, 0, "lists_modification_present_flag");
 	WRITE_UVLC(entropy->syn.m_bitIf, 0, "log2_parallel_merge_level_minus2");
 	WRITE_FLAG(entropy->syn.m_bitIf, 0, "slice_segment_header_extension_present_flag");
-	WRITE_FLAG(entropy->syn.m_bitIf, 0, "pps_extension_flag");*/
+	WRITE_FLAG(entropy->syn.m_bitIf, 0, "pps_extension_flag");
 }
 
 /** Encode equiprobable bin */
@@ -1275,8 +1275,8 @@ void entropy_resetBits(Entropy* entropy)
 }
 
 void setBitstream(Entropy* entropy, Bitstream* pbit)
-{/*
-	entropy->syn.m_bitIf = pbit;*/
+{
+	entropy->syn.m_bitIf = pbit;
 }
 
 /* finish encoding a cu and handle end-of-slice conditions */
