@@ -125,9 +125,11 @@ int x265_encoder_headers(Encoder *enc, x265_nal **pp_nal, uint32_t *pi_nal)
 }
 
 int x265_encoder_encode(Encoder *enc, x265_nal **pp_nal, uint32_t *pi_nal, x265_picture *pic_in, x265_picture *pic_out)
-{/*
+{
 	if (!enc)
 		return -1;
+
+	enc->m_dpb->m_freeList.m_count = 0;//³õÊ¼»¯m_count
 
 	Encoder *encoder = enc;
 	int numEncoded;
@@ -137,7 +139,7 @@ int x265_encoder_encode(Encoder *enc, x265_nal **pp_nal, uint32_t *pi_nal, x265_
 	{
 		numEncoded = encode(enc, pic_in, pic_out);
 	} while (numEncoded == 0 && !pic_in && encoder->m_numDelayedPic);
-
+	/*
 	if (pp_nal && numEncoded > 0)
 	{
 		*pp_nal = &encoder->m_nalList.m_nal[0];

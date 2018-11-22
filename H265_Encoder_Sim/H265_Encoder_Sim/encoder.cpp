@@ -210,7 +210,7 @@ void Encoder_initPPS(Encoder *encoder, PPS *pps)
 }
 
 int encode(Encoder *enc, x265_picture* pic_in, x265_picture* pic_out)
-{/*
+{
 	if (enc->m_aborted)
 		return -1;
 	Frame *inFrame; //即将creat用于存储视频帧
@@ -222,7 +222,6 @@ int encode(Encoder *enc, x265_picture* pic_in, x265_picture* pic_out)
 	}
 	if (pic_in)
 	{
-
 		if (empty(&enc->m_dpb->m_freeList))
 		{
 			//printf("sizeof(Frame)=%d\n",sizeof(Frame));
@@ -283,7 +282,7 @@ int encode(Encoder *enc, x265_picture* pic_in, x265_picture* pic_out)
 		inFrame->m_pts = pic_in->pts; //一般就是对应poc的值
 		inFrame->m_forceqp = pic_in->forceqp;
 		inFrame->m_param = enc->m_reconfigured ? enc->m_latestParam : enc->m_param;
-	}
+	}/*
 	FrameEncoder *curEncoder = enc->m_frameEncoder;
 	push_1(&curEncoder->m_bs);
 	Entropy_entropy(&curEncoder->m_entropyCoder);

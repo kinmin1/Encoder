@@ -87,6 +87,7 @@
     <ClCompile Include="nal.cpp" />
     <ClCompile Include="param.cpp" />
     <ClCompile Include="piclist.cpp" />
+    <ClCompile Include="picyuv.cpp" />
     <ClCompile Include="pixel.cpp" />
     <ClCompile Include="primitives.cpp" />
     <ClCompile Include="scalinglist.cpp" />

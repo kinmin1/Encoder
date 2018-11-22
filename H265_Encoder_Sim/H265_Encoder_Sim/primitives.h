@@ -328,9 +328,8 @@ typedef struct EncoderPrimitives
 	chroma[X265_CSP_COUNT];
 }EncoderPrimitives;
 
-
 /* This copy of the table is what gets used by the encoder */
-//EncoderPrimitives primitives;
+extern EncoderPrimitives primitives;
 
 /* Returns a LumaPU enum for the given size, always expected to return a valid enum */
 int partitionFromSizes(int width, int height);

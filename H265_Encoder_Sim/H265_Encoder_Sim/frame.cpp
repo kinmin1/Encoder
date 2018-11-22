@@ -27,14 +27,14 @@ void Frame_init(Frame *frame)
 
 int Frame_create(Frame *frame, x265_param *param)
 {
-	/*
+	
 	frame->m_fencPic = (PicYuv *)malloc(sizeof(PicYuv));//&Pic_m_fencPic;//
 	//printf("sizeof(PicYuv)=%d\n",sizeof(PicYuv));
 	if (!frame->m_fencPic)
 	printf("malloc PicYuv fail!");
 
 	frame->m_param = param;
-	return PicYuv_create(frame->m_fencPic, param->sourceWidth, param->sourceHeight);*/return 1;
+	return PicYuv_create(frame->m_fencPic, param->sourceWidth, param->sourceHeight);
 }
 
 int Frame_allocEncodeData(Frame *frame, x265_param *param, struct SPS *sps)
