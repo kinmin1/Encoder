@@ -8,6 +8,8 @@
 #include"common.h"
 #include"Bitstream.h"
 
+uint8_t fifo_1[5000] = { 0 };
+uint8_t fifo_2[100] = { 0 };
 void resetBits(struct Bitstream *pbit)
 {
 	pbit->m_partialByteBits = 0;
@@ -16,7 +18,12 @@ void resetBits(struct Bitstream *pbit)
 }
 void push(struct Bitstream *pbit)
 {
-	pbit->m_fifo = (uint8_t  *)malloc(sizeof(uint8_t) * 5000);
+	pbit->m_fifo = fifo_1;// (uint8_t  *)malloc(sizeof(uint8_t) * 5000);
+	resetBits(pbit);
+}
+void push_1(struct Bitstream *pbit)
+{
+	pbit->m_fifo = fifo_2;// (uint8_t  *)malloc(sizeof(uint8_t) * 5000);
 	resetBits(pbit);
 }
 void push_back(struct Bitstream *pbit, uint8_t val)

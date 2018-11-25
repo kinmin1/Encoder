@@ -24,21 +24,25 @@ struct CUData* framedata_getPicCTU(FrameData *framedata, uint32_t ctuAddr)
 {
 	return &framedata->m_picCTU[ctuAddr];
 }
-
+Slice slice_1;
+CUData cudata_1;
+CUDataMemPool cudatamenpool_1;
+RCStatCU rcstatcu_1;
+RCStatRow rcststrow_1;
 bool FrameData_create(FrameData *framedata, x265_param *param, struct SPS *sps)
 {
 	framedata->m_param = param;
-	framedata->m_slice = (Slice *)malloc(sizeof(Slice));//已释放
+	framedata->m_slice = &slice_1;// (Slice *)malloc(sizeof(Slice));//已释放
 	//printf("sizeof(Slice)=%d\n",sizeof(Slice));
 	if (!framedata->m_slice)
 		printf("malloc Slice fail!\n");
 
-	framedata->m_picCTU = (CUData *) malloc (sizeof(CUData)*sps->numCUsInFrame);
+	framedata->m_picCTU = &cudata_1;// (CUData *)malloc(sizeof(CUData)*sps->numCUsInFrame);
 	//printf("sizeof(CUData)*sps->numCUsInFrame=%d\n",sizeof(Slice)*sps->numCUsInFrame);//-=-=-=-=-=-=-
 	if (!framedata->m_picCTU)
 		printf("malloc CUData fail!\n");
 
-	framedata->m_cuMemPool = (CUDataMemPool*)malloc(sizeof(CUDataMemPool));//已释放
+	framedata->m_cuMemPool = &cudatamenpool_1;// (CUDataMemPool*)malloc(sizeof(CUDataMemPool));//已释放
 	//printf("sizeof(CUDataMemPool)=%d\n",sizeof(CUDataMemPool));//-=-=-=-=-=-=-
 	if (!framedata->m_cuMemPool)
 		printf("malloc CUDataMemPool fail!\n");
@@ -51,9 +55,12 @@ bool FrameData_create(FrameData *framedata, x265_param *param, struct SPS *sps)
 		//framedata->m_picCTU += 1;
 	}
 	//framedata->m_picCTU -= sps->numCUsInFrame;
-	CHECKED_MALLOC(framedata->m_cuStat, RCStatCU, sps->numCUsInFrame);
+	//CHECKED_MALLOC(framedata->m_cuStat, RCStatCU, sps->numCUsInFrame);
+
+	framedata->m_cuStat = &rcstatcu_1;
+	framedata->m_rowStat = &rcststrow_1;
 	//printf("sizeof(RCStatCU) * (sps->numCUsInFrame)=%d\n",sizeof(RCStatCU) * (sps->numCUsInFrame));
-	CHECKED_MALLOC(framedata->m_rowStat, RCStatRow, sps->numCuInHeight);
+	//CHECKED_MALLOC(framedata->m_rowStat, RCStatRow, sps->numCuInHeight);
 	//printf("sizeof(RCStatRow) * (sps->numCuInHeight)=%d\n",sizeof(RCStatRow) * (sps->numCuInHeight));
 	FrameData_reinit(framedata, sps);
 	return TRUE;

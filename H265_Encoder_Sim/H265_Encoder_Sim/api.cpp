@@ -25,7 +25,7 @@ Encoder *x265_encoder_open(x265_param *p)
 	
 	x265_setup_primitives();
 	
-	encoder = (Encoder *)malloc(sizeof(Encoder));//完成所有帧编码后释放
+	encoder = (Encoder *)malloc(sizeof(Encoder));//x265_encoder_close调用，完成所有帧编码后释放
 	//printf("sizeof(Encoder)=%d\n",sizeof(Encoder));
 	if (!encoder)
 		printf("malloc Encoder fail!\n");

@@ -13,6 +13,38 @@
 #include "constants.h"
 #include "dpb.h"
 
+
+void DPB_Destroy(DPB *dpb)
+{
+	while (!empty(&dpb->m_freeList))
+	{
+		Frame* curFrame = PicList_popFront(&dpb->m_freeList);
+		Frame_destroy(curFrame);
+		free(curFrame);
+		curFrame = NULL;
+	}
+
+	while (!empty(&dpb->m_picList))
+	{
+		Frame* curFrame = PicList_popFront(&dpb->m_picList);
+		Frame_destroy(curFrame);
+		curFrame = NULL;
+	}
+
+	while (dpb->m_picSymFreeList)
+	{
+		FrameData* next = dpb->m_picSymFreeList->m_freeListNext;
+		FrameData_destory(dpb->m_picSymFreeList);
+
+		PicYuv_destroy(dpb->m_picSymFreeList->m_reconPic);
+		free(dpb->m_picSymFreeList->m_reconPic);
+		dpb->m_picSymFreeList->m_reconPic = NULL;
+
+		free(dpb->m_picSymFreeList);
+		//dpb->m_picSymFreeList = NULL;
+		dpb->m_picSymFreeList = next;
+	}
+}
 void DPB_init(DPB *dpb, x265_param *param)
 {
 	dpb->m_lastIDR = 0;
@@ -26,7 +58,7 @@ void DPB_init(DPB *dpb, x265_param *param)
 }
 
 void DPB_prepareEncode(DPB * dpb, Frame *newFrame)
-{/*
+{
 	Slice* slice = newFrame->m_encData->m_slice;
 	slice->m_poc = newFrame->m_poc;
 
@@ -34,7 +66,7 @@ void DPB_prepareEncode(DPB * dpb, Frame *newFrame)
 	int type = 1;//newFrame->m_lowres.sliceType;
 	bool bIsKeyFrame = TRUE;//newFrame->m_lowres.bKeyframe;
 
-	slice->m_nalUnitType = getNalUnitType(dpb, pocCurr, bIsKeyFrame);
+	slice->m_nalUnitType = (NalUnitType)getNalUnitType(dpb, pocCurr, bIsKeyFrame);
 	if (slice->m_nalUnitType == NAL_UNIT_CODED_SLICE_IDR_W_RADL)
 		dpb->m_lastIDR = pocCurr;
 	slice->m_lastIDR = dpb->m_lastIDR;
@@ -68,18 +100,18 @@ void DPB_prepareEncode(DPB * dpb, Frame *newFrame)
 		newFrame->m_encData->m_bHasReferences = TRUE;
 	}
 
-	PicList_pushFront(&dpb->m_picList, newFrame);
+	//PicList_pushFront(&dpb->m_picList, newFrame);
 	// Do decoding refresh marking if any
-	DPB_decodingRefreshMarking(dpb, pocCurr, slice->m_nalUnitType);
-	DP_computeRPS(dpb, pocCurr, isIRAP(slice), &slice->m_rps, slice->m_sps->maxDecPicBuffering);
+	//DPB_decodingRefreshMarking(dpb, pocCurr, slice->m_nalUnitType);
+	//DP_computeRPS(dpb, pocCurr, isIRAP(slice), &slice->m_rps, slice->m_sps->maxDecPicBuffering);
 
 	// Mark pictures in m_piclist as unreferenced if they are not included in RPS
-	DPB_applyReferencePictureSet(dpb, &slice->m_rps, pocCurr);
+	//DPB_applyReferencePictureSet(dpb, &slice->m_rps, pocCurr);
 	slice->m_rps.numberOfNegativePictures = 1;
 
 	slice->m_numRefIdx[0] = X265_MIN(dpb->m_maxRefL0, slice->m_rps.numberOfNegativePictures); // Ensuring L0 contains just the -ve POC
 	slice->m_numRefIdx[1] = X265_MIN(dpb->m_maxRefL1, slice->m_rps.numberOfPositivePictures);
-	Slice_setRefPicList(slice, &dpb->m_picList);
+	//Slice_setRefPicList(slice, &dpb->m_picList);
 
 	if (slice->m_sliceType == B_SLICE)
 	{
@@ -107,12 +139,12 @@ void DPB_prepareEncode(DPB * dpb, Frame *newFrame)
 		for (int ref = 0; ref < slice->m_numRefIdx[l]; ref++)
 		{
 			Frame *refpic = slice->m_refPicList[l][ref];
-			slice->m_refPicList[l][ref]->m_reconPic->m_picOrg[0] = reconFrameBuf_Y;
-			slice->m_refPicList[l][ref]->m_reconPic->m_picOrg[1] = reconFrameBuf_U;
-			slice->m_refPicList[l][ref]->m_reconPic->m_picOrg[2] = reconFrameBuf_V;
+			//slice->m_refPicList[l][ref]->m_reconPic->m_picOrg[0] = reconFrameBuf_Y;
+			//slice->m_refPicList[l][ref]->m_reconPic->m_picOrg[1] = reconFrameBuf_U;
+			//slice->m_refPicList[l][ref]->m_reconPic->m_picOrg[2] = reconFrameBuf_V;
 			//ATOMIC_INC(&refpic->m_countRefEncoders);
 		}
-	}*/
+	}
 }
 void DPB_prepareEncode2(DPB * dpb, Frame *newFrame)
 {/*
@@ -209,7 +241,7 @@ void DPB_prepareEncode2(DPB * dpb, Frame *newFrame)
 	}*/
 }
 int getNalUnitType(DPB *dpb, int curPOC, bool bIsKeyFrame)
-{/*
+{
 	if (!curPOC)
 		return NAL_UNIT_CODED_SLICE_IDR_W_RADL;
 
@@ -227,7 +259,7 @@ int getNalUnitType(DPB *dpb, int curPOC, bool bIsKeyFrame)
 
 	if (dpb->m_lastIDR && curPOC < dpb->m_lastIDR)
 		return NAL_UNIT_CODED_SLICE_RADL_R;
-		*/
+		
 	return NAL_UNIT_CODED_SLICE_TRAIL_R;
 }
 

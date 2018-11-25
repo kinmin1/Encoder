@@ -14,7 +14,7 @@
 #ifndef COMMON_H_
 #define COMMON_H_
 
-#define NUM_OF_I_FRAME 1
+#define NUM_OF_I_FRAME 10
 
 #ifndef _SIZE_T
 #define _SIZE_T

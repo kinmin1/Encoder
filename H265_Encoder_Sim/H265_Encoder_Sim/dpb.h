@@ -27,6 +27,7 @@ typedef struct DPB
 	FrameData*         m_picSymFreeList;
 }DPB;
 
+void DPB_Destroy(DPB *dpb);
 void DPB_init(DPB *dpb, x265_param *param);
 void DPB_prepareEncode(DPB * dpb, Frame *newFrame);
 void DPB_prepareEncode2(DPB * dpb, Frame *newFrame);

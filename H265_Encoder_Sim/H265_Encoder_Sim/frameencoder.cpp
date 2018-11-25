@@ -170,10 +170,11 @@ bool FrameEncoder_startCompressFrame(FrameEncoder *frencoder, Frame* curFrame)
 	Analysis_create(&analysis);//申请模式决策内存 初始化相关CU内存
 
 	FrameEncoder_compressFrame(frencoder, &analysis);
-	free(analysis.sear.m_me.fencPUYuv.m_buf[0]); analysis.sear.m_me.fencPUYuv.m_buf[0] = NULL;
-	FrameEncoder_destroy(frencoder);
-	free(quant); quant = NULL;
-	free(curFrame->m_encData->m_slice); curFrame->m_encData->m_slice = NULL;//--------------free
+//	DPB_Destroy()
+//	free(analysis.sear.m_me.fencPUYuv.m_buf[0]); analysis.sear.m_me.fencPUYuv.m_buf[0] = NULL;
+//	FrameEncoder_destroy(frencoder);
+//	free(quant); quant = NULL;
+//	free(curFrame->m_encData->m_slice); curFrame->m_encData->m_slice = NULL;//--------------free
 	*/
 	return TRUE;
 }
@@ -199,8 +200,10 @@ void FrameEncoder_compressFrame(FrameEncoder *frencoder, Analysis *analysis)
 			struct WeightParam *w = NULL;
 			frencoder->m_mref[l][ref].referenceplanes = (ReferencePlanes *)malloc(sizeof(ReferencePlanes));
 			//printf("sizeof(ReferencePlanes)=%d\n",sizeof(ReferencePlanes));
-			//ECS_memcpy(slice->m_refPicList[l][ref]->m_reconPic->m_picOrg[0], reconFrameBuf_Y, sizeof(pixel) * 21376);
-			//ECS_memcpy(slice->m_refPicList[l][ref]->m_reconPic->m_picOrg[1], reconFrameBuf_U, sizeof(pixel) * 8320);
+			//ECS_memcpy(slice->m_refPicList[l][ref]->
+			[0], reconFrameBuf_Y, sizeof(pixel) * 21376);
+			//ECS_memcpy(slice->m_refPicList[l][ref]->
+			[1], reconFrameBuf_U, sizeof(pixel) * 8320);
 			//ECS_memcpy(slice->m_refPicList[l][ref]->m_reconPic->m_picOrg[2], reconFrameBuf_V, sizeof(pixel) * 8320);
 			MotionReference_init(&frencoder->m_mref[l][ref], slice->m_refPicList[l][ref]->m_reconPic, frencoder->m_param);
 		}

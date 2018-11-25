@@ -215,20 +215,19 @@ int encode(Encoder *enc, x265_picture* pic_in, x265_picture* pic_out)
 		return -1;
 	Frame *inFrame; //即将creat用于存储视频帧
 	inFrame = (Frame *)malloc(sizeof(Frame));//申请空间
-	if (0)
-	{
-		enc->m_exportedPic = NULL;
-		DPB_recycleUnreferenced(enc->m_dpb);
-	}
+	if (!inFrame)
+		printf("malloc inFrame fail!\n");
+
 	if (pic_in)
 	{
 		if (empty(&enc->m_dpb->m_freeList))
 		{
+			
 			//printf("sizeof(Frame)=%d\n",sizeof(Frame));
-			if (!inFrame)
-				printf("malloc inFrame fail!");
-
-			if (Frame_create(inFrame, enc->m_param))
+			//if (!inFrame)
+			//	printf("malloc inFrame fail!");
+			x265_param* p = enc->m_param;
+			if (Frame_create(inFrame, p))
 			{
 				// the first PicYuv created is asked to generate the CU and block unit offset
 				// arrays which are then shared with all subsequent PicYuv (orig and recon)
@@ -282,7 +281,7 @@ int encode(Encoder *enc, x265_picture* pic_in, x265_picture* pic_out)
 		inFrame->m_pts = pic_in->pts; //一般就是对应poc的值
 		inFrame->m_forceqp = pic_in->forceqp;
 		inFrame->m_param = enc->m_reconfigured ? enc->m_latestParam : enc->m_param;
-	}/*
+	}
 	FrameEncoder *curEncoder = enc->m_frameEncoder;
 	push_1(&curEncoder->m_bs);
 	Entropy_entropy(&curEncoder->m_entropyCoder);
@@ -294,7 +293,7 @@ int encode(Encoder *enc, x265_picture* pic_in, x265_picture* pic_out)
 	Frame *outFrame = NULL;
 	Frame *frameEnc = NULL;
 	int pass = 0;
-
+	
 	do
 	{
 		// getEncodedPicture() should block until the FrameEncoder has completed
@@ -348,21 +347,17 @@ int encode(Encoder *enc, x265_picture* pic_in, x265_picture* pic_out)
 			enc->m_numDelayedPic--;
 			ret = 1;
 		}
-
+		
 		// pop a single frame from decided list, then provide to frame encoder
 		// curEncoder is guaranteed to be idle at this point //
 		if (!pass)
 			//frameEnc = m_lookahead->getDecidedPicture();
 			frameEnc = inFrame;
+		free(inFrame); 
+		inFrame = NULL;
 		if (frameEnc && !pass)
 		{
 			// give this frame a FrameData instance before encoding //
-			if (enc->m_dpb->m_picSymFreeList)
-			{//暂时不执行
-				frameEnc->m_encData = enc->m_dpb->m_picSymFreeList;
-				enc->m_dpb->m_picSymFreeList = enc->m_dpb->m_picSymFreeList->m_freeListNext;
-			}
-			else
 			{
 				if (!Frame_allocEncodeData(frameEnc, enc->m_param, &enc->m_sps))
 					printf("initial allocEncodeData fail!\n");
@@ -377,31 +372,8 @@ int encode(Encoder *enc, x265_picture* pic_in, x265_picture* pic_out)
 				frameEnc->m_reconPic->m_buOffsetC = enc->m_buOffsetC;
 				frameEnc->m_reconPic->m_buOffsetY = enc->m_buOffsetY;
 			}
-
-			if (enc->m_bframeDelay)
-			{//暂时不执行
-				int64_t *prevReorderedPts = enc->m_prevReorderedPts;
-				frameEnc->m_dts = enc->m_encodedFrameNum > enc->m_bframeDelay
-					? prevReorderedPts[(enc->m_encodedFrameNum - enc->m_bframeDelay) % enc->m_bframeDelay]
-					: frameEnc->m_reorderedPts - enc->m_bframeDelayTime;
-				prevReorderedPts[enc->m_encodedFrameNum % enc->m_bframeDelay] = frameEnc->m_reorderedPts;
-			}
-			else
-				frameEnc->m_dts = frameEnc->m_reorderedPts;
-
-			// Allocate analysis data before encode in save mode. This is allocated in frameEnc //
-			if (enc->m_param->analysisMode == X265_ANALYSIS_SAVE)
-			{//暂时不执行
-				x265_analysis_data* analysis = &frameEnc->m_analysisData;
-				analysis->poc = frameEnc->m_poc;
-				analysis->sliceType = frameEnc->m_lowres->sliceType;
-				uint32_t widthInCU = (enc->m_param->sourceWidth + g_maxCUSize - 1) >> g_maxLog2CUSize;
-				uint32_t heightInCU = (enc->m_param->sourceHeight + g_maxCUSize - 1) >> g_maxLog2CUSize;
-
-				uint32_t numCUsInFrame = widthInCU * heightInCU;
-				analysis->numCUsInFrame = numCUsInFrame;
-				analysis->numPartitions = NUM_4x4_PARTITIONS;
-			}
+			
+			frameEnc->m_dts = frameEnc->m_reorderedPts;
 
 			// determine references, setup RPS, etc //
 			if ((frameEnc->m_poc<NUM_OF_I_FRAME) || ((frameEnc->m_poc + 1) % 10 == 0))
@@ -414,13 +386,20 @@ int encode(Encoder *enc, x265_picture* pic_in, x265_picture* pic_out)
 				DPB_prepareEncode2(enc->m_dpb, frameEnc);
 				curEncoder->m_sliceType = 3;
 			}
-
+			
 			// Allow FrameEncoder::compressFrame() to start in the frame encoder thread //
 			if (!FrameEncoder_startCompressFrame(curEncoder, frameEnc))
-				enc->m_aborted = TRUE;
+				enc->m_aborted = TRUE; 
 		}
 	} while (enc->m_bZeroLatency && ++pass < 2);
-	return ret;*/return 0;
+
+	Frame_destroy(inFrame);
+	free(inFrame);
+	inFrame = NULL;
+	DPB_Destroy(enc->m_dpb);
+	free(enc->m_dpb);
+	enc->m_dpb = NULL;
+	return ret;
 }
 
 void Encoder_configure(Encoder * encoder, x265_param *p)
@@ -456,13 +435,17 @@ void Encoder_configure(Encoder * encoder, x265_param *p)
 }
 
 void Encoder_destroy(Encoder *encoder)
-{/*
+{
 	//FrameEncoder_destroy(encoder->m_frameEncoder);
-	free(encoder->m_frameEncoder); encoder->m_frameEncoder = NULL;
-	free(encoder->m_dpb); encoder->m_dpb = NULL;
-	free(encoder->m_scalingList); encoder->m_scalingList = NULL;
+	free(encoder->m_frameEncoder); 
+	encoder->m_frameEncoder = NULL;
+	free(encoder->m_dpb); 
+	encoder->m_dpb = NULL;
+	free(encoder->m_scalingList); 
+	encoder->m_scalingList = NULL;
 	if (encoder->m_param)
 	{
-		free(encoder->m_param); encoder->m_param = NULL;
-	}*/
+		free(encoder->m_param); 
+		encoder->m_param = NULL;
+	}
 }
