@@ -82,7 +82,7 @@ void CTURow_init(CTURow *cturow, Entropy *initContext)
 //计算CU所有情况的几何信息
 bool FrameEncoder_initializeGeoms(FrameEncoder *frencoder)
 {
-	/*
+	
 	// Geoms only vary between CTUs in the presence of picture edges //
 	int maxCUSize = frencoder->m_param->maxCUSize;
 	int minCUSize = frencoder->m_param->minCUSize;
@@ -98,7 +98,7 @@ bool FrameEncoder_initializeGeoms(FrameEncoder *frencoder)
 
 	frencoder->m_cuGeoms = X265_MALLOC(CUGeom, allocGeoms * MAX_GEOMS);//已释放
 
-
+	
 	if (!frencoder->m_cuGeoms || !frencoder->m_ctuGeomMap)
 	{
 		printf("malloc ctuGeomMap and cuGeoms fail!");
@@ -109,7 +109,7 @@ bool FrameEncoder_initializeGeoms(FrameEncoder *frencoder)
 	memset(frencoder->m_ctuGeomMap, 0, sizeof(uint32_t) * frencoder->m_numRows * frencoder->m_numCols);
 	if (allocGeoms == 1)
 		return TRUE;
-
+	
 	int countGeoms = 1;
 	if (widthRem)
 	{
@@ -144,12 +144,12 @@ bool FrameEncoder_initializeGeoms(FrameEncoder *frencoder)
 		}
 		X265_CHECK(countGeoms == allocGeoms, "geometry match check failure\n");
 	}
-	*/
+	
 	return TRUE;
 }
 
 bool FrameEncoder_startCompressFrame(FrameEncoder *frencoder, Frame* curFrame)
-{/*
+{
 	frencoder->m_frame = curFrame;
 	frencoder->m_param = curFrame->m_param;
 	curFrame->m_encData->m_slice->m_mref = frencoder->m_mref;
@@ -159,21 +159,22 @@ bool FrameEncoder_startCompressFrame(FrameEncoder *frencoder, Frame* curFrame)
 		if (!FrameEncoder_initializeGeoms(frencoder))
 			return FALSE;
 	}
-
+	
 	Analysis analysis;
 	Entropy_entropy(&analysis.sear.m_entropyCoder);
 	analysis.sear.m_entropyCoder.syn.m_bitIf = NULL;
 	Quant *quant = (struct Quant *)malloc(sizeof(struct Quant));//已释放
 
 	initSearch(&(analysis.sear), frencoder->m_param, frencoder->m_top->m_scalingList);
-
+	/*
 	Analysis_create(&analysis);//申请模式决策内存 初始化相关CU内存
 
 	FrameEncoder_compressFrame(frencoder, &analysis);
+	
 //	DPB_Destroy()
 //	free(analysis.sear.m_me.fencPUYuv.m_buf[0]); analysis.sear.m_me.fencPUYuv.m_buf[0] = NULL;
 //	FrameEncoder_destroy(frencoder);
-//	free(quant); quant = NULL;
+	free(quant); quant = NULL;
 //	free(curFrame->m_encData->m_slice); curFrame->m_encData->m_slice = NULL;//--------------free
 	*/
 	return TRUE;

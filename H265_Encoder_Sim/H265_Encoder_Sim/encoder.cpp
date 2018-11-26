@@ -280,7 +280,7 @@ int encode(Encoder *enc, x265_picture* pic_in, x265_picture* pic_out)
 		inFrame->m_userData = pic_in->userData; //一般都为0
 		inFrame->m_pts = pic_in->pts; //一般就是对应poc的值
 		inFrame->m_forceqp = pic_in->forceqp;
-		inFrame->m_param = enc->m_reconfigured ? enc->m_latestParam : enc->m_param;
+		inFrame->m_param = enc->m_param;
 	}
 	FrameEncoder *curEncoder = enc->m_frameEncoder;
 	push_1(&curEncoder->m_bs);
@@ -353,8 +353,8 @@ int encode(Encoder *enc, x265_picture* pic_in, x265_picture* pic_out)
 		if (!pass)
 			//frameEnc = m_lookahead->getDecidedPicture();
 			frameEnc = inFrame;
-		free(inFrame); 
-		inFrame = NULL;
+		//free(inFrame); 
+		//inFrame = NULL;
 		if (frameEnc && !pass)
 		{
 			// give this frame a FrameData instance before encoding //

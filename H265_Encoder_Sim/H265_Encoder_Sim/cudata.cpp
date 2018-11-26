@@ -1612,7 +1612,7 @@ void CUData_setPURefIdx(struct CUData *cu, int list, int8_t refIdx, int absPartI
 **/
 
 void CUData_calcCTUGeoms(uint32_t ctuWidth, uint32_t ctuHeight, uint32_t maxCUSize, uint32_t minCUSize, CUGeom cuDataArray[85])
-{/*
+{
 	uint32_t sbY;
 	uint32_t sbX;
 	uint32_t log2CUSize, rangeCUIdx;
@@ -1657,7 +1657,7 @@ void CUData_calcCTUGeoms(uint32_t ctuWidth, uint32_t ctuHeight, uint32_t maxCUSi
 			}
 		}
 		rangeCUIdx += sbWidth * sbWidth; //用于计算每个块在geom的位置
-	}*/
+	}
 }
 
 bool isDiffMER(int xN, int yN, int xP, int yP)

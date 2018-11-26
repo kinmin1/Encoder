@@ -91,6 +91,7 @@
     <ClCompile Include="pixel.cpp" />
     <ClCompile Include="primitives.cpp" />
     <ClCompile Include="scalinglist.cpp" />
+    <ClCompile Include="search.cpp" />
     <ClCompile Include="slice.cpp" />
   </ItemGroup>
   <ItemGroup>

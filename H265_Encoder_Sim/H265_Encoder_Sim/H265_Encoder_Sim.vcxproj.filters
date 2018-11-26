@@ -93,6 +93,9 @@
     <ClCompile Include="picyuv.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="search.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="x265.h">
