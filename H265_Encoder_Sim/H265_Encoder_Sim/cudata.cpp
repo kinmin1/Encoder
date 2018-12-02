@@ -16,87 +16,26 @@
 
 const uint32_t nbPartsTable[8] = { 1, 2, 2, 4, 2, 2, 2, 2 };
 
-void bcast1(uint8_t* dst, uint8_t val)
-{
-	dst[0] = val;
+/* for all bcast* and copy* functions, dst and src are aligned to MIN(size, 32) */
+
+void bcast1(uint8_t* dst, uint8_t val)  { dst[0] = val; }
+
+void copy4(uint8_t* dst, uint8_t* src)  { ((uint32_t*)dst)[0] = ((uint32_t*)src)[0]; }
+void bcast4(uint8_t* dst, uint8_t val)  { ((uint32_t*)dst)[0] = 0x01010101u * val; }
+
+void copy16(uint8_t* dst, uint8_t* src) { ((uint64_t*)dst)[0] = ((uint64_t*)src)[0]; ((uint64_t*)dst)[1] = ((uint64_t*)src)[1]; }
+void bcast16(uint8_t* dst, uint8_t val) { uint64_t bval = 0x0101010101010101ULL * val; ((uint64_t*)dst)[0] = bval; ((uint64_t*)dst)[1] = bval; }
+
+void copy64(uint8_t* dst, uint8_t* src) {
+	((uint64_t*)dst)[0] = ((uint64_t*)src)[0]; ((uint64_t*)dst)[1] = ((uint64_t*)src)[1];
+	((uint64_t*)dst)[2] = ((uint64_t*)src)[2]; ((uint64_t*)dst)[3] = ((uint64_t*)src)[3];
+	((uint64_t*)dst)[4] = ((uint64_t*)src)[4]; ((uint64_t*)dst)[5] = ((uint64_t*)src)[5];
+	((uint64_t*)dst)[6] = ((uint64_t*)src)[6]; ((uint64_t*)dst)[7] = ((uint64_t*)src)[7];
 }
-
-void copy4(uint8_t* dst, uint8_t* src)
-{
-	((uint32_t*)dst)[0] = ((uint32_t*)src)[0];
-}
-
-void bcast4(uint8_t* dst, uint8_t val)
-{
-	((uint32_t*)dst)[0] = 0x01010101 * val;
-}
-
-void copy16(uint8_t* dst, uint8_t* src)
-{
-	((uint64_t*)dst)[0] = ((uint64_t*)src)[0];
-	((uint64_t*)dst)[1] = ((uint64_t*)src)[1];
-}
-
-void bcast16(uint8_t* dst, uint8_t val)
-{
-	uint64_t bval = val;
-	((uint64_t*)dst)[0] = bval;
-	((uint64_t*)dst)[1] = bval;
-}
-
-void copy64(uint8_t* dst, uint8_t* src)
-{
-((uint64_t*)dst)[0] = ((uint64_t*)src)[0];
-((uint64_t*)dst)[1] = ((uint64_t*)src)[1];
-((uint64_t*)dst)[2] = ((uint64_t*)src)[2];
-((uint64_t*)dst)[3] = ((uint64_t*)src)[3];
-((uint64_t*)dst)[4] = ((uint64_t*)src)[4];
-((uint64_t*)dst)[5] = ((uint64_t*)src)[5];
-((uint64_t*)dst)[6] = ((uint64_t*)src)[6];
-((uint64_t*)dst)[7] = ((uint64_t*)src)[7];
-((uint64_t*)dst)[8] = ((uint64_t*)src)[8];
-((uint64_t*)dst)[9] = ((uint64_t*)src)[9];
-((uint64_t*)dst)[10] = ((uint64_t*)src)[10];
-((uint64_t*)dst)[11] = ((uint64_t*)src)[11];
-((uint64_t*)dst)[12] = ((uint64_t*)src)[12];
-((uint64_t*)dst)[13] = ((uint64_t*)src)[13];
-((uint64_t*)dst)[14] = ((uint64_t*)src)[14];
-((uint64_t*)dst)[15] = ((uint64_t*)src)[15];
-((uint64_t*)dst)[16] = ((uint64_t*)src)[16];
-((uint64_t*)dst)[17] = ((uint64_t*)src)[17];
-((uint64_t*)dst)[18] = ((uint64_t*)src)[18];
-((uint64_t*)dst)[19] = ((uint64_t*)src)[19];
-
-((uint64_t*)dst)[20] = ((uint64_t*)src)[20];
-((uint64_t*)dst)[21] = ((uint64_t*)src)[21];
-((uint64_t*)dst)[22] = ((uint64_t*)src)[22];
-((uint64_t*)dst)[23] = ((uint64_t*)src)[23];
-((uint64_t*)dst)[24] = ((uint64_t*)src)[24];
-((uint64_t*)dst)[25] = ((uint64_t*)src)[25];
-((uint64_t*)dst)[26] = ((uint64_t*)src)[26];
-((uint64_t*)dst)[27] = ((uint64_t*)src)[27];
-((uint64_t*)dst)[28] = ((uint64_t*)src)[28];
-((uint64_t*)dst)[29] = ((uint64_t*)src)[29];
-
-((uint64_t*)dst)[30] = ((uint64_t*)src)[30];
-((uint64_t*)dst)[31] = ((uint64_t*)src)[31];
-
-}
-
-void bcast64(uint8_t* dst, uint8_t val)
-{
-dst[0] = val; dst[1] = val;  dst[2] = val;
-dst[3] = val; dst[4] = val;  dst[5] = val;
-dst[6] = val; dst[7] = val;
-dst[8] = val;  dst[9] = val; dst[10] = val;
-dst[11] = val; dst[12] = val;dst[13] = val;
-dst[14] = val; dst[15] = val;
-dst[16] = val; dst[17] = val;dst[18] = val;
-dst[19] = val; dst[20] = val;dst[21] = val;
-dst[22] = val; dst[23] = val;
-dst[24] = val; dst[25] = val;dst[26] = val;
-dst[27] = val; dst[28] = val;dst[29] = val;
-dst[30] = val; dst[31] = val;
+void bcast64(uint8_t* dst, uint8_t val) {
+	uint64_t bval = 0x0101010101010101ULL * val;
+	((uint64_t*)dst)[0] = bval; ((uint64_t*)dst)[1] = bval; ((uint64_t*)dst)[2] = bval; ((uint64_t*)dst)[3] = bval;
+	((uint64_t*)dst)[4] = bval; ((uint64_t*)dst)[5] = bval; ((uint64_t*)dst)[6] = bval; ((uint64_t*)dst)[7] = bval;
 }
 
 /* at 256 bytes, memset/memcpy will probably use SIMD more effectively than our uint64_t hack,
@@ -207,7 +146,6 @@ void CUData_CUData(struct CUData *cu)
 
 int CUDataMemPool_create_analysis(CUDataMemPool *MemPool, uint32_t depth, uint32_t numInstances)
 {
-	/*
 	uint32_t numPartition = NUM_4x4_PARTITIONS >> (depth * 2);
 	uint32_t cuSize = g_maxCUSize >> depth;
 	uint32_t sizeL = cuSize * cuSize;
@@ -237,13 +175,11 @@ int CUDataMemPool_create_analysis(CUDataMemPool *MemPool, uint32_t depth, uint32
 	return TRUE;
 
 fail:
-	return FALSE;*/
-	return 0;
+	return FALSE;
 }
 
 int CUDataMemPool_create_frame(CUDataMemPool *MemPool, uint32_t depth, uint32_t numInstances)
-{/*
-
+{
 	uint32_t numPartition = NUM_4x4_PARTITIONS >> (depth * 2);
 	uint32_t cuSize = g_maxCUSize >> depth;
 	uint32_t sizeL = cuSize * cuSize;
@@ -276,11 +212,11 @@ int CUDataMemPool_create_frame(CUDataMemPool *MemPool, uint32_t depth, uint32_t 
 	return TRUE;
 
 	fail:
-	return FALSE;*/return 0;
+	return FALSE;
 }
 
 void CUData_initialize(struct CUData *cu, struct CUDataMemPool *dataPool, uint32_t depth, int instance)
-{/*
+{
 	cu->m_chromaFormat = 1;
 	cu->m_hChromaShift = 1;
 	cu->m_vChromaShift = 1;
@@ -384,12 +320,14 @@ void CUData_initialize(struct CUData *cu, struct CUDataMemPool *dataPool, uint32
 	uint32_t sizeC = sizeL >> (cu->m_hChromaShift + cu->m_vChromaShift);
 	cu->m_trCoeff[0] = dataPool->trCoeffMemBlock + instance * (sizeL + sizeC * 2);
 	cu->m_trCoeff[1] = cu->m_trCoeff[0] + sizeL;
-	cu->m_trCoeff[2] = cu->m_trCoeff[0] + sizeL + sizeC;*/
+	cu->m_trCoeff[2] = cu->m_trCoeff[0] + sizeL + sizeC;
 }
 
 void CUData_initCTU(CUData* cu, struct Frame* frame, uint32_t cuAddr, int qp)
 {
-	/*
+
+	cu->m_qp = (int8_t*)malloc(sizeof(10));
+
 	cu->m_encData = frame->m_encData;
 	cu->m_slice = cu->m_encData->m_slice;
 	cu->m_cuAddr = cuAddr;
@@ -420,7 +358,7 @@ void CUData_initCTU(CUData* cu, struct Frame* frame, uint32_t cuAddr, int qp)
 	cu->m_cuAbove = (cu->m_cuAddr / widthInCU) ? framedata_getPicCTU(cu->m_encData, cu->m_cuAddr - widthInCU) : NULL;
 	cu->m_cuAboveLeft = (cu->m_cuLeft && cu->m_cuAbove) ? framedata_getPicCTU(cu->m_encData, cu->m_cuAddr - widthInCU - 1) : NULL;
 	cu->m_cuAboveRight = (cu->m_cuAbove && ((cu->m_cuAddr % widthInCU) < (widthInCU - 1))) ? framedata_getPicCTU(cu->m_encData, cu->m_cuAddr - widthInCU + 1) : NULL;
-	*/
+	
 }
 
 

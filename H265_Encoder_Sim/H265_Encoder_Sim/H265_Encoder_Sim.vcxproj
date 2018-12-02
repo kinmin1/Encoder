@@ -89,10 +89,15 @@
     <ClCompile Include="piclist.cpp" />
     <ClCompile Include="picyuv.cpp" />
     <ClCompile Include="pixel.cpp" />
+    <ClCompile Include="predict.cpp" />
     <ClCompile Include="primitives.cpp" />
+    <ClCompile Include="quant.cpp" />
+    <ClCompile Include="rdcost.cpp" />
     <ClCompile Include="scalinglist.cpp" />
     <ClCompile Include="search.cpp" />
+    <ClCompile Include="shortyuv.cpp" />
     <ClCompile Include="slice.cpp" />
+    <ClCompile Include="yuv.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="analysis.h" />
@@ -113,6 +118,7 @@
     <ClInclude Include="frameencoder.h" />
     <ClInclude Include="framefilter.h" />
     <ClInclude Include="intrapred.h" />
+    <ClInclude Include="ipfilter.h" />
     <ClInclude Include="level.h" />
     <ClInclude Include="lowres.h" />
     <ClInclude Include="motion.h" />

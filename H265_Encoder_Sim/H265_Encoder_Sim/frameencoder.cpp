@@ -71,11 +71,11 @@ bool FrameEncoder_init(FrameEncoder *frencoder, struct Encoder *top, int numRows
 }
 
 void CTURow_init(CTURow *cturow, Entropy *initContext)
-{/*
+{
 	(*cturow).active = FALSE;
 	(*cturow).busy = TRUE;
 	(*cturow).completed = 0;
-	load(&(*cturow).rowGoOnCoder, initContext);*/
+	load(&(*cturow).rowGoOnCoder, initContext);
 }
 
 /* Generate a complete list of unique geom sets for the current picture dimensions */
@@ -166,11 +166,11 @@ bool FrameEncoder_startCompressFrame(FrameEncoder *frencoder, Frame* curFrame)
 	Quant *quant = (struct Quant *)malloc(sizeof(struct Quant));//已释放
 
 	initSearch(&(analysis.sear), frencoder->m_param, frencoder->m_top->m_scalingList);
-	/*
-	Analysis_create(&analysis);//申请模式决策内存 初始化相关CU内存
-
-	FrameEncoder_compressFrame(frencoder, &analysis);
 	
+	Analysis_create(&analysis);//申请模式决策内存 初始化相关CU内存
+	
+	FrameEncoder_compressFrame(frencoder, &analysis);
+	/*
 //	DPB_Destroy()
 //	free(analysis.sear.m_me.fencPUYuv.m_buf[0]); analysis.sear.m_me.fencPUYuv.m_buf[0] = NULL;
 //	FrameEncoder_destroy(frencoder);
@@ -185,13 +185,13 @@ bool FrameEncoder_startCompressFrame(FrameEncoder *frencoder, Frame* curFrame)
 *   返回值         ： null
 **/
 void FrameEncoder_compressFrame(FrameEncoder *frencoder, Analysis *analysis)
-{/*
+{
 	Analysis *ana = analysis;
 	// Emit access unit delimiter unless this is the first frame and the user is
 	// not repeating headers (since AUD is supposed to be the first NAL in the access
 	// unit) 
 	Slice* slice = frencoder->m_frame->m_encData->m_slice; //获取当前slice
-
+	/*
 	// Generate motion references//产生运动参考帧
 	int numPredDir = isInterP(slice) ? 1 : isInterB(slice) ? 2 : 0;
 	for (int l = 0; l < numPredDir; l++)
@@ -208,8 +208,8 @@ void FrameEncoder_compressFrame(FrameEncoder *frencoder, Analysis *analysis)
 			//ECS_memcpy(slice->m_refPicList[l][ref]->m_reconPic->m_picOrg[2], reconFrameBuf_V, sizeof(pixel) * 8320);
 			MotionReference_init(&frencoder->m_mref[l][ref], slice->m_refPicList[l][ref]->m_reconPic, frencoder->m_param);
 		}
-	}
-
+	}*/
+	
 	// Get the QP for this frame from rate control. This call may block until
 	// frames ahead of it in encode order have called rateControlEnd() 
 	int qp = 26; //计算估计当前帧应用的量化参数
@@ -223,7 +223,7 @@ void FrameEncoder_compressFrame(FrameEncoder *frencoder, Analysis *analysis)
 	load(&frencoder->m_entropyCoder, &frencoder->m_initSliceContext);
 	for (uint32_t i = 0; i < frencoder->m_numRows; i++)
 		CTURow_init(&frencoder->m_rows[i], &frencoder->m_initSliceContext);
-
+	
 	uint32_t numSubstreams = 1;
 	if (!frencoder->m_outStreams)
 	{
@@ -238,7 +238,7 @@ void FrameEncoder_compressFrame(FrameEncoder *frencoder, Analysis *analysis)
 	}
 	else
 		resetBits(frencoder->m_outStreams);
-
+	
 	frencoder->m_rows->active = TRUE;
 	for (uint32_t i = 0; i < frencoder->m_numRows + frencoder->m_filterRowDelay; i++)
 	{
@@ -250,10 +250,10 @@ void FrameEncoder_compressFrame(FrameEncoder *frencoder, Analysis *analysis)
 		// filter
 		if (i >= frencoder->m_filterRowDelay)
 		{
-			FrameFilter_processRow(frencoder->m_frameFilter, i - frencoder->m_filterRowDelay);
+			//FrameFilter_processRow(frencoder->m_frameFilter, i - frencoder->m_filterRowDelay);
 		}
 	}
-	resetBits(&frencoder->m_bs);
+/*	resetBits(&frencoder->m_bs);
 	load(&frencoder->m_entropyCoder, &frencoder->m_initSliceContext);
 	setBitstream(&frencoder->m_entropyCoder, &frencoder->m_bs);
 	codeSliceHeader(&frencoder->m_entropyCoder, slice);
@@ -280,7 +280,7 @@ void FrameEncoder_compressFrame(FrameEncoder *frencoder, Analysis *analysis)
 
 // Called by worker threads
 void FrameEncoder_processRowEncoder(FrameEncoder *frencoder, int intRow, Analysis *tld)
-{/*
+{
 	int count = 0;
 	uint32_t row = (uint32_t)intRow; //获取当前CTU行号
 	CTURow *curRow = &frencoder->m_rows[row];
@@ -297,7 +297,7 @@ void FrameEncoder_processRowEncoder(FrameEncoder *frencoder, int intRow, Analysi
 
 	const uint32_t numCols = frencoder->m_numCols; //获取当前行有多少CTU
 	uint32_t lineStartCUAddr = row * numCols; //获取当前CTU行的第一个CTU在帧中的号
-
+	
 	uint32_t cuAddr = lineStartCUAddr; //获取CTU在帧中的编号
 	while (curRow->completed < numCols)
 	{
@@ -319,7 +319,7 @@ void FrameEncoder_processRowEncoder(FrameEncoder *frencoder, int intRow, Analysi
 		cuAddr++;
 
 	}
-
+	/*
 	// flush row bitstream (if WPP and no SAO) or flush frame if no WPP and no SAO //
 	if (!frencoder->m_param->bEnableSAO && (row == frencoder->m_numRows - 1))
 		finishSlice(rowCoder);

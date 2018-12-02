@@ -96,6 +96,21 @@
     <ClCompile Include="search.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="rdcost.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="quant.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="predict.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="shortyuv.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="yuv.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="x265.h">
@@ -216,6 +231,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="sao.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ipfilter.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

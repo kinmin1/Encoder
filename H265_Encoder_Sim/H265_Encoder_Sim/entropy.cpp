@@ -743,29 +743,29 @@ void copyFrom(Entropy* dst, const Entropy* src)
 
 /* Initialize our context information from the nominated source */
 void copyContextsFrom(Entropy* dst, const Entropy* src)
-{/*
+{
 	X265_CHECK(src->m_valid, "invalid copy source context\n");
 
 	memcpy(dst->m_contextState, src->m_contextState, MAX_OFF_CTX_MOD * sizeof(dst->m_contextState[0]));
-	markValid(dst);*/
+	markValid(dst);
 }
 // SBAC RD
 void loadIntraDirModeLuma(Entropy* dst, const Entropy* src)
-{/*
+{
 	dst->m_fracBits = src->m_fracBits;
-	dst->m_contextState[OFF_ADI_CTX] = src->m_contextState[OFF_ADI_CTX];*/
+	dst->m_contextState[OFF_ADI_CTX] = src->m_contextState[OFF_ADI_CTX];
 }
 void load(Entropy* dst, const Entropy* src)            
-{/*
-	copyFrom(dst, src);*/ 
+{
+	copyFrom(dst, src);
 }
 void store(const Entropy* src, Entropy* dst)          
-{/*
-	copyFrom(dst, src); */
+{
+	copyFrom(dst, src); 
 }
 
 uint8_t sbacInit(int qp, int initValue)
-{/*
+{
 	qp = x265_clip3_int(QP_MIN, QP_MAX_SPEC, qp);
 
 	int  slope = (initValue >> 4) * 5 - 45;
@@ -774,17 +774,17 @@ uint8_t sbacInit(int qp, int initValue)
 	uint32_t mpState = (initState >= 64);
 	uint32_t state = ((mpState ? (initState - 64) : (63 - initState)) << 1) + mpState;
 
-	return (state & 0xff);*/return 0;
+	return (state & 0xff);
 }
 void initBuffer(uint8_t* contextModel, enum SliceType sliceType, int qp, uint8_t* ctxModel, int size)
-{/*
+{
 	int n;
 	ctxModel += sliceType * size;
 	for (n = 0; n < size; n++)
-		contextModel[n] = sbacInit(qp, ctxModel[n]);*/
+		contextModel[n] = sbacInit(qp, ctxModel[n]);
 }
 void resetEntropy(Entropy* entropy, Slice *slice)
-{/*
+{
 	int  qp = slice->m_sliceQp;
 	SliceType sliceType = slice->m_sliceType;
 
@@ -815,7 +815,7 @@ void resetEntropy(Entropy* entropy, Slice *slice)
 	initBuffer(&entropy->m_contextState[OFF_TRANSFORMSKIP_FLAG_CTX], sliceType, qp, (uint8_t*)INIT_TRANSFORMSKIP_FLAG, 2 * NUM_TRANSFORMSKIP_FLAG_CTX);
 	initBuffer(&entropy->m_contextState[OFF_TQUANT_BYPASS_FLAG_CTX], sliceType, qp, (uint8_t*)INIT_CU_TRANSQUANT_BYPASS_FLAG, NUM_TQUANT_BYPASS_FLAG_CTX);
 	// new structure
-	start(entropy);*/
+	start(entropy);
 }
 /** Move bits from register into bitstream */
 void writeOut(Entropy* entropy)

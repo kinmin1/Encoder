@@ -60,9 +60,17 @@ bool ok(const Mode *mode)
 		mode->mvBits >= MAX_UINT / 2 ||
 		mode->coeffBits >= MAX_UINT / 2);
 }
+coeff_t m_rqt_0[1536] = { 1 };
+coeff_t m_rqt_1[1536] = { 1 };
+coeff_t m_rqt_2[1536] = { 1 };
+coeff_t m_rqt_3[1536] = { 1 };
+
+uint8_t m_qtTempCbf[192] = { 1 };
+uint8_t m_qtTempTransformSkipFlag[192] = { 1 };
+pixel m_intraPred[10240] = { 1 };
 
 bool initSearch(Search* search, x265_param* param, ScalingList *scalingList)
-{/*
+{
 	int mov = 0;
 	uint32_t maxLog2CUSize = g_log2Size[param->maxCUSize];
 	search->m_param = param;
@@ -75,7 +83,7 @@ bool initSearch(Search* search, x265_param* param, ScalingList *scalingList)
 	bool ok = Quant_init(&search->m_quant, param->rdoqLevel, param->psyRdoq, scalingList, &search->m_entropyCoder);
 
 	ok &= allocBuffers(&search->predict, 1); // sets m_hChromaShift & m_vChromaShift
-
+	
 	// When frame parallelism is active, only 'refLagPixels' of reference frames will be guaranteed
 	// available for motion reference.  See refLagRows in FrameEncoder::compressCTURows()
 	search->m_refLagPixels = search->m_bFrameParallel ? param->searchRange : param->sourceHeight;
@@ -109,7 +117,7 @@ bool initSearch(Search* search, x265_param* param, ScalingList *scalingList)
 		ok = Yuv_create_search(&(search->m_rqt[i].reconQtYuv), g_maxCUSize, 1, i);
 		ok = ShortYuv_create_search(&(search->m_rqt[i].resiQtYuv), g_maxCUSize, 1, i);
 	}
-
+	
 	// the rest of these buffers are indexed per-depth
 	for (uint32_t i = 0; i <= g_maxCUDepth; i++)
 	{
@@ -119,7 +127,7 @@ bool initSearch(Search* search, x265_param* param, ScalingList *scalingList)
 		ok = Yuv_create_search_2(&(search->m_rqt[i].bidirPredYuv[0]), cuSize, 1, i);
 		ok = Yuv_create_search_3(&(search->m_rqt[i].bidirPredYuv[1]), cuSize, 1, i);
 	}
-
+	
 	//CHECKED_MALLOC(search->m_qtTempCbf[0], uint8_t, numPartitions * 3);
 	search->m_qtTempCbf[0] = m_qtTempCbf;
 	if (!search->m_qtTempCbf)
@@ -155,8 +163,6 @@ bool initSearch(Search* search, x265_param* param, ScalingList *scalingList)
 
 fail:
 	return FALSE;
-	*/
-		return TRUE;
 }
 
 

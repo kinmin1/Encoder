@@ -20,7 +20,7 @@
 
 extern EncoderPrimitives primitives;
 bool Analysis_create(Analysis *analysis)
-{/*
+{
 	analysis->m_bChromaSa8d = analysis->sear.m_param->rdLevel >= 3;
 
 	int csp = 1;//m_param->internalCsp;
@@ -29,23 +29,23 @@ bool Analysis_create(Analysis *analysis)
 	bool ok = TRUE;
 	for (uint32_t depth = 0; depth <= 0; depth++, cuSize >>= 1)//depth <= g_maxCUDepth;
 	{
-		struct ModeDepth *md = &(analysis->m_modeDepth[depth]);
+		//struct ModeDepth *md = &(analysis->m_modeDepth[depth]);
 
-		CUDataMemPool_create_analysis(&md->cuMemPool, depth, 2);//MAX_PRED_TYPES
-		ok &= Yuv_create_md(&md->fencYuv, cuSize, csp);
+		CUDataMemPool_create_analysis(&analysis->m_modeDepth[depth].cuMemPool, depth, 2);//MAX_PRED_TYPES
+		ok &= Yuv_create_md(&analysis->m_modeDepth[depth].fencYuv, cuSize, csp);
 
-		CUData_initialize(&md->pred[PRED_INTRA].cu, &md->cuMemPool, depth, 0);
-		ok &= Yuv_create_md_pred_0(&md->pred[PRED_INTRA].predYuv, cuSize, csp);
-		ok &= Yuv_create_md_pred_1(&md->pred[PRED_INTRA].reconYuv, cuSize, csp);
-		md->pred[PRED_INTRA].fencYuv = &md->fencYuv;
+		CUData_initialize(&analysis->m_modeDepth[depth].pred[PRED_INTRA].cu, &analysis->m_modeDepth[depth].cuMemPool, depth, 0);
+		ok &= Yuv_create_md_pred_0(&analysis->m_modeDepth[depth].pred[PRED_INTRA].predYuv, cuSize, csp);
+		ok &= Yuv_create_md_pred_1(&analysis->m_modeDepth[depth].pred[PRED_INTRA].reconYuv, cuSize, csp);
+		analysis->m_modeDepth[depth].pred[PRED_INTRA].fencYuv = &analysis->m_modeDepth[depth].fencYuv;
 
-		CUData_initialize(&md->pred[PRED_2Nx2N].cu, &md->cuMemPool, depth, 1);
-		ok &= Yuv_create_md_pred_pred2Nx2N_0(&md->pred[PRED_2Nx2N].predYuv, cuSize, csp);
-		ok &= Yuv_create_md_pred_pred2Nx2N_1(&md->pred[PRED_2Nx2N].reconYuv, cuSize, csp);
-		md->pred[PRED_2Nx2N].fencYuv = &md->fencYuv;
+		CUData_initialize(&analysis->m_modeDepth[depth].pred[PRED_2Nx2N].cu, &analysis->m_modeDepth[depth].cuMemPool, depth, 1);
+		ok &= Yuv_create_md_pred_pred2Nx2N_0(&analysis->m_modeDepth[depth].pred[PRED_2Nx2N].predYuv, cuSize, csp);
+		ok &= Yuv_create_md_pred_pred2Nx2N_1(&analysis->m_modeDepth[depth].pred[PRED_2Nx2N].reconYuv, cuSize, csp);
+		analysis->m_modeDepth[depth].pred[PRED_2Nx2N].fencYuv = &analysis->m_modeDepth[depth].fencYuv;
 	}
 	
-	return ok;*/return 0;
+	return ok;
 }
 
 
