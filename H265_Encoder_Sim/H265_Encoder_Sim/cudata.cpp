@@ -143,9 +143,6 @@ void CUData_CUData(struct CUData *cu)
 {
 	memset(cu, 0, sizeof(cu));
 }
-coeff_t MemPool_trCoeffMemBlock[32*32*3/2*2] = {0};
-//uint8_t MemPool_charMemBlock[64 * 2 * 21] = { 0 };
-//coeff_t MemPool_mvMemBlock[64 * 4 * 2] = { 0 };
 
 int CUDataMemPool_create_analysis(CUDataMemPool *MemPool, uint32_t depth, uint32_t numInstances)
 {
@@ -180,8 +177,7 @@ int CUDataMemPool_create_analysis(CUDataMemPool *MemPool, uint32_t depth, uint32
 fail:
 	return FALSE;
 }
-coeff_t frame_MemPool_trCoeffMemBlock[32 * 32 * 3/2 * 9] = { 0 };
-uint8_t MemPool_charMemBlock[64 * 9 * 21] = { 0 };
+
 int CUDataMemPool_create_frame(CUDataMemPool *MemPool, uint32_t depth, uint32_t numInstances)
 {
 	uint32_t numPartition = NUM_4x4_PARTITIONS >> (depth * 2);
@@ -475,7 +471,6 @@ void CUData_initCTU(CUData* cu, struct Frame* frame, uint32_t cuAddr, int qp)
 // initialize Sub partition
 void CUData_initSubCU(struct CUData *cu, struct CUData* ctu, struct CUGeom* cuGeom, int qp)
 {
-	/*
 	cu->m_absIdxInCTU = cuGeom->absPartIdx;
 	cu->m_encData = ctu->m_encData;
 	cu->m_slice = ctu->m_slice;
@@ -499,7 +494,7 @@ void CUData_initSubCU(struct CUData *cu, struct CUData* ctu, struct CUGeom* cuGe
 	cu->m_partSet(cu->m_cuDepth, (uint8_t)cuGeom->depth);
 
 	// initialize the remaining CU data in one memset //
-	memset(cu->m_predMode, 0, (BytesPerPartition - 7) * cu->m_numPartitions);*/
+	memset(cu->m_predMode, 0, (BytesPerPartition - 7) * cu->m_numPartitions);
 }
 
 /* Copy the results of a sub-part (split) CU to the parent CU */
