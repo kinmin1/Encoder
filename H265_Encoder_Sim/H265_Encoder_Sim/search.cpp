@@ -167,7 +167,7 @@ fail:
 
 
 int setLambdaFromQP(Search* search, CUData* ctu, int qp)
-{/*
+{
 	X265_CHECK(qp >= QP_MIN && qp <= QP_MAX_MAX, "QP used for lambda is out of range\n");
 
 	BitCost_init(&search->m_me.bitcost, qp);
@@ -176,8 +176,7 @@ int setLambdaFromQP(Search* search, CUData* ctu, int qp)
 
 	int quantQP = x265_clip3_int(QP_MIN, QP_MAX_SPEC, qp);
 	Quant_setQPforQuant(&search->m_quant, ctu, quantQP);
-	return quantQP;*/
-	return 0;
+	return quantQP;
 }
 
 void addSubCosts(Mode* dstMode, const Mode* subMode)

@@ -26,9 +26,13 @@ void PicYuv_init(PicYuv *picyuv)
 	picyuv->m_buOffsetY = NULL;
 	picyuv->m_buOffsetC = NULL;
 }
-pixel m_picBuf_0[43008] = { 0 }; 
-pixel m_picBuf_1[16896] = { 0 };
-pixel m_picBuf_2[16896] = { 0 };
+//pixel m_picBuf_0[101376] = { 0 };
+//pixel m_picBuf_1[25344] = { 0 };
+//pixel m_picBuf_2[25344] = { 0 };
+
+pixel m_picBuf_0[96*96] = { 0 };
+pixel m_picBuf_1[48*48] = { 0 };
+pixel m_picBuf_2[48*48] = { 0 };
 int PicYuv_create(PicYuv *picyuv, uint32_t picWidth, uint32_t picHeight)
 {
 	PicYuv_init(picyuv);
@@ -69,18 +73,18 @@ int PicYuv_create(PicYuv *picyuv, uint32_t picWidth, uint32_t picHeight)
 		printf("malloc of size %d failed\n", 16896);
 		goto fail;
 	}
-	picyuv->m_picOrg[0] = picyuv->m_picBuf[0] + picyuv->m_lumaMarginY   * picyuv->m_stride + picyuv->m_lumaMarginX;
-	picyuv->m_picOrg[1] = picyuv->m_picBuf[1] + picyuv->m_chromaMarginY * picyuv->m_strideC + picyuv->m_chromaMarginX;
-	picyuv->m_picOrg[2] = picyuv->m_picBuf[2] + picyuv->m_chromaMarginY * picyuv->m_strideC + picyuv->m_chromaMarginX;
+	picyuv->m_picOrg[0] = picyuv->m_picBuf[0];// +picyuv->m_lumaMarginY   * picyuv->m_stride + picyuv->m_lumaMarginX;
+	picyuv->m_picOrg[1] = picyuv->m_picBuf[1];// +picyuv->m_chromaMarginY * picyuv->m_strideC + picyuv->m_chromaMarginX;
+	picyuv->m_picOrg[2] = picyuv->m_picBuf[2];// +picyuv->m_chromaMarginY * picyuv->m_strideC + picyuv->m_chromaMarginX;
 
 	return TRUE;
 
 fail:
 	return FALSE;
 }
-pixel m_reconpicBuf_0[9216] = { 0 };
-pixel m_reconpicBuf_1[2304] = { 0 };
-pixel m_reconpicBuf_2[2304] = { 0 };
+pixel m_reconpicBuf_0[96 * 96] = { 0 };
+pixel m_reconpicBuf_1[48 * 48] = { 0 };
+pixel m_reconpicBuf_2[48 * 48] = { 0 };
 
 int PicYuv_create_reconPic(PicYuv *picyuv, uint32_t picWidth, uint32_t picHeight)
 {
@@ -195,15 +199,15 @@ int PicYuv_createOffsets(PicYuv *picyuv, struct SPS *sps)
 fail:
 	return FALSE;
 }
-intptr_t m_cuOffsetY_recon;
-intptr_t m_cuOffsetC_recon;
-intptr_t m_buOffsetY_recon;
-intptr_t m_buOffsetC_recon;
+intptr_t m_cuOffsetY_recon[9];
+intptr_t m_cuOffsetC_recon[9];
+intptr_t m_buOffsetY_recon[64];
+intptr_t m_buOffsetC_recon[64];
 int PicYuv_createOffsets_recon(PicYuv *picyuv, struct SPS *sps)
 {
 	uint32_t numPartitions = 1 << (g_unitSizeDepth * 2);
 	//CHECKED_MALLOC(picyuv->m_cuOffsetY, intptr_t, sps->numCuInWidth * sps->numCuInHeight);
-	picyuv->m_cuOffsetY = &m_cuOffsetY_recon;
+	picyuv->m_cuOffsetY = m_cuOffsetY_recon;
 	if (!picyuv->m_cuOffsetY)
 	{
 		printf("malloc of size %d failed\n", 9);
@@ -211,7 +215,7 @@ int PicYuv_createOffsets_recon(PicYuv *picyuv, struct SPS *sps)
 	}
 
 	//CHECKED_MALLOC(picyuv->m_cuOffsetC, intptr_t, sps->numCuInWidth * sps->numCuInHeight);
-	picyuv->m_cuOffsetC = &m_cuOffsetC_recon;
+	picyuv->m_cuOffsetC = m_cuOffsetC_recon;
 	if (!picyuv->m_cuOffsetC)
 	{
 		printf("malloc of size %d failed\n", 9);
@@ -230,14 +234,14 @@ int PicYuv_createOffsets_recon(PicYuv *picyuv, struct SPS *sps)
 		}
 	}
 	//CHECKED_MALLOC(picyuv->m_buOffsetY, intptr_t, (size_t)numPartitions);
-	picyuv->m_buOffsetY = &m_buOffsetY_recon;
+	picyuv->m_buOffsetY = m_buOffsetY_recon;
 	if (!picyuv->m_buOffsetY)
 	{
 		printf("malloc of size %d failed\n", 64);
 		goto fail;
 	}
 	//CHECKED_MALLOC(picyuv->m_buOffsetC, intptr_t, (size_t)numPartitions);
-	picyuv->m_buOffsetC = &m_buOffsetC_recon;
+	picyuv->m_buOffsetC = m_buOffsetC_recon;
 	if (!picyuv->m_buOffsetC)
 	{
 		printf("malloc of size %d failed\n", 64);

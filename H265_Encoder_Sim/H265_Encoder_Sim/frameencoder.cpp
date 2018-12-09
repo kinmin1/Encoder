@@ -17,6 +17,7 @@
 #include "reference.h"
 #include "search.h"
 #include "encoder.h"
+#include "malloc.h"
 
 void FrameEncoder_FrameEncoder(FrameEncoder *frencoder)
 {
@@ -306,11 +307,11 @@ void FrameEncoder_processRowEncoder(FrameEncoder *frencoder, int intRow, Analysi
 		CUData *ctu = framedata_getPicCTU(frencoder->m_frame->m_encData, cuAddr); //获取在帧中对应位置的CTU
 		CUData_initCTU(ctu, frencoder->m_frame, cuAddr, slice->m_sliceQp); //初始化CTU
 
-		Mode *best = (Mode*) malloc(sizeof(Mode));
-		if (!best)
-			printf("malloc Mode fail!");
+		//Mode *best = (Mode*) malloc(sizeof(Mode));
+		//if (!best)
+		//	printf("malloc Mode fail!");
 		//Does all the CU analysis, returns best top level mode decision
-		best = compressCTU(tld, ctu, frencoder->m_frame, &frencoder->m_cuGeoms[frencoder->m_ctuGeomMap[cuAddr]], rowCoder);
+		Mode *best = compressCTU(tld, ctu, frencoder->m_frame, &frencoder->m_cuGeoms[frencoder->m_ctuGeomMap[cuAddr]], rowCoder);
 		encodeCTU(rowCoder, ctu, &frencoder->m_cuGeoms[frencoder->m_ctuGeomMap[cuAddr]]);
 
 		curRow->completed++;
@@ -318,6 +319,8 @@ void FrameEncoder_processRowEncoder(FrameEncoder *frencoder, int intRow, Analysi
 		printf("Finish %d CTU\n", cuAddr + 1);
 		cuAddr++;
 
+		free(best);
+		best = NULL;
 	}
 	/*
 	// flush row bitstream (if WPP and no SAO) or flush frame if no WPP and no SAO //

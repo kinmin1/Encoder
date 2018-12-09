@@ -170,6 +170,7 @@ typedef struct TUEntropyCodingParameters
 	uint32_t        firstSignificanceMapContext;
 }TUEntropyCodingParameters;
 
+void CUData_initialize_test(Frame *frame, struct CUData *cu, struct CUDataMemPool *dataPool, uint32_t depth, int instance);
 void CUData_initialize(struct CUData *cu, struct CUDataMemPool *dataPool, uint32_t depth, int instance);
 
 int CUDataMemPool_create(struct CUDataMemPool *MemPool, uint32_t depth, uint32_t numInstances);

@@ -65,7 +65,7 @@ typedef struct FrameData
 }FrameData;
 
 struct CUData* framedata_getPicCTU(FrameData *framedata, uint32_t ctuAddr);
-bool FrameData_create(FrameData *framedata, x265_param *param, struct SPS* sps);
+bool FrameData_create(Frame *frame, FrameData *framedata, x265_param *param, struct SPS* sps);
 void FrameData_reinit(FrameData *framedata, struct SPS *sps);
 void FrameData_FrameData(FrameData* framedata);
 void FrameData_destory(FrameData *framedata);

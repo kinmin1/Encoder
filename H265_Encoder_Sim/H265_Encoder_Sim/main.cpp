@@ -11,7 +11,8 @@ int MY_Encoder(const char* infile, int width, int height, int type, const char* 
 int main()
 {
 	//printf("HELLO WORLD!\n");
-	MY_Encoder("BUS_352x288_30_orig_150f.yuv", 352, 288, 1, "str.bin");
+	//MY_Encoder("BUS_352x288_30_orig_150f.yuv", 352, 288, 1, "str.bin");
+	MY_Encoder("akiyo_cif_88_72.yuv", PIC_WIDTH, PIC_HEIGHT, 1, "str.bin");
 	while (1);
 	return 0;
 }
@@ -113,8 +114,8 @@ int MY_Encoder(const char* infile, int width, int height, int type, const char* 
 	
 	for (int i = 0; i < 10/* frame_cnt*/; i++)
 	{
-		fseek(fp_src, i * 352 * 288 * 3 / 2, SEEK_SET);
-		fread(buffer, sizeof(unsigned char), 352 * 288 * 3 / 2, fp_src);
+		fseek(fp_src, i * width* height * 3 / 2, SEEK_SET);
+		fread(buffer, sizeof(unsigned char), width* height * 3 / 2, fp_src);
 		pic_in->planes[0] = buffer;
 		pic_in->planes[1] = buffer + luma_size;
 		pic_in->planes[2] = buffer + luma_size * 5 / 4;

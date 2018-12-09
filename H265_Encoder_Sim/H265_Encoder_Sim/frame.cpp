@@ -56,7 +56,7 @@ int Frame_allocEncodeData(Frame *frame, x265_param *param, struct SPS *sps)
 		printf("create offset reconpic fail!\n");
 
 	frame->m_encData->m_reconPic = frame->m_reconPic;
-	num1 = FrameData_create(frame->m_encData, param, sps);
+	num1 = FrameData_create(frame, frame->m_encData, param, sps);
 	num2 = PicYuv_create_reconPic(frame->m_reconPic, param->sourceWidth, param->sourceHeight);
 
 	int ok = num1 && num2;
@@ -68,9 +68,9 @@ int Frame_allocEncodeData(Frame *frame, x265_param *param, struct SPS *sps)
 		// initialize right border of m_reconpicYuv as SAO may read beyond the
 		// end of the picture accessing uninitialized pixels //
 		int maxHeight = sps->numCuInHeight * g_maxCUSize;
-		memset(frame->m_reconPic->m_picOrg[0], 0, sizeof(pixel) * 88 * 72/*frame->m_reconPic->m_stride * maxHeight*/);
-		memset(frame->m_reconPic->m_picOrg[1], 0, sizeof(pixel) * (88 * 72 >> 2)/*frame->m_reconPic->m_strideC * (maxHeight >> 2)*/);
-		memset(frame->m_reconPic->m_picOrg[2], 0, sizeof(pixel) * (88 * 72 >> 2)/*frame->m_reconPic->m_strideC * (maxHeight >> 2)*/);
+		memset(frame->m_reconPic->m_picOrg[0], 0, sizeof(pixel) * PIC_WIDTH * PIC_HEIGHT/*frame->m_reconPic->m_stride * maxHeight*/);
+		memset(frame->m_reconPic->m_picOrg[1], 0, sizeof(pixel) * (PIC_WIDTH * PIC_HEIGHT >> 2)/*frame->m_reconPic->m_strideC * (maxHeight >> 2)*/);
+		memset(frame->m_reconPic->m_picOrg[2], 0, sizeof(pixel) * (PIC_WIDTH * PIC_HEIGHT >> 2)/*frame->m_reconPic->m_strideC * (maxHeight >> 2)*/);
 	}
 	
 	return TRUE;

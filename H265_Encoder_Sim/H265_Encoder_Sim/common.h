@@ -14,6 +14,8 @@
 #ifndef COMMON_H_
 #define COMMON_H_
 
+#define PIC_WIDTH	88
+#define PIC_HEIGHT	72
 #define NUM_OF_I_FRAME 10
 
 #ifndef _SIZE_T

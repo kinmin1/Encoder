@@ -49,6 +49,10 @@
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <StackReserveSize>
+      </StackReserveSize>
+      <HeapReserveSize>4194304</HeapReserveSize>
+      <HeapCommitSize>4194304</HeapCommitSize>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -68,6 +72,7 @@
   <ItemGroup>
     <ClCompile Include="analysis.cpp" />
     <ClCompile Include="api.cpp" />
+    <ClCompile Include="bitcost.cpp" />
     <ClCompile Include="Bitstream.cpp" />
     <ClCompile Include="common.cpp" />
     <ClCompile Include="constants.cpp" />

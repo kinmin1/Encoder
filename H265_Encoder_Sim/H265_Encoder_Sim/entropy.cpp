@@ -712,33 +712,33 @@ void start(Entropy* entropy)
 }
 
 void copyState(Entropy* dst, const Entropy* other)
-{/*
+{
 	dst->m_low = other->m_low;
 	dst->m_range = other->m_range;
 	dst->m_bitsLeft = other->m_bitsLeft;
 	dst->m_bufferedByte = other->m_bufferedByte;
 	dst->m_numBufferedBytes = other->m_numBufferedBytes;
-	dst->m_fracBits = other->m_fracBits;*/
+	dst->m_fracBits = other->m_fracBits;
 }
 
 void markInvalid(Entropy* entropy)                 
-{ /*
-	entropy->m_valid = FALSE; */
+{ 
+	entropy->m_valid = FALSE; 
 }
 void markValid(Entropy* entropy)                   
 {
 	entropy->m_valid = TRUE; 
 }
 void zeroFract(Entropy* entropy)                   
-{/*
-	entropy->m_fracBits = 0; */
+{
+	entropy->m_fracBits = 0; 
 }
 void copyFrom(Entropy* dst, const Entropy* src)
-{/*
+{
 	X265_CHECK(src->m_valid, "invalid copy source context\n");
 	copyState(dst, src);
 	memcpy(dst->m_contextState, src->m_contextState, MAX_OFF_CTX_MOD * sizeof(uint8_t));
-	markValid(dst);*/
+	markValid(dst);
 }
 
 /* Initialize our context information from the nominated source */

@@ -143,6 +143,9 @@ void CUData_CUData(struct CUData *cu)
 {
 	memset(cu, 0, sizeof(cu));
 }
+coeff_t MemPool_trCoeffMemBlock[32*32*3/2*2] = {0};
+//uint8_t MemPool_charMemBlock[64 * 2 * 21] = { 0 };
+//coeff_t MemPool_mvMemBlock[64 * 4 * 2] = { 0 };
 
 int CUDataMemPool_create_analysis(CUDataMemPool *MemPool, uint32_t depth, uint32_t numInstances)
 {
@@ -151,7 +154,7 @@ int CUDataMemPool_create_analysis(CUDataMemPool *MemPool, uint32_t depth, uint32
 	uint32_t sizeL = cuSize * cuSize;
 	uint32_t sizeC = sizeL >> 1;
 
-	MemPool->trCoeffMemBlock = (coeff_t *)malloc((sizeL + sizeC * 2) * numInstances);
+	MemPool->trCoeffMemBlock = (coeff_t *)malloc((sizeL + sizeC * 2) * numInstances);//MemPool_trCoeffMemBlock;//
 	if (!MemPool->trCoeffMemBlock)
 	{
 		printf("malloc of size %d failed\n", sizeof(coeff_t) * (sizeL + sizeC * 2)* numInstances);
@@ -165,7 +168,7 @@ int CUDataMemPool_create_analysis(CUDataMemPool *MemPool, uint32_t depth, uint32
 		goto fail;
 	}
 
-	MemPool->mvMemBlock = (MV *)malloc(numPartition * 4 * numInstances);
+	MemPool->mvMemBlock =  (MV *)malloc(numPartition * 4 * numInstances);
 	if (!MemPool->mvMemBlock)
 	{
 		printf("malloc of size %d failed\n", sizeof(MV) * (numPartition * 4 * numInstances));
@@ -177,7 +180,8 @@ int CUDataMemPool_create_analysis(CUDataMemPool *MemPool, uint32_t depth, uint32
 fail:
 	return FALSE;
 }
-
+coeff_t frame_MemPool_trCoeffMemBlock[32 * 32 * 3/2 * 9] = { 0 };
+uint8_t MemPool_charMemBlock[64 * 9 * 21] = { 0 };
 int CUDataMemPool_create_frame(CUDataMemPool *MemPool, uint32_t depth, uint32_t numInstances)
 {
 	uint32_t numPartition = NUM_4x4_PARTITIONS >> (depth * 2);
@@ -185,7 +189,7 @@ int CUDataMemPool_create_frame(CUDataMemPool *MemPool, uint32_t depth, uint32_t 
 	uint32_t sizeL = cuSize * cuSize;
 	uint32_t sizeC = sizeL >> 1;
 
-	MemPool->trCoeffMemBlock = (coeff_t *)malloc((sizeL + sizeC * 2) * numInstances);
+	MemPool->trCoeffMemBlock = (coeff_t *)malloc((sizeL + sizeC * 2) * numInstances); //frame_MemPool_trCoeffMemBlock;//
 	//CHECKED_MALLOC(trCoeffMemBlock, coeff_t, (sizeL + sizeC * 2) * numInstances);
 	//CHECKED_MALLOC(charMemBlock, uint8_t, numPartition * numInstances * CUData::BytesPerPartition);
 	//CHECKED_MALLOC(mvMemBlock, MV, numPartition * 4 * numInstances);
@@ -195,7 +199,7 @@ int CUDataMemPool_create_frame(CUDataMemPool *MemPool, uint32_t depth, uint32_t 
 	goto fail;
 	}
 
-	MemPool->charMemBlock = (uint8_t *)malloc(numPartition * numInstances * BytesPerPartition);
+	MemPool->charMemBlock =  (uint8_t *)malloc(numPartition * numInstances * BytesPerPartition);//MemPool_charMemBlock;//
 	if (!MemPool->charMemBlock)
 	{
 	printf("malloc of size %d failed\n", sizeof(uint8_t) * (numPartition * numInstances * BytesPerPartition));
@@ -322,11 +326,117 @@ void CUData_initialize(struct CUData *cu, struct CUDataMemPool *dataPool, uint32
 	cu->m_trCoeff[1] = cu->m_trCoeff[0] + sizeL;
 	cu->m_trCoeff[2] = cu->m_trCoeff[0] + sizeL + sizeC;
 }
+void CUData_initialize_test(Frame *frame, struct CUData *cu, struct CUDataMemPool *dataPool, uint32_t depth, int instance)
+{
+	cu->m_chromaFormat = 1;
+	cu->m_hChromaShift = 1;
+	cu->m_vChromaShift = 1;
+	cu->s_numPartInCUSize = 1 << g_unitSizeDepth;
+	cu->m_numPartitions = NUM_4x4_PARTITIONS >> (depth * 2);
+	if (!cu->s_partSet[0])
+	{
+		switch (g_maxLog2CUSize)
+		{
+		case 6:
+			cu->s_partSet[0] = bcast256;
+			cu->s_partSet[1] = bcast64;
+			cu->s_partSet[2] = bcast16;
+			cu->s_partSet[3] = bcast4;
+			cu->s_partSet[4] = bcast1;
+			break;
+		case 5:
+			cu->s_partSet[0] = bcast64;
+			cu->s_partSet[1] = bcast16;
+			cu->s_partSet[2] = bcast4;
+			cu->s_partSet[3] = bcast1;
+			cu->s_partSet[4] = NULL;
+			break;
+		case 4:
+			cu->s_partSet[0] = bcast16;
+			cu->s_partSet[1] = bcast4;
+			cu->s_partSet[2] = bcast1;
+			cu->s_partSet[3] = NULL;
+			cu->s_partSet[4] = NULL;
+			break;
+		default:
+			printf("unexpected CTU size\n");
+			break;
+		}
+	}
 
+	switch (cu->m_numPartitions)
+	{
+	case 256: // 64x64 CU
+		cu->m_partCopy = copy256;
+		cu->m_partSet = bcast256;
+		cu->m_subPartCopy = copy64;
+		cu->m_subPartSet = bcast64;
+		break;
+	case 64:  // 32x32 CU
+		cu->m_partCopy = copy64;
+		cu->m_partSet = bcast64;
+		cu->m_subPartCopy = copy16;
+		cu->m_subPartSet = bcast16;
+		break;
+	case 16:  // 16x16 CU
+		cu->m_partCopy = copy16;
+		cu->m_partSet = bcast16;
+		cu->m_subPartCopy = copy4;
+		cu->m_subPartSet = bcast4;
+		break;
+	case 4:   // 8x8 CU
+		cu->m_partCopy = copy4;
+		cu->m_partSet = bcast4;
+		cu->m_subPartCopy = NULL;
+		cu->m_subPartSet = NULL;
+		break;
+	default:
+		printf("unexpected CU partition count\n");
+		break;
+	}
+
+	uint8_t *charBuf = dataPool->charMemBlock + (cu->m_numPartitions * 21) * instance;
+	cu->m_qp = (int8_t*)charBuf; charBuf += cu->m_numPartitions;
+	cu->m_log2CUSize = charBuf; charBuf += cu->m_numPartitions;
+	cu->m_lumaIntraDir = charBuf; charBuf += cu->m_numPartitions;
+	cu->m_tqBypass = charBuf; charBuf += cu->m_numPartitions;
+	cu->m_refIdx[0] = (int8_t*)charBuf; charBuf += cu->m_numPartitions;
+	cu->m_refIdx[1] = (int8_t*)charBuf; charBuf += cu->m_numPartitions;
+	cu->m_cuDepth = charBuf; charBuf += cu->m_numPartitions;
+	cu->m_predMode = charBuf; charBuf += cu->m_numPartitions; // the order up to here is important in initCTU() and initSubCU() //
+	cu->m_partSize = charBuf; charBuf += cu->m_numPartitions;
+	cu->m_mergeFlag = charBuf; charBuf += cu->m_numPartitions;
+	cu->m_interDir = charBuf; charBuf += cu->m_numPartitions;
+	cu->m_mvpIdx[0] = charBuf; charBuf += cu->m_numPartitions;
+	cu->m_mvpIdx[1] = charBuf; charBuf += cu->m_numPartitions;
+	cu->m_tuDepth = charBuf; charBuf += cu->m_numPartitions;
+	cu->m_transformSkip[0] = charBuf; charBuf += cu->m_numPartitions;
+	cu->m_transformSkip[1] = charBuf; charBuf += cu->m_numPartitions;
+	cu->m_transformSkip[2] = charBuf; charBuf += cu->m_numPartitions;
+	cu->m_cbf[0] = charBuf; charBuf += cu->m_numPartitions;
+	cu->m_cbf[1] = charBuf; charBuf += cu->m_numPartitions;
+	cu->m_cbf[2] = charBuf; charBuf += cu->m_numPartitions;
+	cu->m_chromaIntraDir = charBuf; charBuf += cu->m_numPartitions;
+
+	if (!(charBuf == dataPool->charMemBlock + (cu->m_numPartitions * BytesPerPartition) * (instance + 1)))
+		printf("CU data layout is broken\n");
+
+	cu->m_mv[0] = dataPool->mvMemBlock + (instance * 4) * cu->m_numPartitions;
+	cu->m_mv[1] = cu->m_mv[0] + cu->m_numPartitions;
+	cu->m_mvd[0] = cu->m_mv[1] + cu->m_numPartitions;
+	cu->m_mvd[1] = cu->m_mvd[0] + cu->m_numPartitions;
+
+	uint32_t cuSize = g_maxCUSize >> depth;
+	uint32_t sizeL = cuSize * cuSize;
+	uint32_t sizeC = sizeL >> (cu->m_hChromaShift + cu->m_vChromaShift);
+	cu->m_trCoeff[0] = dataPool->trCoeffMemBlock + instance * (sizeL + sizeC * 2);
+	cu->m_trCoeff[1] = cu->m_trCoeff[0] + sizeL;
+	cu->m_trCoeff[2] = cu->m_trCoeff[0] + sizeL + sizeC;
+}
 void CUData_initCTU(CUData* cu, struct Frame* frame, uint32_t cuAddr, int qp)
 {
 
-	cu->m_qp = (int8_t*)malloc(sizeof(10));
+	//cu->m_qp = (int8_t*)malloc(sizeof(int8_t) * 8);
 
 	cu->m_encData = frame->m_encData;
 	cu->m_slice = cu->m_encData->m_slice;

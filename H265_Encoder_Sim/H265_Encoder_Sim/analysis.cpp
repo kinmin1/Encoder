@@ -65,7 +65,7 @@ void checkBestMode(Analysis* analysis, Mode* mode, uint32_t depth)
 }
 
 Mode* compressCTU(Analysis* analysis, CUData* ctu, Frame* frame, CUGeom* cuGeom, Entropy* initialContext)
-{/*
+{
 	analysis->sear.m_slice = ctu->m_slice;
 	analysis->sear.m_frame = frame;
 
@@ -79,37 +79,37 @@ Mode* compressCTU(Analysis* analysis, CUData* ctu, Frame* frame, CUGeom* cuGeom,
 	uint32_t numPartition = ctu->m_numPartitions;
 	if (analysis->sear.m_param->analysisMode)
 	{
-	if (analysis->sear.m_slice->m_sliceType == I_SLICE)
-	analysis->m_reuseIntraDataCTU = (analysis_intra_data*)analysis->sear.m_frame->m_analysisData.intraData;
-	else
-	{
-	int numPredDir = isInterP(analysis->sear.m_slice) ? 1 : 2;
-	analysis->m_reuseInterDataCTU = (analysis_inter_data*)analysis->sear.m_frame->m_analysisData.interData;
-	analysis->m_reuseRef = &(analysis->m_reuseInterDataCTU->ref[ctu->m_cuAddr * X265_MAX_PRED_MODE_PER_CTU * numPredDir]);
-	analysis->m_reuseBestMergeCand = &(analysis->m_reuseInterDataCTU->bestMergeCand[ctu->m_cuAddr * MAX_GEOMS]);
-	}
+		if (analysis->sear.m_slice->m_sliceType == I_SLICE)
+			analysis->m_reuseIntraDataCTU = (analysis_intra_data*)analysis->sear.m_frame->m_analysisData.intraData;
+		else
+		{
+			int numPredDir = isInterP(analysis->sear.m_slice) ? 1 : 2;
+			analysis->m_reuseInterDataCTU = (analysis_inter_data*)analysis->sear.m_frame->m_analysisData.interData;
+			analysis->m_reuseRef = &(analysis->m_reuseInterDataCTU->ref[ctu->m_cuAddr * X265_MAX_PRED_MODE_PER_CTU * numPredDir]);
+			analysis->m_reuseBestMergeCand = &(analysis->m_reuseInterDataCTU->bestMergeCand[ctu->m_cuAddr * MAX_GEOMS]);
+		}
 	}
 
 	uint32_t zOrder = 0;
 	if (analysis->sear.m_slice->m_sliceType == I_SLICE)
 	{
-	compressIntraCU(analysis, ctu, cuGeom, zOrder, qp);
+		compressIntraCU(analysis, ctu, cuGeom, zOrder, qp);
 
-	if (analysis->sear.m_param->analysisMode == X265_ANALYSIS_SAVE && analysis->sear.m_frame->m_analysisData.intraData)
-	{
-	CUData* bestCU = &(analysis->m_modeDepth[0].bestMode->cu);
-	memcpy(&(analysis->m_reuseIntraDataCTU->depth[ctu->m_cuAddr * numPartition]), bestCU->m_cuDepth, sizeof(uint8_t) * numPartition);
-	memcpy(&(analysis->m_reuseIntraDataCTU->modes[ctu->m_cuAddr * numPartition]), bestCU->m_lumaIntraDir, sizeof(uint8_t) * numPartition);
-	memcpy(&(analysis->m_reuseIntraDataCTU->partSizes[ctu->m_cuAddr * numPartition]), bestCU->m_partSize, sizeof(uint8_t) * numPartition);
-	memcpy(&(analysis->m_reuseIntraDataCTU->chromaModes[ctu->m_cuAddr * numPartition]), bestCU->m_chromaIntraDir, sizeof(uint8_t) * numPartition);
-	}
+		if (analysis->sear.m_param->analysisMode == X265_ANALYSIS_SAVE && analysis->sear.m_frame->m_analysisData.intraData)
+		{
+			CUData* bestCU = &(analysis->m_modeDepth[0].bestMode->cu);
+			memcpy(&(analysis->m_reuseIntraDataCTU->depth[ctu->m_cuAddr * numPartition]), bestCU->m_cuDepth, sizeof(uint8_t) * numPartition);
+			memcpy(&(analysis->m_reuseIntraDataCTU->modes[ctu->m_cuAddr * numPartition]), bestCU->m_lumaIntraDir, sizeof(uint8_t) * numPartition);
+			memcpy(&(analysis->m_reuseIntraDataCTU->partSizes[ctu->m_cuAddr * numPartition]), bestCU->m_partSize, sizeof(uint8_t) * numPartition);
+			memcpy(&(analysis->m_reuseIntraDataCTU->chromaModes[ctu->m_cuAddr * numPartition]), bestCU->m_chromaIntraDir, sizeof(uint8_t) * numPartition);
+		}
 	}
 	else
 	{
 	compressInterCU_rd0_4(&analysis->sear.predict, &analysis->sear, analysis, ctu, cuGeom, qp, frame);
 	}
 
-	return analysis->m_modeDepth[0].bestMode;*/return 0;
+	return analysis->m_modeDepth[0].bestMode;
 }
 
 
