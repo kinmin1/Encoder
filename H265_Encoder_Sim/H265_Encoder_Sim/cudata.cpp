@@ -500,7 +500,6 @@ void CUData_initSubCU(struct CUData *cu, struct CUData* ctu, struct CUGeom* cuGe
 /* Copy the results of a sub-part (split) CU to the parent CU */
 void CUData_copyPartFrom(struct CUData *cu, const struct CUData* subCU, const struct CUGeom* childGeom, uint32_t subPartIdx)
 {
-	/*
 	if (subPartIdx < 4)
 		printf("part unit should be less than 4\n");
 
@@ -540,23 +539,22 @@ void CUData_copyPartFrom(struct CUData *cu, const struct CUData* subCU, const st
 	uint32_t tmpC = tmp >> ((cu->m_hChromaShift = 1) + (cu->m_vChromaShift = 1));
 	uint32_t tmpC2 = tmp2 >> ((cu->m_hChromaShift = 1) + (cu->m_vChromaShift = 1));
 	memcpy(cu->m_trCoeff[1] + tmpC2, subCU->m_trCoeff[1], sizeof(coeff_t) * tmpC);
-	memcpy(cu->m_trCoeff[2] + tmpC2, subCU->m_trCoeff[2], sizeof(coeff_t) * tmpC);*/
+	memcpy(cu->m_trCoeff[2] + tmpC2, subCU->m_trCoeff[2], sizeof(coeff_t) * tmpC);
 }
 
 /* If a sub-CU part is not present (off the edge of the picture) its depth and
 * log2size should still be configured */
 void CUData_setEmptyPart(struct CUData *cu, const struct CUGeom* childGeom, uint32_t subPartIdx)
-{/*
+{
 	uint32_t offset = childGeom->numPartitions * subPartIdx;
 	cu->m_subPartSet(cu->m_cuDepth + offset, (uint8_t)childGeom->depth);
-	cu->m_subPartSet(cu->m_log2CUSize + offset, (uint8_t)childGeom->log2CUSize);*/
+	cu->m_subPartSet(cu->m_log2CUSize + offset, (uint8_t)childGeom->log2CUSize);
 }
 
 /* Copy all CU data from one instance to the next, except set lossless flag
 * This will only get used when --cu-lossless is enabled but --lossless is not. */
 void CUData_initLosslessCU(struct CUData *ctu, const struct CUData* cu, const struct CUGeom* cuGeom)
 {
-	/*
 	// Start by making an exact copy //
 	ctu->m_encData = cu->m_encData;
 	ctu->m_slice = cu->m_slice;
@@ -586,13 +584,13 @@ void CUData_initLosslessCU(struct CUData *ctu, const struct CUData* cu, const st
 	cu->m_partSet(ctu->m_transformSkip[2], 0);
 	cu->m_partSet(ctu->m_cbf[0], 0);
 	cu->m_partSet(ctu->m_cbf[1], 0);
-	cu->m_partSet(ctu->m_cbf[2], 0);*/
+	cu->m_partSet(ctu->m_cbf[2], 0);
 }
 
 void x265_memcpy(void *to, const void *from, unsigned int count);
 /* Copy completed predicted CU to CTU in picture */
 void CUData_copyToPic(CUData *cu, uint32_t depth)
-{/*
+{
 	CUData* ctu = framedata_getPicCTU(cu->m_encData, cu->m_cuAddr);
 
 	cu->m_partCopy((uint8_t*)ctu->m_qp + cu->m_absIdxInCTU, (uint8_t*)cu->m_qp);
@@ -629,12 +627,12 @@ void CUData_copyToPic(CUData *cu, uint32_t depth)
 	uint32_t tmpC = tmpY >> ((cu->m_hChromaShift = 1) + (cu->m_vChromaShift = 1));
 	uint32_t tmpC2 = tmpY2 >> ((cu->m_hChromaShift = 1) + (cu->m_vChromaShift = 1));
 	memcpy(ctu->m_trCoeff[1] + tmpC2, cu->m_trCoeff[1], sizeof(coeff_t) * tmpC);
-	memcpy(ctu->m_trCoeff[2] + tmpC2, cu->m_trCoeff[2], sizeof(coeff_t) * tmpC);*/
+	memcpy(ctu->m_trCoeff[2] + tmpC2, cu->m_trCoeff[2], sizeof(coeff_t) * tmpC);
 }
 
 /* The reverse of copyToPic, called only by encodeResidue */
 void CUData_copyFromPic(struct CUData *cu, const struct CUData* ctu, const struct CUGeom* cuGeom)
-{/*
+{
 	cu->m_encData = ctu->m_encData;
 	cu->m_slice = ctu->m_slice;
 	cu->m_cuAddr = ctu->m_cuAddr;
@@ -671,12 +669,12 @@ void CUData_copyFromPic(struct CUData *cu, const struct CUData* ctu, const struc
 	cu->m_partSet(cu->m_transformSkip[2], 0);
 	cu->m_partSet(cu->m_cbf[0], 0);
 	cu->m_partSet(cu->m_cbf[1], 0);
-	cu->m_partSet(cu->m_cbf[2], 0); */
+	cu->m_partSet(cu->m_cbf[2], 0); 
 }
 
 /* Only called by encodeResidue, these fields can be modified during inter/intra coding */
 void CUData_updatePic(struct CUData *cu, uint32_t depth)
-{/*
+{
 	CUData* ctu = framedata_getPicCTU(cu->m_encData, cu->m_cuAddr);
 	cu->m_partCopy((uint8_t*)ctu->m_qp + cu->m_absIdxInCTU, (uint8_t*)cu->m_qp);
 	cu->m_partCopy(ctu->m_transformSkip[0] + cu->m_absIdxInCTU, cu->m_transformSkip[0]);
@@ -695,11 +693,11 @@ void CUData_updatePic(struct CUData *cu, uint32_t depth)
 	tmpY >>= (cu->m_hChromaShift = 1) + (cu->m_vChromaShift = 1);
 	tmpY2 >>= (cu->m_hChromaShift = 1) + (cu->m_vChromaShift = 1);
 	memcpy(ctu->m_trCoeff[1] + tmpY2, cu->m_trCoeff[1], sizeof(coeff_t) * tmpY);
-	memcpy(ctu->m_trCoeff[2] + tmpY2, cu->m_trCoeff[2], sizeof(coeff_t) * tmpY);*/
+	memcpy(ctu->m_trCoeff[2] + tmpY2, cu->m_trCoeff[2], sizeof(coeff_t) * tmpY);
 }
 
 struct CUData *CUData_getPULeft(struct CUData *cu, uint32_t *lPartUnitIdx, uint32_t curPartUnitIdx)
-{/*
+{
 	uint32_t absPartIdx = g_zscanToRaster[curPartUnitIdx];
 	if (!isZeroCol(absPartIdx, cu->s_numPartInCUSize))
 	{
@@ -715,11 +713,11 @@ struct CUData *CUData_getPULeft(struct CUData *cu, uint32_t *lPartUnitIdx, uint3
 	}
 
 	*lPartUnitIdx = g_rasterToZscan[absPartIdx + cu->s_numPartInCUSize - 1];
-	return cu->m_cuLeft;*/return 0;
+	return cu->m_cuLeft;
 }
 
 struct CUData* CUData_getPUAbove(struct CUData *cu, uint32_t *aPartUnitIdx, uint32_t curPartUnitIdx)
-{/*
+{
 	uint32_t absPartIdx = g_zscanToRaster[curPartUnitIdx];
 	if (!isZeroRow(absPartIdx, cu->s_numPartInCUSize))
 	{
@@ -733,11 +731,11 @@ struct CUData* CUData_getPUAbove(struct CUData *cu, uint32_t *aPartUnitIdx, uint
 	}
 
 	*aPartUnitIdx = g_rasterToZscan[absPartIdx + NUM_4x4_PARTITIONS - cu->s_numPartInCUSize];
-	return cu->m_cuAbove;*/return 0;
+	return cu->m_cuAbove;
 }
 
 struct CUData* CUData_getPUAboveLeft(CUData *cu, uint32_t *alPartUnitIdx, uint32_t curPartUnitIdx)
-{/*
+{
 	uint32_t absPartIdx = g_zscanToRaster[curPartUnitIdx];
 
 	if (!isZeroCol(absPartIdx, cu->s_numPartInCUSize))
@@ -765,11 +763,11 @@ struct CUData* CUData_getPUAboveLeft(CUData *cu, uint32_t *alPartUnitIdx, uint32
 	}
 
 	*alPartUnitIdx = g_rasterToZscan[NUM_4x4_PARTITIONS - 1];
-	return cu->m_cuAboveLeft;*/return 0;
+	return cu->m_cuAboveLeft;
 }
 
 CUData* CUData_getPUAboveRight(CUData *cu, uint32_t *arPartUnitIdx, uint32_t curPartUnitIdx)
-{/*
+{
 	if ((framedata_getPicCTU(cu->m_encData, cu->m_cuAddr)->m_cuPelX + g_zscanToPelX[curPartUnitIdx] + UNIT_SIZE) >= cu->m_slice->m_sps->picWidthInLumaSamples)
 	return NULL;
 
@@ -801,11 +799,11 @@ CUData* CUData_getPUAboveRight(CUData *cu, uint32_t *arPartUnitIdx, uint32_t cur
 	return NULL;
 
 	*arPartUnitIdx = g_rasterToZscan[NUM_4x4_PARTITIONS - cu->s_numPartInCUSize];
-	return cu->m_cuAboveRight;*/return 0;
+	return cu->m_cuAboveRight;
 }
 
 struct CUData* CUData_getPUBelowLeft(struct CUData *cu, uint32_t *blPartUnitIdx, uint32_t curPartUnitIdx)
-{/*
+{
 	if ((framedata_getPicCTU(cu->m_encData, cu->m_cuAddr)->m_cuPelY + g_zscanToPelY[curPartUnitIdx] + UNIT_SIZE) >= cu->m_slice->m_sps->picHeightInLumaSamples)
 		return NULL;
 
@@ -832,12 +830,12 @@ struct CUData* CUData_getPUBelowLeft(struct CUData *cu, uint32_t *blPartUnitIdx,
 		*blPartUnitIdx = g_rasterToZscan[absPartIdxLB + cu->s_numPartInCUSize * 2 - 1];
 		return cu->m_cuLeft;
 	}
-	*/
+	
 	return NULL;
 }
 
 struct CUData* CUData_getPUBelowLeftAdi(struct CUData *cu, uint32_t *blPartUnitIdx, uint32_t curPartUnitIdx, uint32_t partUnitOffset)
-{/*
+{
 	if ((framedata_getPicCTU(cu->m_encData, cu->m_cuAddr)->m_cuPelY + g_zscanToPelY[curPartUnitIdx] + (partUnitOffset << LOG2_UNIT_SIZE)) >= cu->m_slice->m_sps->picHeightInLumaSamples)
 		return NULL;
 
@@ -864,12 +862,12 @@ struct CUData* CUData_getPUBelowLeftAdi(struct CUData *cu, uint32_t *blPartUnitI
 		*blPartUnitIdx = g_rasterToZscan[absPartIdxLB + (1 + partUnitOffset) * cu->s_numPartInCUSize - 1];
 		return cu->m_cuLeft;
 	}
-	*/
+	
 	return NULL;
 }
 
 struct CUData* CUData_getPUAboveRightAdi(struct CUData *cu, uint32_t *arPartUnitIdx, uint32_t curPartUnitIdx, uint32_t partUnitOffset)
-{/*
+{
 	if ((framedata_getPicCTU(cu->m_encData, cu->m_cuAddr)->m_cuPelX + g_zscanToPelX[curPartUnitIdx] + (partUnitOffset << LOG2_UNIT_SIZE)) >= cu->m_slice->m_sps->picWidthInLumaSamples)
 	return NULL;
 
@@ -901,13 +899,12 @@ struct CUData* CUData_getPUAboveRightAdi(struct CUData *cu, uint32_t *arPartUnit
 	return NULL;
 
 	*arPartUnitIdx = g_rasterToZscan[NUM_4x4_PARTITIONS - cu->s_numPartInCUSize + partUnitOffset - 1];
-	return cu->m_cuAboveRight;*/return 0;
+	return cu->m_cuAboveRight;
 }
 
 /* Get left QpMinCu */
 const struct CUData* CUData_getQpMinCuLeft(const struct CUData *cu, uint32_t *lPartUnitIdx, uint32_t curAbsIdxInCTU)
-{/*
-
+{
 	uint32_t absZorderQpMinCUIdx = curAbsIdxInCTU & (0xFF << (g_unitSizeDepth - cu->m_slice->m_pps->maxCuDQPDepth) * 2);
 	uint32_t absRorderQpMinCUIdx = g_zscanToRaster[absZorderQpMinCUIdx];
 
@@ -919,12 +916,12 @@ const struct CUData* CUData_getQpMinCuLeft(const struct CUData *cu, uint32_t *lP
 	*lPartUnitIdx = g_rasterToZscan[absRorderQpMinCUIdx - 1];
 
 	// return pointer to current CTU
-	return framedata_getPicCTU(cu->m_encData, cu->m_cuAddr);*/return 0;
+	return framedata_getPicCTU(cu->m_encData, cu->m_cuAddr);
 }
 
 /* Get above QpMinCu */
 const struct CUData* CUData_getQpMinCuAbove(const struct CUData *cu, uint32_t *aPartUnitIdx, uint32_t curAbsIdxInCTU)
-{/*
+{
 	uint32_t absZorderQpMinCUIdx = curAbsIdxInCTU & (0xFF << (g_unitSizeDepth - cu->m_slice->m_pps->maxCuDQPDepth) * 2);
 	uint32_t absRorderQpMinCUIdx = g_zscanToRaster[absZorderQpMinCUIdx];
 
@@ -936,22 +933,21 @@ const struct CUData* CUData_getQpMinCuAbove(const struct CUData *cu, uint32_t *a
 	*aPartUnitIdx = g_rasterToZscan[absRorderQpMinCUIdx - cu->s_numPartInCUSize];
 
 	// return pointer to current CTU
-	return framedata_getPicCTU(cu->m_encData, cu->m_cuAddr);*/return 0;
+	return framedata_getPicCTU(cu->m_encData, cu->m_cuAddr);
 }
 
 /* Get reference QP from left QpMinCu or latest coded QP */
 const int8_t CUData_getRefQP(const struct CUData *cu, uint32_t curAbsIdxInCTU)
-{/*
+{
 	uint32_t lPartIdx = 0, aPartIdx = 0;
 	const struct CUData* cULeft = CUData_getQpMinCuLeft(cu, &lPartIdx, cu->m_absIdxInCTU + curAbsIdxInCTU);
 	const struct CUData* cUAbove = CUData_getQpMinCuAbove(cu, &aPartIdx, cu->m_absIdxInCTU + curAbsIdxInCTU);
 
 	return ((cULeft ? cULeft->m_qp[lPartIdx] : CUData_getLastCodedQP(cu, curAbsIdxInCTU)) + (cUAbove ? cUAbove->m_qp[aPartIdx] : CUData_getLastCodedQP(cu, curAbsIdxInCTU)) + 1) >> 1;
-	*/return 0;
 }
 
 const int CUData_getLastValidPartIdx(const struct CUData *cu, int absPartIdx)
-{/*
+{
 	int lastValidPartIdx = absPartIdx - 1;
 
 	while (lastValidPartIdx >= 0 && cu->m_predMode[lastValidPartIdx] == MODE_NONE)
@@ -960,11 +956,11 @@ const int CUData_getLastValidPartIdx(const struct CUData *cu, int absPartIdx)
 	lastValidPartIdx -= cu->m_numPartitions >> (depth << 1);
 	}
 
-	return lastValidPartIdx;*/return 0;
+	return lastValidPartIdx;
 }
 
 const int8_t CUData_getLastCodedQP(const CUData *cu, uint32_t absPartIdx)
-{/*
+{
 	uint32_t quPartIdxMask = 0xFF << (g_unitSizeDepth - cu->m_slice->m_pps->maxCuDQPDepth) * 2;
 	int lastValidPartIdx = CUData_getLastValidPartIdx(cu, absPartIdx & quPartIdxMask);
 
@@ -978,12 +974,12 @@ const int8_t CUData_getLastCodedQP(const CUData *cu, uint32_t absPartIdx)
 	return CUData_getLastCodedQP(cu, NUM_4x4_PARTITIONS);
 	else
 	return (int8_t)cu->m_slice->m_sliceQp;
-	}*/return 0;
+	}
 }
 
 /* Get allowed chroma intra modes */
 void CUData_getAllowedChromaDir(struct CUData *cu, uint32_t absPartIdx, uint32_t *modeList)
-{/*
+{
 	int i;
 	modeList[0] = PLANAR_IDX;
 	modeList[1] = VER_IDX;
@@ -1000,12 +996,12 @@ void CUData_getAllowedChromaDir(struct CUData *cu, uint32_t absPartIdx, uint32_t
 			modeList[i] = 34; // VER+8 mode
 			break;
 		}
-	}*/
+	}
 }
 
 /* Get most probable intra modes */
 int CUData_getIntraDirLumaPredictor(struct CUData *cu, uint32_t absPartIdx, uint32_t *intraDirPred)
-{/*
+{
 	const struct CUData* tempCU;
 	uint32_t tempPartIdx;
 	uint32_t leftIntraDir, aboveIntraDir;
@@ -1046,7 +1042,7 @@ int CUData_getIntraDirLumaPredictor(struct CUData *cu, uint32_t absPartIdx, uint
 	else
 	intraDirPred[2] = (leftIntraDir + aboveIntraDir) < 2 ? VER_IDX : DC_IDX;
 	return 2;
-	}*/return 0;
+	}
 }
 
 const uint32_t CUData_getCtxSplitFlag(struct CUData *cu, uint32_t absPartIdx, uint32_t depth)
@@ -1076,7 +1072,7 @@ int8_t getRefQP(const CUData* cu, const uint32_t curAbsIdxInCTU)
 }
 
 void CUData_getIntraTUQtDepthRange(struct CUData *cu, uint32_t tuDepthRange[2], uint32_t absPartIdx)
-{/*
+{
 	uint32_t log2CUSize = cu->m_log2CUSize[absPartIdx];
 	uint32_t splitFlag = cu->m_partSize[absPartIdx] != SIZE_2Nx2N;
 
@@ -1084,7 +1080,7 @@ void CUData_getIntraTUQtDepthRange(struct CUData *cu, uint32_t tuDepthRange[2], 
 	tuDepthRange[1] = cu->m_slice->m_sps->quadtreeTULog2MaxSize;
 
 	tuDepthRange[0] = x265_clip3(tuDepthRange[0], tuDepthRange[1], log2CUSize - (cu->m_slice->m_sps->quadtreeTUMaxDepthIntra - 1 + splitFlag));
-	*/
+	
 }
 
 void CUData_getInterTUQtDepthRange(struct CUData *cu, uint32_t tuDepthRange[2], uint32_t absPartIdx)
@@ -1259,7 +1255,7 @@ void CUData_setPUInterDir(struct CUData *cu, uint8_t dir, uint32_t absPartIdx, u
 
 
 void getTUEntropyCodingParameters(CUData* cu, TUEntropyCodingParameters *result, uint32_t absPartIdx, uint32_t log2TrSize, char bIsLuma)
-{/*
+{
 	bool bIsIntra = isIntra_cudata(cu, absPartIdx);
 
 	// set the group layout
@@ -1298,7 +1294,7 @@ void getTUEntropyCodingParameters(CUData* cu, TUEntropyCodingParameters *result,
 	else if (log2TrSize == 3)
 		result->firstSignificanceMapContext = (result->scanType != SCAN_DIAG && bIsLuma) ? 15 : 9;
 	else
-		result->firstSignificanceMapContext = bIsLuma ? 21 : 12;*/
+		result->firstSignificanceMapContext = bIsLuma ? 21 : 12;
 }
 
 //template<typename T>
@@ -1737,22 +1733,26 @@ void     setQPSubParts(struct CUData *cu, int8_t qp, uint32_t absPartIdx, uint32
 
 void     setTUDepthSubParts(struct CUData *cu, uint8_t tuDepth, uint32_t absPartIdx, uint32_t depth)
 {
-	cu->s_partSet[depth](cu->m_tuDepth + absPartIdx, tuDepth);
+	bcast64(cu->m_tuDepth + absPartIdx, tuDepth);
+	//cu->s_partSet[depth](cu->m_tuDepth + absPartIdx, tuDepth);
 }
 
 void     setLumaIntraDirSubParts(struct CUData *cu, uint8_t dir, uint32_t absPartIdx, uint32_t depth)
 {
-	cu->s_partSet[depth](cu->m_lumaIntraDir + absPartIdx, dir);
+	bcast64(cu->m_lumaIntraDir + absPartIdx, dir);
+	//cu->s_partSet[depth](cu->m_lumaIntraDir + absPartIdx, dir);
 }
 
 void     setChromIntraDirSubParts(struct CUData *cu, uint8_t dir, uint32_t absPartIdx, uint32_t depth)
 {
-	cu->s_partSet[depth](cu->m_chromaIntraDir + absPartIdx, dir);
+	bcast64(cu->m_chromaIntraDir + absPartIdx, dir);
+	//cu->s_partSet[depth](cu->m_chromaIntraDir + absPartIdx, dir);
 }
 
 void     setCbfSubParts(struct CUData *cu, uint8_t cbf, enum TextType ttype, uint32_t absPartIdx, uint32_t depth)
 {
-	cu->s_partSet[depth](cu->m_cbf[ttype] + absPartIdx, cbf);
+	bcast64(cu->m_cbf[ttype] + absPartIdx, cbf);
+	//cu->s_partSet[depth](cu->m_cbf[ttype] + absPartIdx, cbf);
 }
 
 void     setCbfPartRange(struct CUData *cu, uint8_t cbf, enum TextType ttype, uint32_t absPartIdx, uint32_t coveredPartIdxes)
@@ -1762,7 +1762,8 @@ void     setCbfPartRange(struct CUData *cu, uint8_t cbf, enum TextType ttype, ui
 
 void     setTransformSkipSubParts(struct CUData *cu, uint8_t tskip, enum TextType ttype, uint32_t absPartIdx, uint32_t depth)
 {
-	cu->s_partSet[depth](cu->m_transformSkip[ttype] + absPartIdx, tskip);
+	bcast64(cu->m_transformSkip[ttype] + absPartIdx, tskip);
+	//cu->s_partSet[depth](cu->m_transformSkip[ttype] + absPartIdx, tskip);
 }
 
 void     setTransformSkipPartRange(struct CUData *cu, uint8_t tskip, enum TextType ttype, uint32_t absPartIdx, uint32_t coveredPartIdxes)

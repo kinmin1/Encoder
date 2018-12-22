@@ -53,7 +53,6 @@ bool Analysis_create(Analysis *analysis)
 void checkBestMode(Analysis* analysis, Mode* mode, uint32_t depth)
 {
 	//X265_CHECK(ok(mode), "mode costs are uninitialized\n");
-	/*
 	struct ModeDepth* md = &(analysis->m_modeDepth[depth]);
 	if (md->bestMode)
 	{
@@ -61,7 +60,7 @@ void checkBestMode(Analysis* analysis, Mode* mode, uint32_t depth)
 			md->bestMode = mode;
 	}
 	else
-		md->bestMode = mode;*/
+		md->bestMode = mode;
 }
 
 Mode* compressCTU(Analysis* analysis, CUData* ctu, Frame* frame, CUGeom* cuGeom, Entropy* initialContext)
@@ -209,12 +208,11 @@ void compressIntraCU(Analysis* analysis, CUData* parentCTU, CUGeom* cuGeom, uint
 		//checkDQPForSplitPred(*splitPred, cuGeom);
 		checkBestMode(analysis, splitPred, depth);
 	}
-
+	*/
 	// Copy best data to encData CTU and recon
 	CUData_copyToPic(&(analysis->m_modeDepth[depth].bestMode->cu), depth);
 	if (analysis->m_modeDepth[depth].bestMode != &(analysis->m_modeDepth[depth].pred[PRED_SPLIT]))
 		Yuv_copyToPicYuv(&(analysis->m_modeDepth[depth].bestMode->reconYuv), analysis->sear.m_frame->m_reconPic, parentCTU->m_cuAddr, cuGeom->absPartIdx);
-*/
 }
 
 //÷°º‰‘§≤‚

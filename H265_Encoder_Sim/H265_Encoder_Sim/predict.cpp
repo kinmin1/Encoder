@@ -64,7 +64,7 @@ void predIntraChromaAng(Predict* pred, uint32_t dirMode, pixel* dst, int stride,
 }
 
 void initAdiPattern(Predict* predict, CUData* cu, CUGeom* cuGeom, uint32_t puAbsPartIdx, struct IntraNeighbors* intraNeighbors, int dirMode)
-{/*
+{
 	int tuSize = 1 << intraNeighbors->log2TrSize;//log2TrSize=cu.m_log2CUSize[0] - tuDepth;
 	int tuSize2 = tuSize << 1;
 
@@ -110,8 +110,8 @@ void initAdiPattern(Predict* predict, CUData* cu, CUGeom* cuGeom, uint32_t puAbs
 			}
 		}
 
-		intraFilter(refBuf, fltBuf, pow(2, intraNeighbors->log2TrSize));
-	}*/
+		intraFilter(refBuf, fltBuf, pow(2.0,double(intraNeighbors->log2TrSize)));
+	}
 }
 
 void initAdiPatternChroma(Predict* pdata, CUData* cu, const CUGeom* cuGeom, uint32_t puAbsPartIdx, struct IntraNeighbors* intraNeighbors, uint32_t chromaId)
@@ -127,7 +127,7 @@ void initAdiPatternChroma(Predict* pdata, CUData* cu, const CUGeom* cuGeom, uint
 }
 
 void initIntraNeighbors(CUData* cu, uint32_t absPartIdx, uint32_t tuDepth, bool isLuma, struct IntraNeighbors *intraNeighbors)
-{/*
+{
 	uint32_t log2TrSize = cu->m_log2CUSize[0] - tuDepth;
 	int log2UnitWidth = LOG2_UNIT_SIZE;
 	int log2UnitHeight = LOG2_UNIT_SIZE;
@@ -180,11 +180,11 @@ void initIntraNeighbors(CUData* cu, uint32_t absPartIdx, uint32_t tuDepth, bool 
 	intraNeighbors->unitWidth = 1 << log2UnitWidth;
 	intraNeighbors->unitHeight = 1 << log2UnitHeight;
 	intraNeighbors->log2TrSize = log2TrSize;
-	*/
+	
 }
 //预测参考数据的获取和滤波处理
 void fillReferenceSamples_t(pixel* adiOrigin, int picStride, struct IntraNeighbors* intraNeighbors, pixel dst[258])
-{/*
+{
 	pixel dcValue = (pixel)(1 << (X265_DEPTH - 1));//X265_DEPTH=8、10
 	int numIntraNeighbor = intraNeighbors->numIntraNeighbor;
 	int totalUnits = intraNeighbors->totalUnits;
@@ -354,7 +354,7 @@ void fillReferenceSamples_t(pixel* adiOrigin, int picStride, struct IntraNeighbo
 		adi = adiLineBuffer + refSize - 1;
 		for (int i = 0; i < (int)refSize - 1; i++)
 			dst[i + refSize] = adi[-(i + 1)];
-	}*/
+	}
 }
 
 bool isAboveLeftAvailable(CUData* cu, uint32_t partIdxLT, bool cip)

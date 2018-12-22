@@ -30,7 +30,13 @@ enum {
 	PRED_LOSSLESS,  /* lossless encode of best mode */
 	MAX_PRED_TYPES
 };
-
+typedef struct ModeDepth
+{
+	Mode           pred[MAX_PRED_TYPES];
+	Mode*          bestMode;
+	Yuv            fencYuv;
+	CUDataMemPool  cuMemPool;
+}ModeDepth;
 typedef struct Analysis
 {
 	Search sear;
@@ -40,13 +46,7 @@ typedef struct Analysis
 	analysis_inter_data* m_reuseInterDataCTU;
 	int32_t*             m_reuseRef;
 	uint32_t*            m_reuseBestMergeCand;
-	struct ModeDepth
-	{
-		Mode           pred[MAX_PRED_TYPES];
-		Mode*          bestMode;
-		Yuv            fencYuv;
-		CUDataMemPool  cuMemPool;
-	}ModeDepth;
+
 	struct ModeDepth m_modeDepth[NUM_CU_DEPTH];
 	bool      m_bTryLossless;
 	bool      m_bChromaSa8d;

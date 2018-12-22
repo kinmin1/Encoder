@@ -33,17 +33,6 @@ typedef struct Predict
 		int w, o, offset, shift, round;
 	}WeightValues;
 
-	struct IntraNeighbors
-	{
-		int      numIntraNeighbor;
-		int      totalUnits;
-		int      aboveUnits;
-		int      leftUnits;
-		int      unitWidth;
-		int      unitHeight;
-		int      log2TrSize;
-		bool     bNeighborFlags[4 * MAX_NUM_SPU_W + 1];
-	}IntraNeighbors;
 
 	struct ShortYuv  m_predShortYuv[2]; /* temporary storage for weighted prediction */
 	int16_t*  m_immedVals;
@@ -56,8 +45,19 @@ typedef struct Predict
 	int       m_hChromaShift;
 	int       m_vChromaShift;
 
-}Predict;
 
+}Predict;
+typedef struct IntraNeighbors
+{
+	int      numIntraNeighbor;
+	int      totalUnits;
+	int      aboveUnits;
+	int      leftUnits;
+	int      unitWidth;
+	int      unitHeight;
+	int      log2TrSize;
+	bool     bNeighborFlags[4 * MAX_NUM_SPU_W + 1];
+}IntraNeighbors;
 bool allocBuffers(Predict* pred, int csp);
 
 /* Angular Intra */
@@ -70,7 +70,7 @@ void initAdiPatternChroma(Predict* pdata, CUData* cu, const CUGeom* cuGeom, uint
 void initIntraNeighbors(CUData* cu, uint32_t absPartIdx, uint32_t tuDepth, bool isLuma, struct IntraNeighbors *IntraNeighbors);
 void fillReferenceSamples(pixel* adiOrigin, int picStride, struct IntraNeighbors* intraNeighbors, pixel dst[258]);
 //void fillReferenceSamples_Chroma(pixel* adiOrigin, int picStride, struct IntraNeighbors* intraNeighbors, pixel dst[258]);
-
+void fillReferenceSamples_t(pixel* adiOrigin, int picStride, struct IntraNeighbors* intraNeighbors, pixel dst[258]);
 static bool isAboveLeftAvailable(CUData* cu, uint32_t partIdxLT, bool cip);
 
 static int  isAboveAvailable(CUData* cu, uint32_t partIdxLT, uint32_t partIdxRT, bool* bValidFlags, bool cip);

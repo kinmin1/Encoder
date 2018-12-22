@@ -135,27 +135,25 @@ typedef struct Search //: public Predict
 	//ThreadLocalData* m_tld;
 
 	uint32_t      m_listSelBits[3];
-
-	struct Cost
-	{
-		uint64_t rdcost;
-		uint32_t bits;
-		uint32_t distortion;
-		uint32_t energy;
-		//Cost() { rdcost = 0; bits = 0; distortion = 0; energy = 0; }
-	}Cost;
-
-	/* output of mergeEstimation, best merge candidate */
-	struct MergeData
-	{
-		struct MVField  mvField[2];
-		uint32_t dir;
-		uint32_t index;
-		uint32_t bits;
-	}MergeData;
-
 }Search;
 
+typedef struct Cost
+{
+	uint64_t rdcost;
+	uint32_t bits;
+	uint32_t distortion;
+	uint32_t energy;
+	//Cost() { rdcost = 0; bits = 0; distortion = 0; energy = 0; }
+}Cost;
+
+/* output of mergeEstimation, best merge candidate */
+typedef struct MergeData
+{
+	struct MVField  mvField[2];
+	uint32_t dir;
+	uint32_t index;
+	uint32_t bits;
+}MergeData;
 void initCosts(Mode *mode);
 
 bool initSearch(Search* search, x265_param* param, ScalingList *scalingList);

@@ -136,4 +136,5 @@ out:
 	x265_picture_free(pic_in);
 	fclose(fp_src);
 	fclose(fp_dst);
+	return 0;
 }

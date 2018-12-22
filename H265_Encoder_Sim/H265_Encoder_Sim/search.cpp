@@ -18,12 +18,12 @@
 #include "shortyuv.h"
 
 #define MVP_IDX_BITS 1
-/*
+
 void init_intraNeighbors(struct IntraNeighbors *intraNeighbors)
 {
 	for (int i = 0; i < 65; i++)
 		intraNeighbors->bNeighborFlags[i] = TRUE;
-}*/
+}
 void initCosts(Mode *mode)
 {
 	mode->rdCost = 0;
@@ -180,7 +180,7 @@ int setLambdaFromQP(Search* search, CUData* ctu, int qp)
 }
 
 void addSubCosts(Mode* dstMode, const Mode* subMode)
-{/*
+{
 	X265_CHECK(ok(subMode), "sub-mode not initialized");
 
 	dstMode->rdCost += subMode->rdCost;
@@ -191,11 +191,11 @@ void addSubCosts(Mode* dstMode, const Mode* subMode)
 	dstMode->totalBits += subMode->totalBits;
 	dstMode->mvBits += subMode->mvBits;
 	dstMode->coeffBits += subMode->coeffBits;
-	*/
+	
 }
 
 void invalidateContexts(Search* sea, int fromDepth)
-{/*
+{
 	// catch reads without previous writes //
 	for (int d = fromDepth; d < NUM_FULL_DEPTH; d++)
 	{
@@ -203,12 +203,12 @@ void invalidateContexts(Search* sea, int fromDepth)
 		markInvalid(&(sea->m_rqt[d].rqtTemp));
 		markInvalid(&(sea->m_rqt[d].rqtRoot));
 		markInvalid(&(sea->m_rqt[d].rqtTest));
-	}*/
+	}
 }
 
 
 void codeSubdivCbfQTChroma(Search* search, CUData* cu, uint32_t tuDepth, uint32_t absPartIdx)
-{/*
+{
 	uint32_t subdiv = tuDepth < cu->m_tuDepth[absPartIdx];
 	uint32_t log2TrSize = cu->m_log2CUSize[0] - tuDepth;
 
@@ -225,11 +225,11 @@ void codeSubdivCbfQTChroma(Search* search, CUData* cu, uint32_t tuDepth, uint32_
 		uint32_t qNumParts = 1 << (log2TrSize - 1 - LOG2_UNIT_SIZE) * 2;
 		for (uint32_t qIdx = 0; qIdx < 4; ++qIdx, absPartIdx += qNumParts)
 			codeSubdivCbfQTChroma(search, cu, tuDepth + 1, absPartIdx);
-	}*/
+	}
 }
 
 void codeCoeffQTChroma(Search* search, CUData* cu, uint32_t tuDepth, uint32_t absPartIdx, enum TextType ttype)
-{/*
+{
 	if (!getCbf(cu, absPartIdx, ttype, tuDepth))
 		return;
 
@@ -277,19 +277,19 @@ void codeCoeffQTChroma(Search* search, CUData* cu, uint32_t tuDepth, uint32_t ab
 		if (getCbf(cu, absPartIdx + tuNumParts, ttype, tuDepth + 1))
 			codeCoeffNxN(&(search->m_entropyCoder), cu, coeff + subTUSize, absPartIdx + tuNumParts, log2TrSizeC, ttype);
 	}
-	search->m_entropyCoder.m_fracBits = 18965994;*/
+	search->m_entropyCoder.m_fracBits = 18965994;
 }
 
 //Quant_init(Quant *quant, int rdoqLevel, double psyScale, const ScalingList* scalingList, Entropy* entropy);
 void codeIntraLumaQT(Search* search, Mode* mode, CUGeom* cuGeom, uint32_t tuDepth, uint32_t absPartIdx, bool bAllowSplit, struct Cost* outCost, uint32_t depthRange[2])//选取最终的编码模式
-{/*
+{
 	//CUData& cu = mode.cu;
 	CUData* cu = &mode->cu;
 	uint32_t fullDepth = cuGeom->depth + tuDepth;
 	uint32_t log2TrSize = cuGeom->log2CUSize - tuDepth;
 	uint32_t qtLayer = log2TrSize - 2;
 	uint32_t sizeIdx = log2TrSize - 2;
-	uint32_t width = pow(2, sizeIdx + 2);
+	uint32_t width = (uint32_t)pow(2.0, double(sizeIdx + 2));
 	bool mightNotSplit = log2TrSize <= depthRange[1];
 	bool mightSplit = (log2TrSize > depthRange[0]) && (bAllowSplit || !mightNotSplit);//通过比较当前的TU大小是否介于允许的最大值和最小值之间，来确定TU是否继续分割
 
@@ -341,11 +341,11 @@ void codeIntraLumaQT(Search* search, Mode* mode, CUGeom* cuGeom, uint32_t tuDept
 		if (numSig)
 		{
 			Quant_invtransformNxN(&search->m_quant, residual, stride, coeffY, log2TrSize, TEXT_LUMA, TRUE, FALSE, numSig);//重建残差
-			primitives.cu[sizeIdx].add_ps(reconQt, reconQtStride, pred, residual, stride, stride, pow(2, log2TrSize), pow(2, log2TrSize));//残差加上预测值，为重建像素值，pixel_add_ps_c<W, H>
+			primitives.cu[sizeIdx].add_ps(reconQt, reconQtStride, pred, residual, stride, stride, (int)pow(2.0, double(log2TrSize)), (int)pow(2.0, double(log2TrSize)));//残差加上预测值，为重建像素值，pixel_add_ps_c<W, H>
 		}
 		else
 			// no coded residual, recon = pred
-			primitives.cu[sizeIdx].copy_pp(reconQt, reconQtStride, pred, stride, pow(2, log2TrSize), pow(2, log2TrSize));
+			primitives.cu[sizeIdx].copy_pp(reconQt, reconQtStride, pred, stride, (int)pow(2.0, double(log2TrSize)), (int)pow(2.0, double(log2TrSize)));
 		bCBF = !!numSig << tuDepth;
 
 		setCbfSubParts(cu, bCBF, TEXT_LUMA, absPartIdx, fullDepth);
@@ -467,7 +467,7 @@ void codeIntraLumaQT(Search* search, Mode* mode, CUGeom* cuGeom, uint32_t tuDept
 	outCost->rdcost += fullCost.rdcost;
 	outCost->distortion += fullCost.distortion;
 	outCost->bits += fullCost.bits;
-	outCost->energy += fullCost.energy;*/
+	outCost->energy += fullCost.energy;
 }
 
 /* returns distortion */
@@ -597,20 +597,20 @@ uint32_t codeIntraChromaQt(Search* search, Mode* mode, const CUGeom* cuGeom, uin
 
 //接近于HM中的xCheckRDCostIntra
 void checkIntra(Search* search, Mode* intraMode, CUGeom* cuGeom, PartSize partSize, uint8_t* sharedModes, uint8_t* sharedChromaModes)
-{/*
+{
 	CUData* cu = &intraMode->cu;
 
 	setPartSizeSubParts(cu, partSize);
 	setPredModeSubParts(cu, MODE_INTRA);
 	search->m_quant.m_tqBypass = 0;//m_quant.m_tqBypass = !!cu.m_tqBypass[0];
-
+	
 	uint32_t tuDepthRange[2];
 	CUData_getIntraTUQtDepthRange(cu, tuDepthRange, 0);
-
+	
 	initCosts(intraMode);
 	intraMode->distortion += estIntraPredQT(search, intraMode, cuGeom, tuDepthRange, sharedModes);
 	intraMode->distortion += estIntraPredChromaQT(search, intraMode, cuGeom, sharedChromaModes);
-
+	
 	entropy_resetBits(&(search->m_entropyCoder));
 	if (search->m_slice->m_pps->bTransquantBypassEnabled)
 		codeCUTransquantBypassFlag(&(search->m_entropyCoder), cu->m_tqBypass[0]);//对语法元素cu_tranaquant_bypass_flag进行常规编码，cu_tranaquant_bypass_flag表示对CU是否进行伸缩、变换和环路滤波过程。
@@ -636,12 +636,12 @@ void checkIntra(Search* search, Mode* intraMode, CUGeom* cuGeom, PartSize partSi
 		intraMode->psyEnergy = psyCost(cuGeom->log2CUSize - 2, fencYuv->m_buf[0], fencYuv->m_size, intraMode->reconYuv.m_buf[0], intraMode->reconYuv.m_size);
 	}
 	updateModeCost(search, intraMode);
-	checkDQP(search, intraMode, cuGeom);*/
+	checkDQP(search, intraMode, cuGeom);
 }
 
 
 void extractIntraResultQT(Search* search, CUData* cu, struct Yuv* reconYuv, uint32_t tuDepth, uint32_t absPartIdx)
-{/*
+{
 	uint32_t log2TrSize = cu->m_log2CUSize[0] - tuDepth;
 
 	if (tuDepth == cu->m_tuDepth[absPartIdx])
@@ -662,7 +662,7 @@ void extractIntraResultQT(Search* search, CUData* cu, struct Yuv* reconYuv, uint
 		uint32_t qNumParts = 1 << (log2TrSize - 1 - LOG2_UNIT_SIZE) * 2;
 		for (uint32_t qIdx = 0; qIdx < 4; ++qIdx, absPartIdx += qNumParts)
 			extractIntraResultQT(search, cu, reconYuv, tuDepth + 1, absPartIdx);
-	}*/
+	}
 }
 
 void offsetCBFs(uint8_t subTUCBF[2])
@@ -728,7 +728,7 @@ void extractIntraResultChromaQT(Search* search, CUData* cu, struct Yuv* reconYuv
 }
 
 uint32_t estIntraPredChromaQT(Search* search, Mode *intraMode, const CUGeom* cuGeom, uint8_t* sharedChromaModes)
-{/*
+{
 	CUData* cu = &(intraMode->cu);
 	struct Yuv* reconYuv = &(intraMode->reconYuv);
 
@@ -852,12 +852,11 @@ uint32_t estIntraPredChromaQT(Search* search, Mode *intraMode, const CUGeom* cuG
 
 	// TODO: remove this
 	load(&(search->m_entropyCoder), &(search->m_rqt[depth].cur));
-	return totalDistortion; */
-		return 0;
+	return totalDistortion; 
 }
 
 uint32_t estIntraPredQT(Search* search, Mode* intraMode, CUGeom* cuGeom, uint32_t depthRange[2], uint8_t* sharedModes)
-{/*
+{
 	CUData* cu = &intraMode->cu;
 	struct Yuv* reconYuv = &intraMode->reconYuv;
 	struct Yuv* predYuv = &intraMode->predYuv;
@@ -872,12 +871,12 @@ uint32_t estIntraPredQT(Search* search, Mode* intraMode, CUGeom* cuGeom, uint32_
 	uint32_t tuSize = 1 << log2TrSize;
 	uint32_t qNumParts = cuGeom->numPartitions >> 2;//puIdx（CU中每个PU第一个4*4块的地址）的地址偏移量，当cu为64*64时，qNumParts = 64 = 256>>2
 	uint32_t sizeIdx = log2TrSize - 2;
-	uint32_t width = pow(2, sizeIdx + 2);
+	uint32_t width = (uint32_t)pow(2.0, double(sizeIdx + 2));
 	uint32_t absPartIdx = 0;
 	uint32_t totalDistortion = 0;
 
 	int checkTransformSkip = 0;//search->m_slice->m_pps->bTransformSkipEnabled && !cu->m_tqBypass[0] && cu->m_partSize[0] != SIZE_2Nx2N;
-
+	
 	// loop over partitions
 	for (uint32_t puIdx = 0; puIdx < numPU; puIdx++, absPartIdx += qNumParts)
 	{
@@ -891,16 +890,16 @@ uint32_t estIntraPredQT(Search* search, Mode* intraMode, CUGeom* cuGeom, uint32_
 			uint32_t rdModeList[MAX_RD_INTRA_MODES];
 			uint64_t bcost;
 			int maxCandCount = 2 + search->m_param->rdLevel + ((depth + initTuDepth) >> 1);
-
+			
 			{
 				//ProfileCUScope(intraMode->cu, intraAnalysisElapsedTime, countIntraAnalysis);
-
+				
 				// Reference sample smoothing
 				struct IntraNeighbors intraNeighbors;
 				init_intraNeighbors(&intraNeighbors);
 				initIntraNeighbors(cu, absPartIdx, initTuDepth, TRUE, &intraNeighbors);
 				initAdiPattern(&(search->predict), cu, cuGeom, absPartIdx, &intraNeighbors, ALL_IDX);
-
+				
 				// determine set of modes to be tested (using prediction signal only)
 				const pixel* fenc = Yuv_getLumaAddr_const(fencYuv, absPartIdx);
 				uint32_t stride = predYuv->m_size;
@@ -908,7 +907,7 @@ uint32_t estIntraPredQT(Search* search, Mode* intraMode, CUGeom* cuGeom, uint32_
 				int scaleTuSize = tuSize;
 				int scaleStride = stride;
 				int costShift = 0;
-
+				
 				if (tuSize > 32)
 				{
 					// origin is 64x64, we scale to 32x32 and setup required parameters
@@ -927,9 +926,9 @@ uint32_t estIntraPredQT(Search* search, Mode* intraMode, CUGeom* cuGeom, uint32_
 					costShift = 2;
 					sizeIdx = 5 - 2; // log2(scaleTuSize) - 2
 				}
-
+				
 				loadIntraDirModeLuma(&(search->m_entropyCoder), &(search->m_rqt[depth].cur));
-
+				
 				// there are three cost tiers for intra modes:
 				//  pred[0]          - mode probable, least cost
 				//  pred[1], pred[2] - less probable, slightly more cost
@@ -940,24 +939,24 @@ uint32_t estIntraPredQT(Search* search, Mode* intraMode, CUGeom* cuGeom, uint32_
 
 				pixelcmp_t sa8d = primitives.cu[sizeIdx].sa8d;
 				uint64_t modeCosts[35];
-
+				
 				// DC
 				primitives.cu[sizeIdx].intra_pred[DC_IDX](search->m_intraPred, scaleStride, search->predict.intraNeighbourBuf[0], 0, (scaleTuSize <= 16), width);
 				uint32_t bits = (mpms & ((uint64_t)1 << DC_IDX)) ? bitsIntraModeMPM(&(search->m_entropyCoder), mpmModes, DC_IDX) : rbits;
 				uint32_t sad = sa8d(fenc, scaleStride, search->m_intraPred, scaleStride, width, width) << costShift;
 				modeCosts[DC_IDX] = bcost = calcRdSADCost(&(search->m_rdCost), sad, bits);
-
+				
 				// PLANAR
 				pixel* planar = search->predict.intraNeighbourBuf[0];
 				if (tuSize >= 8 && tuSize <= 32)
 					planar = search->predict.intraNeighbourBuf[1];
-
+				
 				primitives.cu[sizeIdx].intra_pred[PLANAR_IDX](search->m_intraPred, scaleStride, planar, 0, 0, log2TrSize);
 				bits = (mpms & ((uint64_t)1 << PLANAR_IDX)) ? bitsIntraModeMPM(&(search->m_entropyCoder), mpmModes, PLANAR_IDX) : rbits;
 				sad = sa8d(fenc, scaleStride, search->m_intraPred, scaleStride, width, width) << costShift;
 				modeCosts[PLANAR_IDX] = calcRdSADCost(&(search->m_rdCost), sad, bits);
 				COPY1_IF_LT(bcost, modeCosts[PLANAR_IDX]);
-
+				
 				// angular predictions
 				if (primitives.cu[sizeIdx].intra_pred_allangs)
 				{
@@ -986,7 +985,7 @@ uint32_t estIntraPredQT(Search* search, Mode* intraMode, CUGeom* cuGeom, uint32_
 						COPY1_IF_LT(bcost, modeCosts[mode]);
 					}
 				}
-
+				
 				// Find the top maxCandCount candidate modes with cost within 25% of best
 				// or among the most probable modes. maxCandCount is derived from the
 				// rdLevel and depth. In general we want to try more modes at slower RD
@@ -998,8 +997,9 @@ uint32_t estIntraPredQT(Search* search, Mode* intraMode, CUGeom* cuGeom, uint32_
 				for (mode = 0; mode < 35; mode++)
 					if (modeCosts[mode] < paddedBcost || (mpms & ((uint64_t)1 << mode)))//默认5个最小的
 						updateCandList(mode, modeCosts[mode], maxCandCount, rdModeList, candCostList);
+				
 			}
-
+			
 			// measure best candidates using simple RDO (no TU splits) //
 			//遍历maxCandCount种候选模式，选出最佳预测模式。进行完全的、复杂度高的率失真计算，包括对失真和bits的计算。递归熵编码Intra CU，包括变换、量化等最后最佳模式为bmode。
 			bcost = MAX_INT;
@@ -1022,7 +1022,7 @@ uint32_t estIntraPredQT(Search* search, Mode* intraMode, CUGeom* cuGeom, uint32_
 				COPY2_IF_LT(bcost, icosts.rdcost, bmode, rdModeList[i]);
 			}
 		}
-
+		
 		//ProfileCUScope(intraMode.cu, intraRDOElapsedTime[cuGeom.depth], countIntraRDO[cuGeom.depth]);
 
 		// remeasure best mode, allowing TU splits //
@@ -1044,7 +1044,7 @@ uint32_t estIntraPredQT(Search* search, Mode* intraMode, CUGeom* cuGeom, uint32_
 			uint32_t dststride = search->m_frame->m_reconPic->m_stride;
 			pixel*   src = Yuv_getLumaAddr_const(reconYuv, absPartIdx);
 			uint32_t srcstride = reconYuv->m_size;
-			primitives.cu[log2TrSize - 2].copy_pp(dst, dststride, src, srcstride, pow(2, log2TrSize), pow(2, log2TrSize));
+			primitives.cu[log2TrSize - 2].copy_pp(dst, dststride, src, srcstride, (int)pow(2.0, double(log2TrSize)), (int)pow(2.0, double(log2TrSize)));
 		}
 	}
 
@@ -1061,15 +1061,14 @@ uint32_t estIntraPredQT(Search* search, Mode* intraMode, CUGeom* cuGeom, uint32_
 	// TODO: remove this
 	load(&(search->m_entropyCoder), &(search->m_rqt[depth].cur));
 
-	return totalDistortion; */
-		return 0;
+	return totalDistortion; 
 }
 
 
 /* returns the number of bits required to signal a non-most-probable mode.
 * on return mpms contains bitmap of most probable modes */
 unsigned int getIntraRemModeBits(const Search* search, CUData* cu, uint32_t absPartIdx, uint32_t mpmModes[3], uint64_t* mpms)
-{/*
+{
 	uint32_t temp = 0;
 	CUData_getIntraDirLumaPredictor(cu, absPartIdx, mpmModes);
 
@@ -1079,12 +1078,12 @@ unsigned int getIntraRemModeBits(const Search* search, CUData* cu, uint32_t absP
 
 
 	return bitsIntraModeNonMPM(&(search->m_entropyCoder));
-	*/
+	
 		return 0;
 }
 
 void updateCandList(uint32_t mode, uint64_t cost, int maxCandCount, uint32_t* candModeList, uint64_t* candCostList)
-{/*
+{
 	uint32_t maxIndex = 0;
 	uint64_t maxValue = 0;
 
@@ -1101,11 +1100,11 @@ void updateCandList(uint32_t mode, uint64_t cost, int maxCandCount, uint32_t* ca
 	{
 		candCostList[maxIndex] = cost;
 		candModeList[maxIndex] = mode;
-	}*/
+	}
 }
 
 void checkDQP(Search* search, Mode* mode, const CUGeom* cuGeom)
-{/*
+{
 	CUData* cu = &mode->cu;
 	if (cu->m_slice->m_pps->bUseDQP && cuGeom->depth <= cu->m_slice->m_pps->maxCuDQPDepth)
 	{
@@ -1129,13 +1128,12 @@ void checkDQP(Search* search, Mode* mode, const CUGeom* cuGeom)
 		}
 		else
 			setQPSubParts(cu, getRefQP(cu, 0), 0, cuGeom->depth);
-	}*/
+	}
 }
 
 void updateModeCost(const Search* sch, Mode* m)
-{/*
+{
 	m->rdCost = sch->m_rdCost.m_psyRd ? calcPsyRdCost(&(sch->m_rdCost), m->distortion, m->totalBits, m->psyEnergy) : calcRdCost(&(sch->m_rdCost), m->distortion, m->totalBits);
-*/
 }
 
 int getTUBits(int idx, int numIdx)

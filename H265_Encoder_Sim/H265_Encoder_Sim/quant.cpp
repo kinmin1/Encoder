@@ -151,6 +151,12 @@ uint32_t getSigCtxInc(uint32_t patternSigCtx, uint32_t log2TrSize, uint32_t trSi
 
 bool Quant_init(Quant *quant, int rdoqLevel, double psyScale, ScalingList* scalingList, Entropy* entropy)
 {
+	quant->m_resiDctCoeff = NULL;
+	quant->m_fencDctCoeff = NULL;
+	quant->m_fencShortBuf = NULL;
+	quant->m_frameNr = NULL;
+	quant->m_nr = NULL;
+
 	quant->m_entropyCoder = entropy;
 	quant->m_rdoqLevel = rdoqLevel;
 	quant->m_psyRdoqScale = (int32_t)(psyScale * 256.0);
@@ -278,7 +284,7 @@ uint32_t Quant_signBitHidingHDQ(Quant *quant, int16_t* coeff, int32_t* deltaU, u
 
 uint32_t Quant_transformNxN(Quant *quant, struct CUData* cu, const pixel* fenc, uint32_t fencStride, int16_t* residual, uint32_t resiStride, coeff_t* coeff, uint32_t log2TrSize, TextType ttype, uint32_t absPartIdx, bool useTransformSkip)
 {
-	/*
+	
 	uint32_t sizeIdx = log2TrSize - 2;
 	if (quant->m_tqBypass)
 	{
@@ -348,13 +354,13 @@ uint32_t Quant_transformNxN(Quant *quant, struct CUData* cu, const pixel* fenc, 
 
 	   if (numSig >= 2 && cu->m_slice->m_pps->bSignHideEnabled)
 	   {
-		   TUEntropyCodingParameters *codeParams;
+		   struct TUEntropyCodingParameters *codeParams=NULL;
 		   getTUEntropyCodingParameters(cu, codeParams, absPartIdx, log2TrSize, isLuma);
 		   return Quant_signBitHidingHDQ(quant, coeff, deltaU, numSig, codeParams);
 	   }
 	   else
 		   return numSig;
-   }*/
+   }
 	return 0;
 }
 
