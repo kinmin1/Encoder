@@ -338,7 +338,7 @@ uint32_t Quant_transformNxN(Quant *quant, struct CUData* cu, const pixel* fenc, 
 	}
 
    {
-	   int deltaU[32 * 32];
+	   int deltaU[32 * 32] = {0};
 
 	   int scalingListType = (isIntra_cudata(cu, absPartIdx) ? 0 : 3) + ttype;
 	   int rem = quant->m_qpParam[ttype].rem;
@@ -390,6 +390,7 @@ void Quant_invtransformNxN(Quant *quant, int16_t* residual, uint32_t resiStride,
 	else
 	{
 		int scale = quant->m_scalingList->s_invQuantScales[rem] << per;
+		//int scale = const_s_invQuantScales[rem] << per;
 		primitives.dequant_normal(coeff, quant->m_resiDctCoeff, numCoeff, scale, shift);
 	}
 

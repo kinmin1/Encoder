@@ -32,6 +32,10 @@ typedef struct ScalingList
 
 }ScalingList;
 
+extern const int     const_s_numCoefPerSize[NUM_SIZES1];
+extern const int32_t const_s_quantScales[NUM_REM];
+extern const int32_t const_s_invQuantScales[NUM_REM];
+
 bool ScalingList_init(ScalingList* scalingList);
 const int checkPredMode(struct ScalingList* scalingList, int size, int list);
 const int32_t* getScalingListDefaultAddress(int sizeId, int listId);

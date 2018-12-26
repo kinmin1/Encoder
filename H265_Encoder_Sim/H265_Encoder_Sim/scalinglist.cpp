@@ -62,13 +62,16 @@ bool ScalingList_init(ScalingList* scalingList)
 		{
 			scalingList->m_scalingListCoef[sizeId][listId] = X265_MALLOC(int32_t, X265_MIN(MAX_MATRIX_COEF_NUM, const_s_numCoefPerSize[sizeId]));
 			ok &= !!scalingList->m_scalingListCoef[sizeId][listId];
+			scalingList->s_quantScales[listId] = const_s_quantScales[listId];
 			for (int rem = 0; rem < NUM_REM; rem++)
 			{
 				scalingList->m_quantCoef[sizeId][listId][rem] = X265_MALLOC(int32_t, const_s_numCoefPerSize[sizeId]);
 				scalingList->m_dequantCoef[sizeId][listId][rem] = X265_MALLOC(int32_t, const_s_numCoefPerSize[sizeId]);
 				ok &= scalingList->m_quantCoef[sizeId][listId][rem] && scalingList->m_dequantCoef[sizeId][listId][rem];
+				scalingList->s_invQuantScales[rem] = const_s_invQuantScales[rem];
 			}
 		}
+		scalingList->s_numCoefPerSize[sizeId] = const_s_numCoefPerSize[sizeId];
 	}
 
 	scalingList->m_bEnabled = FALSE;
@@ -158,7 +161,6 @@ void ScalingList_setupQuantMatrices(ScalingList *scal)
 			}
 		}
 	}
-	int m = 0;
 }
 
 void processScalingListEnc(int32_t *coeff, int32_t *quantcoeff, int32_t quantScales, int height, int width,

@@ -570,10 +570,8 @@ void idct4_c(int16_t* src, int16_t* dst, intptr_t dstStride)
 
 	for (int i = 0; i < 4; i++)
 	{
-		memcpy(dst, &block[i * 4], 4);
-		dst = dst + dstStride;
+		memcpy(&dst[i * dstStride], &block[i * 4], 4 * sizeof(int16_t));
 	}
-	dst = dst - 4 * dstStride;
 }
 
 void idct8_c(int16_t* src, int16_t* dst, intptr_t dstStride)
@@ -589,11 +587,8 @@ void idct8_c(int16_t* src, int16_t* dst, intptr_t dstStride)
 
 	for (int i = 0; i < 8; i++)
 	{
-		memcpy(dst, &block[i * 8], 8);
-		dst = dst + dstStride;
+		memcpy(&dst[i * dstStride], &block[i * 8], 8 * sizeof(int16_t));
 	}
-	dst = dst - 8 * dstStride;
-
 }
 
 void idct16_c(int16_t* src, int16_t* dst, intptr_t dstStride)
@@ -609,10 +604,8 @@ void idct16_c(int16_t* src, int16_t* dst, intptr_t dstStride)
 
 	for (int i = 0; i < 16; i++)
 	{
-	memcpy(dst, &block[i*16], 16);
-	dst = dst + dstStride;
+		memcpy(&dst[i * dstStride], &block[i * 16], 16 * sizeof(int16_t));
 	}
-	dst = dst- 16*dstStride;
 }
 
 void idct32_c(int16_t* src, int16_t* dst, intptr_t dstStride)
@@ -628,10 +621,8 @@ void idct32_c(int16_t* src, int16_t* dst, intptr_t dstStride)
 
 	for (int i = 0; i < 32; i++)
 	{
-	memcpy(dst, &block[i*32], 32);
-	dst = dst + dstStride;
+		memcpy(&dst[i * dstStride], &block[i * 32], 32 * sizeof(int16_t));
 	}
-	dst = dst - 32*dstStride;
 }
 
 void dequant_normal_c(const int16_t* quantCoef, int16_t* coef, int num, int scale, int shift)
@@ -652,8 +643,8 @@ void dequant_normal_c(const int16_t* quantCoef, int16_t* coef, int num, int scal
 
 	for (int n = 0; n < num; n++)
 	{
-	coeffQ = (quantCoef[n] * scale + add) >> shift;
-	coef[n] = (int16_t)x265_clip3(-32768, 32767, coeffQ);
+		coeffQ = (quantCoef[n] * scale + add) >> shift;
+		coef[n] = (int16_t)x265_clip3(-32768, 32767, coeffQ);
 	}
 }
 

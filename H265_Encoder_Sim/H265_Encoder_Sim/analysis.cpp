@@ -29,20 +29,20 @@ bool Analysis_create(Analysis *analysis)
 	bool ok = TRUE;
 	for (uint32_t depth = 0; depth <= 0; depth++, cuSize >>= 1)//depth <= g_maxCUDepth;
 	{
-		//struct ModeDepth *md = &(analysis->m_modeDepth[depth]);
+		struct ModeDepth *md = &(analysis->m_modeDepth[depth]);
 
-		CUDataMemPool_create_analysis(&analysis->m_modeDepth[depth].cuMemPool, depth, 2);//MAX_PRED_TYPES
-		ok &= Yuv_create_md(&analysis->m_modeDepth[depth].fencYuv, cuSize, csp);
+		CUDataMemPool_create_analysis(&md->cuMemPool, depth, 2);//MAX_PRED_TYPES
+		ok &= Yuv_create_md(&md->fencYuv, cuSize, csp);
 
-		CUData_initialize(&analysis->m_modeDepth[depth].pred[PRED_INTRA].cu, &analysis->m_modeDepth[depth].cuMemPool, depth, 0);
-		ok &= Yuv_create_md_pred_0(&analysis->m_modeDepth[depth].pred[PRED_INTRA].predYuv, cuSize, csp);
-		ok &= Yuv_create_md_pred_1(&analysis->m_modeDepth[depth].pred[PRED_INTRA].reconYuv, cuSize, csp);
-		analysis->m_modeDepth[depth].pred[PRED_INTRA].fencYuv = &analysis->m_modeDepth[depth].fencYuv;
+		CUData_initialize(&md->pred[PRED_INTRA].cu, &md->cuMemPool, depth, 0);
+		ok &= Yuv_create_md_pred_0(&md->pred[PRED_INTRA].predYuv, cuSize, csp);
+		ok &= Yuv_create_md_pred_1(&md->pred[PRED_INTRA].reconYuv, cuSize, csp);
+		md->pred[PRED_INTRA].fencYuv = &md->fencYuv;
 
-		CUData_initialize(&analysis->m_modeDepth[depth].pred[PRED_2Nx2N].cu, &analysis->m_modeDepth[depth].cuMemPool, depth, 1);
-		ok &= Yuv_create_md_pred_pred2Nx2N_0(&analysis->m_modeDepth[depth].pred[PRED_2Nx2N].predYuv, cuSize, csp);
-		ok &= Yuv_create_md_pred_pred2Nx2N_1(&analysis->m_modeDepth[depth].pred[PRED_2Nx2N].reconYuv, cuSize, csp);
-		analysis->m_modeDepth[depth].pred[PRED_2Nx2N].fencYuv = &analysis->m_modeDepth[depth].fencYuv;
+		CUData_initialize(&md->pred[PRED_2Nx2N].cu, &md->cuMemPool, depth, 1);
+		ok &= Yuv_create_md_pred_pred2Nx2N_0(&md->pred[PRED_2Nx2N].predYuv, cuSize, csp);
+		ok &= Yuv_create_md_pred_pred2Nx2N_1(&md->pred[PRED_2Nx2N].reconYuv, cuSize, csp);
+		md->pred[PRED_2Nx2N].fencYuv = &md->fencYuv;
 	}
 	
 	return ok;
@@ -116,8 +116,8 @@ Mode* compressCTU(Analysis* analysis, CUData* ctu, Frame* frame, CUGeom* cuGeom,
 void compressIntraCU(Analysis* analysis, CUData* parentCTU, CUGeom* cuGeom, uint32_t zOrder, int32_t qp)
 {
 	uint32_t depth = cuGeom->depth;//当前CU深度
-	//struct ModeDepth* md = &(analysis->m_modeDepth[depth]);
-	analysis->m_modeDepth[depth].bestMode = NULL;
+	struct ModeDepth* md = &(analysis->m_modeDepth[depth]);
+	md->bestMode = NULL;
 
 	bool mightSplit = 0;
 	bool mightNotSplit = 1;
@@ -132,13 +132,13 @@ void compressIntraCU(Analysis* analysis, CUData* parentCTU, CUGeom* cuGeom, uint
 		if (mightNotSplit && depth == reuseDepth[zOrder] && zOrder == cuGeom->absPartIdx)
 		{
 			PartSize size = (PartSize)reusePartSizes[zOrder];
-			Mode* mode = (size == SIZE_2Nx2N) ? &(analysis->m_modeDepth[depth].pred[PRED_INTRA]) : &(analysis->m_modeDepth[depth].pred[PRED_INTRA_NxN]);
+			Mode* mode = (size == SIZE_2Nx2N) ? &(md->pred[PRED_INTRA]) : &(md->pred[PRED_INTRA_NxN]);
 			CUData_initSubCU(&mode->cu, parentCTU, cuGeom, qp);
 			checkIntra(&analysis->sear, mode, cuGeom, size, &reuseModes[zOrder], &reuseChromaModes[zOrder]);
 			checkBestMode(analysis, mode, depth);
 
 			if (mightSplit)
-				addSplitFlagCost(analysis, analysis->m_modeDepth[depth].bestMode, cuGeom->depth);//熵编码部分
+				addSplitFlagCost(analysis, md->bestMode, cuGeom->depth);//熵编码部分
 
 			// increment zOrder offset to point to next best depth in sharedDepth buffer
 			zOrder += g_depthInc[g_maxCUDepth - 1][reuseDepth[zOrder]];
@@ -148,24 +148,24 @@ void compressIntraCU(Analysis* analysis, CUData* parentCTU, CUGeom* cuGeom, uint
 	
 	if (mightNotSplit)
 	{
-		CUData_initSubCU(&analysis->m_modeDepth[depth].pred[PRED_INTRA].cu, parentCTU, cuGeom, qp);
-		checkIntra(&analysis->sear, &analysis->m_modeDepth[depth].pred[PRED_INTRA], cuGeom, SIZE_2Nx2N, NULL, NULL);
-		checkBestMode(analysis, &analysis->m_modeDepth[depth].pred[PRED_INTRA], depth);
+		CUData_initSubCU(&md->pred[PRED_INTRA].cu, parentCTU, cuGeom, qp);
+		checkIntra(&analysis->sear, &md->pred[PRED_INTRA], cuGeom, SIZE_2Nx2N, NULL, NULL);
+		checkBestMode(analysis, &md->pred[PRED_INTRA], depth);
 
 		if (cuGeom->log2CUSize == 3 && analysis->sear.m_slice->m_sps->quadtreeTULog2MinSize < 3)
 		{
-			CUData_initSubCU(&analysis->m_modeDepth[depth].pred[PRED_INTRA_NxN].cu, parentCTU, cuGeom, qp);
-			checkIntra(&analysis->sear, &analysis->m_modeDepth[depth].pred[PRED_INTRA_NxN], cuGeom, SIZE_NxN, NULL, NULL);
-			checkBestMode(analysis, &analysis->m_modeDepth[depth].pred[PRED_INTRA_NxN], depth);
+			CUData_initSubCU(&md->pred[PRED_INTRA_NxN].cu, parentCTU, cuGeom, qp);
+			checkIntra(&analysis->sear, &md->pred[PRED_INTRA_NxN], cuGeom, SIZE_NxN, NULL, NULL);
+			checkBestMode(analysis, &md->pred[PRED_INTRA_NxN], depth);
 		}
 
 		if (mightSplit)
-			addSplitFlagCost(analysis, analysis->m_modeDepth[depth].bestMode, cuGeom->depth);
+			addSplitFlagCost(analysis, md->bestMode, cuGeom->depth);
 	}
 	/*
 	if (mightSplit)
 	{
-		Mode* splitPred = &analysis->m_modeDepth[depth].pred[PRED_SPLIT];
+		Mode* splitPred = &md->pred[PRED_SPLIT];
 		initCosts(splitPred);
 		CUData* splitCU = &splitPred->cu;
 		CUData_initSubCU(splitCU, parentCTU, cuGeom, qp);
@@ -210,9 +210,9 @@ void compressIntraCU(Analysis* analysis, CUData* parentCTU, CUGeom* cuGeom, uint
 	}
 	*/
 	// Copy best data to encData CTU and recon
-	CUData_copyToPic(&(analysis->m_modeDepth[depth].bestMode->cu), depth);
-	if (analysis->m_modeDepth[depth].bestMode != &(analysis->m_modeDepth[depth].pred[PRED_SPLIT]))
-		Yuv_copyToPicYuv(&(analysis->m_modeDepth[depth].bestMode->reconYuv), analysis->sear.m_frame->m_reconPic, parentCTU->m_cuAddr, cuGeom->absPartIdx);
+	CUData_copyToPic(&(md->bestMode->cu), depth);
+	if (md->bestMode != &(md->pred[PRED_SPLIT]))
+		Yuv_copyToPicYuv(&(md->bestMode->reconYuv), analysis->sear.m_frame->m_reconPic, parentCTU->m_cuAddr, cuGeom->absPartIdx);
 }
 
 //帧间预测

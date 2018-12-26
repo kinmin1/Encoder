@@ -487,15 +487,15 @@ void cpy1Dto2D_shr(int16_t* dst, int16_t* src, intptr_t dstStride, int shift, in
 
 void getResidual(const pixel* fenc, const pixel* pred, int16_t* residual, intptr_t stride, int blockSize)
 {
-for (int y = 0; y < blockSize; y++)
-{
-for (int x = 0; x < blockSize; x++)
-residual[x] = (fenc[x]&0xffff) - (pred[x]&0xffff);
+	for (int y = 0; y < blockSize; y++)
+	{
+		for (int x = 0; x < blockSize; x++)
+		residual[x] = (fenc[x]&0xffff) - (pred[x]&0xffff);
 
-fenc += stride;
-residual += stride;
-pred += stride;
-}
+		fenc += stride;
+		residual += stride;
+		pred += stride;
+	}
 }
 
 void transpose(pixel* dst, const pixel* src, intptr_t stride, int blockSize)

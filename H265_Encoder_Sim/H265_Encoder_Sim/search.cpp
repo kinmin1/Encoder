@@ -24,6 +24,13 @@ void init_intraNeighbors(struct IntraNeighbors *intraNeighbors)
 	for (int i = 0; i < 65; i++)
 		intraNeighbors->bNeighborFlags[i] = TRUE;
 }
+void init_Cost(struct Cost *cost)
+{
+	cost->rdcost = 0; 
+	cost->bits = 0; 
+	cost->distortion = 0; 
+	cost->energy = 0;
+}
 void initCosts(Mode *mode)
 {
 	mode->rdCost = 0;
@@ -862,7 +869,7 @@ uint32_t estIntraPredQT(Search* search, Mode* intraMode, CUGeom* cuGeom, uint32_
 	struct Yuv* predYuv = &intraMode->predYuv;
 	struct Yuv* fencYuv = intraMode->fencYuv;//fenc指编码帧
 	int mode;
-	struct Cost icosts;
+	
 
 	uint32_t depth = cuGeom->depth;
 	uint32_t initTuDepth = cu->m_partSize[0] != SIZE_2Nx2N;
@@ -1015,6 +1022,8 @@ uint32_t estIntraPredQT(Search* search, Mode* intraMode, CUGeom* cuGeom, uint32_
 				setLumaIntraDirSubParts(cu, rdModeList[i], absPartIdx, depth + initTuDepth);//将亮度分量候选预测模式赋给待处理PU
 
 				//struct Cost icosts;
+				struct Cost icosts;
+				init_Cost(&icosts);
 				//if (checkTransformSkip)
 				// codeIntraLumaTSkip(intraMode, cuGeom, initTuDepth, absPartIdx, icosts);
 				//else
@@ -1024,10 +1033,17 @@ uint32_t estIntraPredQT(Search* search, Mode* intraMode, CUGeom* cuGeom, uint32_
 		}
 		
 		//ProfileCUScope(intraMode.cu, intraRDOElapsedTime[cuGeom.depth], countIntraRDO[cuGeom.depth]);
-
+		
+		struct Cost icosts;
+		init_Cost(&icosts);
 		// remeasure best mode, allowing TU splits //
 		setLumaIntraDirSubParts(cu, bmode, absPartIdx, depth + initTuDepth);
 		load(&(search->m_entropyCoder), &(search->m_rqt[depth].cur));
+
+		//if (checkTransformSkip)
+		//	codeIntraLumaTSkip(intraMode, cuGeom, initTuDepth, absPartIdx, icosts);
+		//else
+		codeIntraLumaQT(search, intraMode, cuGeom, initTuDepth, absPartIdx, TRUE, &icosts, depthRange);
 
 		totalDistortion += icosts.distortion;
 
