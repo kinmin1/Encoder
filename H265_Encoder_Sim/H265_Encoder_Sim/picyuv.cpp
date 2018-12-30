@@ -447,7 +447,6 @@ pixel*  Picyuv_CTUgetPlaneAddr(PicYuv *picyuv, uint32_t plane, uint32_t ctuAddr)
 /* get pointer to CU start address */
 pixel* Picyuv_CUgetLumaAddr(PicYuv *picyuv, uint32_t ctuAddr, uint32_t absPartIdx)
 {
-	int n = picyuv->m_cuOffsetY[ctuAddr];
 	return (picyuv->m_picOrg[0] + picyuv->m_cuOffsetY[ctuAddr] + picyuv->m_buOffsetY[absPartIdx]);
 }
 

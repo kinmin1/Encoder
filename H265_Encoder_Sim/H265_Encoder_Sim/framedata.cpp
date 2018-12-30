@@ -33,12 +33,12 @@ bool FrameData_create(Frame *frame,FrameData *framedata, x265_param *param, stru
 {
 	framedata->m_param = param;
 	framedata->m_slice =  (Slice *)malloc(sizeof(Slice));//ÒÑÊÍ·Å&slice_1;//
-	//printf("sizeof(Slice)=%d\n",sizeof(Slice));
+	printf("sizeof(Slice)=%d\n",sizeof(Slice));
 	if (!framedata->m_slice)
 		printf("malloc Slice fail!\n");
 
-	framedata->m_picCTU =  (CUData *)malloc(sizeof(CUData)*sps->numCUsInFrame);//&cudata_1;//
-	//printf("sizeof(CUData)*sps->numCUsInFrame=%d\n",sizeof(Slice)*sps->numCUsInFrame);//-=-=-=-=-=-=-
+	framedata->m_picCTU =  (CUData *)malloc((sizeof(CUData)+128)*sps->numCUsInFrame);//&cudata_1;//
+	printf("sizeof(CUData)=%d\n", sizeof(CUData));//-=-=-=-=-=-=-
 	if (!framedata->m_picCTU)
 		printf("malloc CUData fail!\n");
 
@@ -57,12 +57,12 @@ bool FrameData_create(Frame *frame,FrameData *framedata, x265_param *param, stru
 	//framedata->m_picCTU -= sps->numCUsInFrame;
 	//CHECKED_MALLOC(framedata->m_cuStat, RCStatCU, sps->numCUsInFrame);
 
-	framedata->m_cuStat = (RCStatCU *)malloc(sizeof(RCStatCU)* (sps->numCUsInFrame));//&rcstatcu_1;
-	framedata->m_rowStat = (RCStatRow *)malloc(sizeof(RCStatRow)* (sps->numCuInHeight));//&rcststrow_1;
+	//framedata->m_cuStat = (RCStatCU *)malloc(sizeof(RCStatCU)* (sps->numCUsInFrame));//&rcstatcu_1;
+	//framedata->m_rowStat = (RCStatRow *)malloc(sizeof(RCStatRow)* (sps->numCuInHeight));//&rcststrow_1;
 	//printf("sizeof(RCStatCU) * (sps->numCUsInFrame)=%d\n",sizeof(RCStatCU) * (sps->numCUsInFrame));
 	//CHECKED_MALLOC(framedata->m_rowStat, RCStatRow, sps->numCuInHeight);
 	//printf("sizeof(RCStatRow) * (sps->numCuInHeight)=%d\n",sizeof(RCStatRow) * (sps->numCuInHeight));
-	FrameData_reinit(framedata, sps);
+	//FrameData_reinit(framedata, sps);
 	return TRUE;
 
 fail:
@@ -73,6 +73,6 @@ void FrameData_destory(FrameData *framedata)
 {
 	free(framedata->m_picCTU); framedata->m_picCTU = NULL;
 	free(framedata->m_slice); framedata->m_slice = NULL;
-	free(framedata->m_cuStat); framedata->m_cuStat = NULL;
-	CUMemPool_destory(framedata->m_cuMemPool);
+	//free(framedata->m_cuStat); framedata->m_cuStat = NULL;
+	//CUMemPool_destory(framedata->m_cuMemPool);
 }

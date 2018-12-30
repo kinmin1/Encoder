@@ -355,7 +355,7 @@ void compressInterCU_rd0_4(struct Predict *predict, struct Search* search, struc
 }
 
 void addSplitFlagCost(Analysis* aly, Mode* mode, uint32_t depth)
-{/*
+{
 	if (aly->sear.m_param->rdLevel >= 3)
 	{
 		// code the split flag (0 or 1) and update bit costs //
@@ -376,7 +376,7 @@ void addSplitFlagCost(Analysis* aly, Mode* mode, uint32_t depth)
 		mode->mvBits++;
 		mode->totalBits++;
 		updateModeCost(&(aly->sear), mode);
-	}*/
+	}
 }
 
 uint32_t Analysis_topSkipMinDepth(Search *search, struct CUData *parentCTU, struct CUGeom* cuGeom)

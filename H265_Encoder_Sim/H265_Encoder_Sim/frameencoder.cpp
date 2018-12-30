@@ -171,6 +171,7 @@ bool FrameEncoder_startCompressFrame(FrameEncoder *frencoder, Frame* curFrame)
 	Analysis_create(&analysis);//申请模式决策内存 初始化相关CU内存
 	
 	FrameEncoder_compressFrame(frencoder, &analysis);
+	FrameEncoder_destroy(frencoder);
 	/*
 //	DPB_Destroy()
 //	free(analysis.sear.m_me.fencPUYuv.m_buf[0]); analysis.sear.m_me.fencPUYuv.m_buf[0] = NULL;
@@ -319,8 +320,8 @@ void FrameEncoder_processRowEncoder(FrameEncoder *frencoder, int intRow, Analysi
 		printf("Finish %d CTU\n", cuAddr + 1);
 		cuAddr++;
 
-		free(best);
-		best = NULL;
+		//free(best);
+		//best = NULL;
 	}
 	/*
 	// flush row bitstream (if WPP and no SAO) or flush frame if no WPP and no SAO //
@@ -340,7 +341,7 @@ void FrameEncoder_processRowEncoder(FrameEncoder *frencoder, int intRow, Analysi
 }
 
 void FrameEncoder_destroy(FrameEncoder *frencoder)
-{/*
+{
 	if (frencoder->m_outStreams)
 	{
 		free(frencoder->m_outStreams);
@@ -363,7 +364,7 @@ void FrameEncoder_destroy(FrameEncoder *frencoder)
 	{
 		free(frencoder->m_substreamSizes);
 		frencoder->m_substreamSizes = NULL;
-	}*/
+	}
 }
 
 Frame *FrameEncoder_getEncodedPicture(FrameEncoder *frameE, NALList* output)

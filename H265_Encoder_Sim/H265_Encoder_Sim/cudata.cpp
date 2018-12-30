@@ -615,10 +615,10 @@ void CUData_copyToPic(CUData *cu, uint32_t depth)
 	cu->m_partCopy(ctu->m_cbf[2] + cu->m_absIdxInCTU, cu->m_cbf[2]);
 	cu->m_partCopy(ctu->m_chromaIntraDir + cu->m_absIdxInCTU, cu->m_chromaIntraDir);
 
-	memcpy(ctu->m_mv[0] + cu->m_absIdxInCTU, cu->m_mv[0], cu->m_numPartitions * sizeof(struct MV));
-	memcpy(ctu->m_mv[1] + cu->m_absIdxInCTU, cu->m_mv[1], cu->m_numPartitions * sizeof(struct MV));
-	memcpy(ctu->m_mvd[0] + cu->m_absIdxInCTU, cu->m_mvd[0], cu->m_numPartitions * sizeof(struct MV));
-	memcpy(ctu->m_mvd[1] + cu->m_absIdxInCTU, cu->m_mvd[1], cu->m_numPartitions * sizeof(struct MV));
+//	memcpy(ctu->m_mv[0] + cu->m_absIdxInCTU, cu->m_mv[0], cu->m_numPartitions * sizeof(struct MV));
+//	memcpy(ctu->m_mv[1] + cu->m_absIdxInCTU, cu->m_mv[1], cu->m_numPartitions * sizeof(struct MV));
+//	memcpy(ctu->m_mvd[0] + cu->m_absIdxInCTU, cu->m_mvd[0], cu->m_numPartitions * sizeof(struct MV));
+//	memcpy(ctu->m_mvd[1] + cu->m_absIdxInCTU, cu->m_mvd[1], cu->m_numPartitions * sizeof(struct MV));
 
 	uint32_t tmpY = 1 << ((g_maxLog2CUSize - depth) * 2);
 	uint32_t tmpY2 = cu->m_absIdxInCTU << (LOG2_UNIT_SIZE * 2);

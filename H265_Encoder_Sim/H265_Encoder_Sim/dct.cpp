@@ -469,10 +469,8 @@ void dct4_c(int16_t* src, int16_t* dst, intptr_t srcStride)
 
 	for (int i = 0; i < 4; i++)
 	{
-		memcpy(&block[i * 4], src, 4);
-		src = src + srcStride;
+		memcpy(&block[i * 4], &src[i * srcStride], 4 * sizeof(int16_t));
 	}
-	src = src - 4 * srcStride;
 
 	partialButterfly4(block, coef, shift_1st, 4);
 	partialButterfly4(coef, dst, shift_2nd, 4);
@@ -488,10 +486,8 @@ void dct8_c(int16_t* src, int16_t* dst, intptr_t srcStride)
 
 	for (int i = 0; i < 8; i++)
 	{
-		memcpy(&block[i * 8], src, 8);
-		src = src + srcStride;
+		memcpy(&block[i * 8], &src[i * srcStride], 8 * sizeof(int16_t));
 	}
-	src = src - 8 * srcStride;
 
 	partialButterfly8(block, coef, shift_1st, 8);
 	partialButterfly8(coef, dst, shift_2nd, 8);
@@ -507,14 +503,12 @@ void dct16_c(int16_t* src, int16_t* dst, intptr_t srcStride)
 
 	for (int i = 0; i < 16; i++)
 	{
-	memcpy(&block[i*16], src, 16);
-	src = src + srcStride;
+		memcpy(&block[i * 16], &src[i * srcStride], 16 * sizeof(int16_t));
 	}
-	src = src- 16*srcStride;
 
 	partialButterfly16(block, coef, shift_1st, 16);
 	partialButterfly16(coef, dst, shift_2nd, 16);
-	
+
 }
 
 void dct32_c(int16_t* src, int16_t* dst, intptr_t srcStride)
@@ -525,16 +519,13 @@ void dct32_c(int16_t* src, int16_t* dst, intptr_t srcStride)
 	int16_t coef[32 * 32];
 	int16_t block[32 * 32];
 
-    for (int i = 0; i < 32; i++)
+	for (int i = 0; i < 32; i++)
 	{
-	memcpy(&block[i*32], src, 32);
-	src = src + srcStride;
+		memcpy(&block[i * 32], &src[i * srcStride], 32 * sizeof(int16_t));
 	}
-	src = src- 32*srcStride;
-
 	partialButterfly32(block, coef, shift_1st, 32);
 	partialButterfly32(coef, dst, shift_2nd, 32);
-	
+
 }
 
 void idst4_c(int16_t* src, int16_t* dst, intptr_t dstStride)
@@ -551,11 +542,10 @@ void idst4_c(int16_t* src, int16_t* dst, intptr_t dstStride)
 
 	for (int i = 0; i < 4; i++)
 	{
-		memcpy(dst, &block[i * 4], 4);
-		dst = dst + dstStride;
+		memcpy(&dst[i * dstStride], &block[i * 4], 4 * sizeof(int16_t));
 	}
-	dst = dst - 4 * dstStride;
 }
+
 
 void idct4_c(int16_t* src, int16_t* dst, intptr_t dstStride)
 {

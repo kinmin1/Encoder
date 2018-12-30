@@ -393,12 +393,12 @@ int encode(Encoder *enc, x265_picture* pic_in, x265_picture* pic_out)
 		}
 	} while (enc->m_bZeroLatency && ++pass < 2);
 
-	Frame_destroy(inFrame);
-	free(inFrame);
-	inFrame = NULL;
-	DPB_Destroy(enc->m_dpb);
-	free(enc->m_dpb);
-	enc->m_dpb = NULL;
+//	Frame_destroy(inFrame);
+//	free(inFrame);
+//	inFrame = NULL;
+//	DPB_Destroy(enc->m_dpb);
+//	free(enc->m_dpb);
+//	enc->m_dpb = NULL;
 	return ret;
 }
 
